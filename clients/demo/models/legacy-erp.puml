@@ -1,0 +1,7 @@
+' ============================================================
+' Domain: Demo Client — legacy systems
+' ============================================================
+
+!procedure $LegacyErp()
+  System_Ext(legacy_erp, "Legacy ERP", "SAP R/3, on-prem")
+!endprocedure

@@ -81,6 +81,19 @@ def animate_svg(svg_content: str, return_count: bool = False):
         root.remove(style)
         root.insert(0, style)
 
+    # Ensure white background is explicit (some viewers ignore inline style)
+    # Add a white rect as first visual element if not already present
+    viewbox = root.get("viewBox", "0 0 100 100")
+    vb_parts = viewbox.split()
+    if len(vb_parts) == 4:
+        bg_rect = ET.Element(f"{NS_PREFIX}rect")
+        bg_rect.set("width", "100%")
+        bg_rect.set("height", "100%")
+        bg_rect.set("fill", "#FFFFFF")
+        # Insert after style (index 1) or at 0 if no style
+        insert_idx = 1 if animated_count > 0 else 0
+        root.insert(insert_idx, bg_rect)
+
     result = ET.tostring(root, encoding="unicode", xml_declaration=False)
     # Add XML declaration for proper SVG
     result = '<?xml version="1.0" encoding="UTF-8"?>\n' + result
@@ -90,10 +103,24 @@ def animate_svg(svg_content: str, return_count: bool = False):
     return result
 
 
+def wrap_in_html(svg_content: str) -> str:
+    """Wrap SVG in a minimal HTML page for guaranteed animation support."""
+    # Strip XML declaration if present — not needed inside HTML
+    svg_body = re.sub(r"<\?xml[^?]*\?>", "", svg_content).strip()
+    return f"""<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Animated Diagram</title></head>
+<body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f9fafb;">
+{svg_body}
+</body>
+</html>"""
+
+
 def main():
     parser = argparse.ArgumentParser(description="Add marching-ant animation to SVG arrows marked with ~")
     parser.add_argument("svg", help="Path to SVG file")
     parser.add_argument("--output", "-o", help="Output path (default: overwrite in-place)")
+    parser.add_argument("--html", action="store_true", help="Also generate an HTML wrapper for guaranteed animation")
     args = parser.parse_args()
 
     if not os.path.isfile(args.svg):
@@ -111,6 +138,12 @@ def main():
     with open(out_path, "w") as f:
         f.write(result)
     print(f"Animated {count} arrow(s) -> {out_path}")
+
+    if args.html:
+        html_path = os.path.splitext(out_path)[0] + ".html"
+        with open(html_path, "w") as f:
+            f.write(wrap_in_html(result))
+        print(f"HTML wrapper  -> {html_path}")
 
 
 if __name__ == "__main__":

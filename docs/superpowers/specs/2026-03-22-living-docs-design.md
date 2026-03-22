@@ -15,7 +15,7 @@ Both outputs are single self-contained HTML files with zero external dependencie
 
 - **Single HTML file** for docs deliverable — no zip, no folder structure, just email one file
 - **Markdown companions** alongside diagrams — one `.md` per diagram, `_overview.md` per section, `overview.md` per client
-- **Lightweight client `client.yaml`** for metadata and section ordering (distinct from root `client.yaml` which describes shared domains/elements)
+- **Lightweight client `client.yaml`** for metadata and section ordering (distinct from root `manifest.yaml` which describes shared domains/elements)
 - **Simple regex markdown parser** — no dependencies, single-pass, no nested inline formatting. Covers headings/paragraphs/bold/italic/code/links/lists/blockquotes. Multi-line list items not supported — each `- ` or `1. ` line is one item
 - **Gallery and docs are separate tools** — gallery for internal dev browsing, docs for client delivery
 - **Demo client gets full showcase** — all 17 diagrams with companion prose, manifest, section overviews
@@ -234,7 +234,7 @@ Total: 22 new markdown files + 1 manifest
 
 ## Shared Utilities
 
-`gallery.py` and `docs.py` share logic: `discover_diagrams`, `group_by_type`, `diagram_name`, `parse_client_yaml`. These live in `docs.py` (as the more general script) and are imported by `gallery.py`. This avoids duplication without introducing a third module.
+`gallery.py` and `docs.py` share logic: `discover_diagrams`, `group_by_type`, `diagram_name`. These already exist in `gallery.py`. The new `parse_client_yaml()` is added to `gallery.py` as well. `docs.py` imports these from `gallery.py` — lower churn since the functions already live there. This avoids duplication without introducing a third module.
 
 ## Repo Changes
 

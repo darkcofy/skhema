@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(dirname "$SCRIPT_DIR")"
+PYTHON="${SKHEMA_PYTHON:-python3}"
+
+usage() {
+  cat <<'EOF'
+skhema — architecture diagrams as code
+
+Usage: skhema <command> [options]
+
+Commands:
+  render    Render PlantUML diagrams via Kroki API
+  gallery   Generate self-contained HTML gallery
+  docs      Generate living docs architecture handbook
+  deck      Export PDF or PowerPoint deck
+  validate  Lint diagrams for convention violations
+  demo      Regenerate all outputs for the demo client
+
+Run 'skhema <command> --help' for command-specific options.
+EOF
+  exit 0
+}
+
+[[ $# -eq 0 ]] && usage
+
+cmd="$1"; shift
+
+case "$cmd" in
+  render)   exec "$PYTHON" -m scripts.render "$@" ;;
+  gallery)  exec "$PYTHON" -m scripts.gallery "$@" ;;
+  docs)     exec "$PYTHON" -m scripts.docs "$@" ;;
+  deck)     exec "$PYTHON" -m scripts.deck "$@" ;;
+  validate) exec "$PYTHON" -m scripts.validate "$@" ;;
+  demo)
+    client="${1:-demo}"
+    echo "=== Rendering diagrams for '$client' ==="
+    "$PYTHON" -m scripts.render --client "$client" --all --animate
+    echo ""
+    echo "=== Generating gallery ==="
+    "$PYTHON" -m scripts.gallery --client "$client" --history 0
+    echo ""
+    echo "=== Generating living docs ==="
+    "$PYTHON" -m scripts.docs --client "$client"
+    echo ""
+    echo "=== Generating PDF deck ==="
+    "$PYTHON" -m scripts.deck --client "$client"
+    echo ""
+    echo "Done. Outputs in clients/$client/"
+    ;;
+  help|-h|--help) usage ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    echo "Run 'skhema help' for usage." >&2
+    exit 1
+    ;;
+esac

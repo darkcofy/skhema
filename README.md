@@ -4,30 +4,147 @@
 
 Architecture diagrams as code for consulting engagements. PlantUML + C4-PlantUML rendered via Kroki API, with multi-client isolation, self-contained HTML gallery, living docs handbook, and PDF/PPTX deck export.
 
+## Installation
+
+**Requirements:** Python 3.10+ and Git. No pip dependencies (except optional `python-pptx` for PowerPoint export).
+
+### Linux / macOS
+
+```bash
+git clone <repo-url> ~/skhema
+echo 'export PATH="$HOME/skhema/bin:$PATH"' >> ~/.bashrc  # or ~/.zshrc
+source ~/.bashrc
+```
+
+### macOS (alternative — symlink)
+
+```bash
+git clone <repo-url> ~/skhema
+ln -s ~/skhema/bin/skhema /usr/local/bin/skhema
+```
+
+### Windows (Git Bash / WSL)
+
+```bash
+git clone <repo-url> ~/skhema
+echo 'export PATH="$HOME/skhema/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Windows (PowerShell / CMD)
+
+```powershell
+git clone <repo-url> C:\skhema
+# Add C:\skhema\bin to your system PATH via:
+# Settings → System → About → Advanced system settings → Environment Variables
+# Or run the scripts directly: python C:\skhema\scripts\render.py --all
+```
+
+### Verify
+
+```bash
+skhema help
+```
+
 ## Quick Start
 
 ```bash
-# Render shared diagrams
-python scripts/render.py --all
+# Generate everything for the demo client (render + gallery + docs + deck)
+skhema demo
 
-# Render a client's diagrams (with animation)
-python scripts/render.py --client demo --all --animate
-
-# Generate client gallery (internal dev tool, dark mode + sidebar)
-python scripts/gallery.py --client demo --title "NovaPay"
-
-# Generate living docs handbook (single self-contained HTML, client-facing)
-python scripts/docs.py --client demo
-
-# Export PDF deck
-python scripts/deck.py --client demo
-
-# Export PowerPoint deck (requires: pip install python-pptx)
-python scripts/deck.py --client demo --pptx
-
-# Validate all files
-python scripts/validate.py
+# Or step by step:
+skhema render --client demo --all --animate
+skhema gallery --client demo
+skhema docs --client demo
+skhema deck --client demo
 ```
+
+## CLI Reference
+
+### `skhema render` — Render diagrams
+
+```bash
+# Render all shared diagrams
+skhema render --all
+
+# Render a single shared diagram
+skhema render diagrams/c4/data-platform-container.puml
+
+# Render all client diagrams with animation
+skhema render --client acme --all --animate
+
+# Render a single client diagram
+skhema render --client acme clients/acme/diagrams/c4/system-context.puml
+
+# Render as PNG instead of SVG
+skhema render --client acme --all --png
+
+# Dry-run (print resolved PlantUML source without rendering)
+skhema render --client acme clients/acme/diagrams/c4/system-context.puml --dry-run
+```
+
+### `skhema gallery` — Generate HTML gallery
+
+```bash
+# Generate gallery for a client
+skhema gallery --client acme
+
+# Override the display title
+skhema gallery --client acme --title "Acme Corp"
+
+# Include version history (default: 3 versions, 0 to disable)
+skhema gallery --client acme --history 5
+skhema gallery --client acme --history 0
+```
+
+Output: `clients/acme/index.html` — self-contained HTML with dark mode toggle, sidebar nav, modal preview, search/filter.
+
+### `skhema docs` — Generate living docs handbook
+
+```bash
+# Generate architecture handbook
+skhema docs --client acme
+
+# Override the display title
+skhema docs --client acme --title "Acme Corp"
+
+# Custom output filename
+skhema docs --client acme --output acme-v2.html
+```
+
+Output: `clients/acme/acme-architecture.html` — self-contained HTML with cover page, table of contents, companion prose, inlined SVG diagrams. Print-friendly.
+
+### `skhema deck` — Export PDF or PowerPoint deck
+
+```bash
+# PDF deck (no dependencies)
+skhema deck --client acme
+
+# PowerPoint deck (requires: pip install python-pptx)
+skhema deck --client acme --pptx
+```
+
+Output: `clients/acme/deck.pdf` (single diagram) or `clients/acme/deck_pages/` (multiple diagrams).
+
+### `skhema validate` — Lint diagrams
+
+```bash
+skhema validate
+```
+
+Checks for: inline element definitions, hardcoded colours, duplicate element IDs.
+
+### `skhema demo` — Regenerate demo client
+
+```bash
+# Regenerate everything for the demo client
+skhema demo
+
+# Regenerate for a different client
+skhema demo acme
+```
+
+Runs render (with animation) + gallery + docs + deck in sequence.
 
 ## Architecture
 
@@ -75,33 +192,19 @@ When rendering with `--client`, includes are resolved in order:
 ```bash
 mkdir -p clients/acme/diagrams/c4 clients/acme/models
 
-# Create diagrams, then render
-python scripts/render.py --client acme --all --animate
+# Create diagrams, then generate everything
+skhema render --client acme --all --animate
+skhema gallery --client acme
+skhema docs --client acme
+skhema deck --client acme
 
-# Add optional docs for living handbook
-mkdir -p clients/acme/docs/c4
-echo 'name: "Acme Corp"' > clients/acme/client.yaml
-
-# Generate outputs
-python scripts/gallery.py --client acme
-python scripts/docs.py --client acme
-python scripts/deck.py --client acme
+# Or all at once
+skhema demo acme
 ```
-
-## Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/render.py` | Render PlantUML → SVG/PNG via Kroki API |
-| `scripts/gallery.py` | Generate self-contained HTML gallery (dark mode, sidebar, modal preview) |
-| `scripts/docs.py` | Generate self-contained HTML architecture handbook with prose + diagrams |
-| `scripts/deck.py` | Export PDF deck (stdlib) or PPTX (requires python-pptx) |
-| `scripts/animate.py` | Add marching-ant CSS animation to `~` arrows in SVGs |
-| `scripts/validate.py` | Lint diagrams for inline definitions, hardcoded colours, duplicate IDs |
 
 ## Living Docs
 
-The docs handbook is a "living document" — rerun `docs.py` after any diagram or prose change and the output reflects current state.
+The docs handbook is a "living document" — rerun `skhema docs` after any diagram or prose change and the output reflects current state.
 
 Companion markdown files are optional. If present, their content appears above the corresponding diagram. If absent, the diagram appears with an auto-generated title. Start with zero prose and add narrative where it matters.
 

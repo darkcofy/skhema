@@ -53,7 +53,10 @@ def post_to_kroki(source: str, fmt: str = "svg") -> bytes:
     """POST resolved PlantUML source to Kroki and return the response bytes."""
     url = f"{KROKI_BASE}/{fmt}"
     data = source.encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "text/plain"})
+    req = urllib.request.Request(url, data=data, headers={
+        "Content-Type": "text/plain",
+        "User-Agent": "arch-diagrams/1.0 (PlantUML renderer)",
+    })
 
     max_retries = 3
     for attempt in range(max_retries):

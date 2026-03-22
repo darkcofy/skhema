@@ -225,4 +225,8 @@ domains:
         type: Container
         description: "Human feedback capture"
 
-diagrams: []
+diagrams:
+  - path: diagrams/c4/data-platform-container.puml
+    title: "Data Platform — Container View"
+    type: c4_container
+    includes_domains: [consumers, ingestion, storage, processing, serving]

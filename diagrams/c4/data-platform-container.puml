@@ -1,0 +1,40 @@
+@startuml
+!include ../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+$ApplySkinparams()
+
+!include ../../models/consumers.puml
+!include ../../models/ingestion.puml
+!include ../../models/storage.puml
+!include ../../models/processing.puml
+!include ../../models/serving.puml
+
+title Data Platform — Container View
+
+$DataAnalyst()
+$DataEngineer()
+
+$EventStream()
+$BatchEtl()
+
+$DataLake()
+$DataWarehouse()
+
+$DbtTransform()
+$Orchestrator()
+
+$BiPlatform()
+
+Rel(data_analyst, bi_platform, "Views reports")
+Rel(data_analyst, data_warehouse, "Queries", "SQL")
+Rel(data_engineer, orchestrator, "Manages")
+Rel(event_stream, data_lake, "Streams to", "Avro/JSON")
+Rel(batch_etl, data_lake, "Loads to", "Parquet")
+Rel(data_lake, dbt_transform, "Source for")
+Rel(dbt_transform, data_warehouse, "Writes to")
+Rel(orchestrator, dbt_transform, "Triggers")
+Rel(orchestrator, batch_etl, "Triggers")
+Rel(data_warehouse, bi_platform, "Serves", "DirectQuery")
+
+LAYOUT_WITH_LEGEND()
+@enduml

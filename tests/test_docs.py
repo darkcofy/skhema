@@ -1,7 +1,7 @@
 """Tests for the living docs generator."""
 import os
 import pytest
-from scripts.docs import parse_markdown
+from scripts.docs import generate_docs_html, parse_markdown
 
 
 class TestParseMarkdown:
@@ -71,3 +71,79 @@ class TestParseMarkdown:
     def test_empty_input(self):
         assert parse_markdown("") == ""
         assert parse_markdown("  \n  \n") == ""
+
+
+class TestGenerateDocsHtml:
+    def test_returns_html_with_client_name(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "test.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>')
+        html = generate_docs_html(
+            client_name="TestCo",
+            subtitle="Platform",
+            rendered_dir=str(tmp_path / "rendered"),
+            docs_dir=str(tmp_path / "docs"),
+        )
+        assert "<!DOCTYPE html>" in html
+        assert "TestCo" in html
+        assert "Platform" in html
+
+    def test_inlines_svg(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "arch.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle r="5"/></svg>')
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "docs"))
+        assert "<circle" in html
+
+    def test_includes_companion_prose(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "test.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        docs = tmp_path / "docs" / "c4"
+        docs.mkdir(parents=True)
+        (docs / "test.md").write_text("# Test Diagram\n\nThis shows the **test** architecture.")
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "docs"))
+        assert "<strong>test</strong>" in html
+        assert "Test Diagram" in html
+
+    def test_includes_section_overview(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        docs = tmp_path / "docs" / "c4"
+        docs.mkdir(parents=True)
+        (docs / "_overview.md").write_text("C4 diagrams show containers and components.")
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "docs"))
+        assert "C4 diagrams show containers and components." in html
+
+    def test_includes_client_overview(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        docs = tmp_path / "docs"
+        docs.mkdir(parents=True)
+        (docs / "overview.md").write_text("# NovaPay\n\nA payments platform.")
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(docs))
+        assert "A payments platform." in html
+
+    def test_missing_docs_dir_still_works(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "test.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "nodocs"))
+        assert "<!DOCTYPE html>" in html
+        assert "Test" in html
+
+    def test_has_table_of_contents(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "docs"))
+        assert "Table of Contents" in html or "toc" in html.lower()
+
+    def test_print_friendly(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "docs"))
+        assert "@media print" in html

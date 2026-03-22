@@ -184,7 +184,7 @@ body { font-family: 'Segoe UI', system-ui, Arial, sans-serif; margin: 0; padding
 
 GALLERY_JS = """
 function initTheme() {
-  const saved = localStorage.getItem('arch-diagrams-theme');
+  const saved = localStorage.getItem('skhema-theme');
   if (saved) document.documentElement.setAttribute('data-theme', saved);
   else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -194,7 +194,7 @@ function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('arch-diagrams-theme', next);
+  localStorage.setItem('skhema-theme', next);
   updateToggleLabel();
 }
 function updateToggleLabel() {

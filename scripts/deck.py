@@ -58,7 +58,7 @@ def render_to_pdf(source: str) -> bytes:
     data = source.encode("utf-8")
     req = urllib.request.Request(url, data=data, headers={
         "Content-Type": "text/plain",
-        "User-Agent": "arch-diagrams/1.0",
+        "User-Agent": "skhema/1.0",
     })
     max_retries = 3
     for attempt in range(max_retries):
@@ -79,7 +79,7 @@ def render_to_png(source: str, scale: int = 2) -> bytes:
     data = source.encode("utf-8")
     req = urllib.request.Request(url, data=data, headers={
         "Content-Type": "text/plain",
-        "User-Agent": "arch-diagrams/1.0",
+        "User-Agent": "skhema/1.0",
     })
     with urllib.request.urlopen(req, timeout=30) as resp:
         return resp.read()

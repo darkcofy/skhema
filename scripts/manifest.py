@@ -1,4 +1,4 @@
-"""Shared manifest.yaml parser for arch-diagrams.
+"""Shared manifest.yaml parser for skhema.
 
 Parses the YAML manifest using line-based parsing (no PyYAML dependency).
 Returns full element metadata grouped by domain.

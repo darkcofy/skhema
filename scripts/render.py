@@ -73,7 +73,7 @@ def post_to_kroki(source: str, fmt: str = "svg") -> bytes:
     data = source.encode("utf-8")
     req = urllib.request.Request(url, data=data, headers={
         "Content-Type": "text/plain",
-        "User-Agent": "arch-diagrams/1.0 (PlantUML renderer)",
+        "User-Agent": "skhema/1.0 (PlantUML renderer)",
     })
 
     max_retries = 3

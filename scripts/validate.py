@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate PlantUML files against arch-diagrams conventions.
+"""Validate PlantUML files against skhema conventions.
 
 Usage:
     python scripts/validate.py            # Check everything
@@ -95,7 +95,7 @@ def check_manifest_sync(manifest_path: str, models_dir: str) -> list[str]:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validate arch-diagrams conventions")
+    parser = argparse.ArgumentParser(description="Validate skhema conventions")
     parser.add_argument("path", nargs="?", default=".", help="Path to check")
     args = parser.parse_args()
 

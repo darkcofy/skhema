@@ -122,7 +122,7 @@ class TestGalleryDarkMode:
         (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
         html = generate_gallery_html("X", str(tmp_path / "rendered"), history=0)
         assert "theme-toggle" in html
-        assert "arch-diagrams-theme" in html
+        assert "skhema-theme" in html
 
     def test_dark_mode_css_present(self, tmp_path):
         rendered = tmp_path / "rendered" / "c4"

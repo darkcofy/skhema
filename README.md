@@ -1,6 +1,8 @@
-# arch-diagrams
+# skhema
 
-Version-controlled enterprise architecture diagrams using PlantUML + C4-PlantUML, rendered via Kroki API. Multi-client support with per-client HTML gallery, living docs handbook, and PDF/PPTX deck export.
+*σχῆμα — "form, shape, figure"*
+
+Architecture diagrams as code for consulting engagements. PlantUML + C4-PlantUML rendered via Kroki API, with multi-client isolation, self-contained HTML gallery, living docs handbook, and PDF/PPTX deck export.
 
 ## Quick Start
 

@@ -76,15 +76,13 @@ Each library item has one text element inside the shape:
 - `verticalAlign`: `"middle"`
 - Text is bound to the shape via `containerId` — Excalidraw auto-centers it
 
-## Deterministic Output
+## Timestamps and Seeds
 
-For clean git diffs on regeneration:
-
-- `seed`: `hash(element_id) & 0x7FFFFFFF` (deterministic per element)
-- `created`: fixed epoch `1711065600000` (2024-03-22)
-- `version`: 1
+- `seed`: `hash(element_id) & 0x7FFFFFFF` (deterministic — keeps hand-drawn rendering stable across regenerations)
 - `versionNonce`: same as `seed`
+- `created`: current epoch milliseconds at generation time — tracks when library was last built
 - `updated`: same as `created`
+- `version`: 1
 - Library items ordered: domains alphabetically, elements alphabetically within domain
 
 ## Complete Library Item Example
@@ -113,7 +111,7 @@ For clean git diffs on regeneration:
       "seed": 1234567890,
       "version": 1,
       "versionNonce": 1234567890,
-      "updated": 1711065600000,
+      "updated": <current_epoch_ms>,
       "isDeleted": false,
       "groupIds": ["data_lake_group"],
       "frameId": null,
@@ -143,7 +141,7 @@ For clean git diffs on regeneration:
       "seed": 1234567891,
       "version": 1,
       "versionNonce": 1234567891,
-      "updated": 1711065600000,
+      "updated": <current_epoch_ms>,
       "isDeleted": false,
       "groupIds": ["data_lake_group"],
       "frameId": null,
@@ -162,7 +160,7 @@ For clean git diffs on regeneration:
       "lineHeight": 1.25
     }
   ],
-  "created": 1711065600000
+  "created": <current_epoch_ms>
 }
 ```
 

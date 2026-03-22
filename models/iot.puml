@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: IoT — edge devices and telemetry
+' ============================================================
+
+!procedure $EdgeDevice()
+  Container_Ext(edge_device, "Edge Device", "Technology TBD", "Sensor / edge compute device")
+!endprocedure
+
+!procedure $EdgeGateway()
+  Container(edge_gateway, "Edge Gateway", "Technology TBD", "Local aggregation and protocol translation")
+!endprocedure
+
+!procedure $TelemetryCollector()
+  Container(telemetry_collector, "Telemetry Collector", "Technology TBD", "Ingests device telemetry at scale")
+!endprocedure
+
+!procedure $DeviceRegistry()
+  ContainerDb(device_registry, "Device Registry", "Technology TBD", "Device identity and configuration store")
+!endprocedure
+
+!procedure $CommandDispatcher()
+  Container(command_dispatcher, "Command Dispatcher", "Technology TBD", "Cloud-to-device command routing")
+!endprocedure

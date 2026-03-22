@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: ML Platform — training, serving, experiment tracking
+' ============================================================
+
+!procedure $FeatureStore()
+  ContainerDb(feature_store, "Feature Store", "Technology TBD", "Managed feature storage (online + offline)")
+!endprocedure
+
+!procedure $ModelRegistry()
+  ContainerDb(model_registry, "Model Registry", "Technology TBD", "Versioned model artifacts and metadata")
+!endprocedure
+
+!procedure $TrainingInfra()
+  Container(training_infra, "Training Infra", "Technology TBD", "Model training compute")
+!endprocedure
+
+!procedure $ExperimentTracker()
+  Container(experiment_tracker, "Experiment Tracker", "Technology TBD", "Experiment logging and comparison")
+!endprocedure
+
+!procedure $MlPipeline()
+  Container(ml_pipeline, "ML Pipeline", "Technology TBD", "End-to-end ML pipeline orchestration")
+!endprocedure

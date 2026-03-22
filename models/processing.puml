@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Processing — how data moves and transforms
+' ============================================================
+
+!procedure $EltPipeline()
+  Container(elt_pipeline, "ELT Pipeline", "Technology TBD", "Extract-load-transform pipeline")
+!endprocedure
+
+!procedure $StreamProcessor()
+  Container(stream_processor, "Stream Processor", "Technology TBD", "Real-time stream processing")
+!endprocedure
+
+!procedure $Orchestrator()
+  Container(orchestrator, "Orchestrator", "Technology TBD", "Workflow orchestration")
+!endprocedure
+
+!procedure $DbtTransform()
+  Container(dbt_transform, "dbt Transform", "dbt Core", "SQL transformations")
+!endprocedure
+
+!procedure $SparkJob()
+  Container(spark_job, "Spark Job", "Technology TBD", "Distributed compute processing")
+!endprocedure

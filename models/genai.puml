@@ -1,0 +1,39 @@
+' ============================================================
+' Domain: GenAI — LLM ops, RAG, evals, safety
+' ============================================================
+
+!procedure $LlmGateway()
+  Container(llm_gateway, "LLM Gateway", "Technology TBD", "Unified LLM API proxy")
+!endprocedure
+
+!procedure $PromptRegistry()
+  ContainerDb(prompt_registry, "Prompt Registry", "Technology TBD", "Versioned prompt templates and system prompts")
+!endprocedure
+
+!procedure $RagPipeline()
+  Container(rag_pipeline, "RAG Pipeline", "Technology TBD", "Retrieval-augmented generation orchestration")
+!endprocedure
+
+!procedure $VectorStore()
+  ContainerDb(vector_store, "Vector Store", "Technology TBD", "Embedding storage and similarity search")
+!endprocedure
+
+!procedure $EvalFramework()
+  Container(eval_framework, "Eval Framework", "Technology TBD", "Automated evaluation and benchmarking")
+!endprocedure
+
+!procedure $RedteamHarness()
+  Container(redteam_harness, "Redteam Harness", "Technology TBD", "Adversarial testing and safety probing")
+!endprocedure
+
+!procedure $GuardrailsEngine()
+  Container(guardrails_engine, "Guardrails Engine", "Technology TBD", "Input/output filtering, PII detection, policy enforcement")
+!endprocedure
+
+!procedure $AgentRuntime()
+  Container(agent_runtime, "Agent Runtime", "Technology TBD", "Agent orchestration and tool execution")
+!endprocedure
+
+!procedure $FeedbackCollector()
+  Container(feedback_collector, "Feedback Collector", "Technology TBD", "Human feedback capture")
+!endprocedure

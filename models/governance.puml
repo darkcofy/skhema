@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Governance — data quality, lineage, policy
+' ============================================================
+
+!procedure $QualityEngine()
+  Container(quality_engine, "Quality Engine", "Technology TBD", "Data quality checks and monitoring")
+!endprocedure
+
+!procedure $AccessControl()
+  Container(access_control, "Access Control", "Technology TBD", "RBAC/ABAC policy enforcement")
+!endprocedure
+
+!procedure $LineageTracker()
+  Container(lineage_tracker, "Lineage Tracker", "Technology TBD", "End-to-end data lineage")
+!endprocedure
+
+!procedure $MasterDataSvc()
+  Container(master_data_svc, "Master Data Service", "Technology TBD", "Master data management")
+!endprocedure
+
+!procedure $PolicyEngine()
+  Container(policy_engine, "Policy Engine", "Technology TBD", "Data classification and policy rules")
+!endprocedure

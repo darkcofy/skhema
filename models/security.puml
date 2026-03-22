@@ -1,0 +1,27 @@
+' ============================================================
+' Domain: Security — auth, secrets, audit
+' ============================================================
+
+!procedure $IdentityProvider()
+  Container_Ext(identity_provider, "Identity Provider", "Technology TBD", "OAuth/SAML/OIDC provider")
+!endprocedure
+
+!procedure $AuthGateway()
+  Container(auth_gateway, "Auth Gateway", "Technology TBD", "API auth enforcement (token validation, mTLS)")
+!endprocedure
+
+!procedure $SecretsVault()
+  Container(secrets_vault, "Secrets Vault", "Technology TBD", "Secrets/key management")
+!endprocedure
+
+!procedure $Firewall()
+  Container_Ext(firewall, "Firewall", "Technology TBD", "Network perimeter / WAF")
+!endprocedure
+
+!procedure $CertificateMgr()
+  Container(certificate_mgr, "Certificate Manager", "Technology TBD", "TLS cert provisioning and rotation")
+!endprocedure
+
+!procedure $AuditLog()
+  ContainerDb(audit_log, "Audit Log", "Technology TBD", "Security audit trail")
+!endprocedure

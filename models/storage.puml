@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Storage — where data lives
+' ============================================================
+
+!procedure $DataLake()
+  ContainerDb(data_lake, "Data Lake", "Technology TBD", "Raw + curated zones")
+!endprocedure
+
+!procedure $DataWarehouse()
+  ContainerDb(data_warehouse, "Data Warehouse", "Technology TBD", "Dimensional models, governed data")
+!endprocedure
+
+!procedure $OperationalDb()
+  ContainerDb(operational_db, "Operational DB", "Technology TBD", "Transactional/operational database")
+!endprocedure
+
+!procedure $ObjectStore()
+  ContainerDb(object_store, "Object Store", "Technology TBD", "Unstructured blob/file storage")
+!endprocedure
+
+!procedure $CacheLayer()
+  Container(cache_layer, "Cache Layer", "Technology TBD", "Low-latency cache")
+!endprocedure

@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Consumers — people and external actors
+' ============================================================
+
+!procedure $DataAnalyst()
+  Person(data_analyst, "Data Analyst", "Queries data via BI/SQL tools")
+!endprocedure
+
+!procedure $DataEngineer()
+  Person(data_engineer, "Data Engineer", "Builds and maintains pipelines")
+!endprocedure
+
+!procedure $DataScientist()
+  Person(data_scientist, "Data Scientist", "Builds models, explores data")
+!endprocedure
+
+!procedure $BusinessUser()
+  Person(business_user, "Business User", "Consumes reports and dashboards")
+!endprocedure
+
+!procedure $ExternalSystem()
+  System_Ext(external_system, "External System", "System outside the boundary")
+!endprocedure

@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Ingestion — how data gets in
+' ============================================================
+
+!procedure $ApiGateway()
+  Container(api_gateway, "API Gateway", "Technology TBD", "Entry point for API-based ingestion")
+!endprocedure
+
+!procedure $EventStream()
+  Container(event_stream, "Event Stream", "Technology TBD", "Real-time event ingestion")
+!endprocedure
+
+!procedure $BatchEtl()
+  Container(batch_etl, "Batch ETL", "Technology TBD", "Scheduled batch data extraction")
+!endprocedure
+
+!procedure $CdcPipeline()
+  Container(cdc_pipeline, "CDC Pipeline", "Technology TBD", "Change data capture from source DBs")
+!endprocedure
+
+!procedure $FileDrop()
+  Container(file_drop, "File Drop", "Technology TBD", "SFTP/S3/blob file-based ingestion")
+!endprocedure

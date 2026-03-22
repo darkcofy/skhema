@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Serving — how data gets consumed
+' ============================================================
+
+!procedure $BiPlatform()
+  Container(bi_platform, "BI Platform", "Technology TBD", "Dashboards and reports")
+!endprocedure
+
+!procedure $ApiService()
+  Container(api_service, "API Service", "Technology TBD", "Data API for downstream consumers")
+!endprocedure
+
+!procedure $MlEndpoint()
+  Container(ml_endpoint, "ML Endpoint", "Technology TBD", "Deployed ML model serving predictions")
+!endprocedure
+
+!procedure $DataCatalog()
+  Container(data_catalog, "Data Catalog", "Technology TBD", "Searchable metadata catalog")
+!endprocedure
+
+!procedure $ReportDashboard()
+  Container(report_dashboard, "Report Dashboard", "Technology TBD", "Scheduled/static reports")
+!endprocedure

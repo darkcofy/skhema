@@ -1,0 +1,23 @@
+' ============================================================
+' Domain: Integration — system-to-system glue
+' ============================================================
+
+!procedure $Esb()
+  Container(esb, "ESB / Integration Platform", "Technology TBD", "Enterprise service bus")
+!endprocedure
+
+!procedure $MessageBroker()
+  Container(message_broker, "Message Broker", "Technology TBD", "Async message routing")
+!endprocedure
+
+!procedure $WebhookHandler()
+  Container(webhook_handler, "Webhook Handler", "Technology TBD", "Inbound webhook receiver")
+!endprocedure
+
+!procedure $RestApi()
+  Container(rest_api, "REST API", "Technology TBD", "RESTful integration endpoint")
+!endprocedure
+
+!procedure $GraphqlEndpoint()
+  Container(graphql_endpoint, "GraphQL Endpoint", "Technology TBD", "GraphQL integration endpoint")
+!endprocedure

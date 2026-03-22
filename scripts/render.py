@@ -91,9 +91,24 @@ def post_to_kroki(source: str, fmt: str = "svg") -> bytes:
     return b""
 
 
-def find_all_diagrams(root: str) -> list[str]:
-    """Find all .puml files under the diagrams/ directory."""
-    diagrams_path = os.path.join(root, DIAGRAMS_DIR)
+def get_client_paths(root: str, client: str) -> tuple[str, str, list[str]]:
+    """Return (diagrams_dir, rendered_dir, search_paths) for a client."""
+    client_dir = os.path.join(root, "clients", client)
+    if not os.path.isdir(client_dir):
+        print(f"Client '{client}' not found in clients/", file=sys.stderr)
+        sys.exit(1)
+    diagrams_dir = os.path.join(client_dir, "diagrams")
+    rendered_dir = os.path.join(client_dir, "rendered")
+    search_paths = [
+        os.path.join(client_dir, "models"),
+        os.path.join(root, "models"),
+        os.path.join(root, "lib"),
+    ]
+    return diagrams_dir, rendered_dir, search_paths
+
+
+def find_all_diagrams(diagrams_path: str) -> list[str]:
+    """Find all .puml files under the given diagrams directory."""
     results = []
     for dirpath, _, filenames in os.walk(diagrams_path):
         for f in sorted(filenames):
@@ -102,21 +117,21 @@ def find_all_diagrams(root: str) -> list[str]:
     return results
 
 
-def output_path(source_path: str, root: str, fmt: str) -> str:
-    """Compute output path mirroring diagrams/ structure into rendered/."""
-    rel = os.path.relpath(source_path, os.path.join(root, DIAGRAMS_DIR))
+def output_path(source_path: str, diagrams_dir: str, rendered_dir: str, fmt: str) -> str:
+    """Compute output path mirroring diagrams structure into rendered dir."""
+    rel = os.path.relpath(source_path, diagrams_dir)
     name = os.path.splitext(rel)[0] + f".{fmt}"
-    return os.path.join(root, RENDERED_DIR, name)
+    return os.path.join(rendered_dir, name)
 
 
-def render_file(source_path: str, root: str, fmt: str, dry_run: bool, animate: bool = False) -> bool:
+def render_file(source_path: str, diagrams_dir: str, rendered_dir: str, root: str, fmt: str, dry_run: bool, animate: bool = False, search_paths: list[str] | None = None) -> bool:
     """Render a single .puml file. Returns True on success."""
     print(f"Rendering: {os.path.relpath(source_path, root)}")
     source = open(source_path).read()
     base_dir = os.path.dirname(source_path)
 
     try:
-        resolved = resolve_includes(source, base_dir=base_dir)
+        resolved = resolve_includes(source, base_dir=base_dir, search_paths=search_paths)
     except (ValueError, FileNotFoundError) as e:
         print(f"  ERROR: {e}", file=sys.stderr)
         return False
@@ -131,7 +146,7 @@ def render_file(source_path: str, root: str, fmt: str, dry_run: bool, animate: b
         print(f"  ERROR: Kroki request failed: {e}", file=sys.stderr)
         return False
 
-    out = output_path(source_path, root, fmt)
+    out = output_path(source_path, diagrams_dir, rendered_dir, fmt)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "wb") as f:
         f.write(image_data)
@@ -153,6 +168,7 @@ def main():
     parser = argparse.ArgumentParser(description="Render PlantUML diagrams via Kroki API")
     parser.add_argument("file", nargs="?", help="Path to .puml file")
     parser.add_argument("--all", action="store_true", help="Render all diagrams/")
+    parser.add_argument("--client", help="Client name (looks in clients/<name>/diagrams/)")
     parser.add_argument("--png", action="store_true", help="Output PNG instead of SVG")
     parser.add_argument("--dry-run", action="store_true", help="Print resolved source only")
     parser.add_argument("--animate", action="store_true", help="Add marching-ant animation to ~ arrows (SVG only)")
@@ -167,14 +183,22 @@ def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fmt = "png" if args.png else "svg"
 
+    # Determine directories based on --client flag
+    if args.client:
+        diagrams_dir, rendered_dir, search_paths = get_client_paths(root, args.client)
+    else:
+        diagrams_dir = os.path.join(root, DIAGRAMS_DIR)
+        rendered_dir = os.path.join(root, RENDERED_DIR)
+        search_paths = None
+
     if args.all:
-        files = find_all_diagrams(root)
+        files = find_all_diagrams(diagrams_dir)
         if not files:
-            print("No .puml files found in diagrams/")
+            print(f"No .puml files found in {os.path.relpath(diagrams_dir, root)}/")
             return
         failures = []
         for f in files:
-            if not render_file(f, root, fmt, args.dry_run, animate=args.animate):
+            if not render_file(f, diagrams_dir, rendered_dir, root, fmt, args.dry_run, animate=args.animate, search_paths=search_paths):
                 failures.append(f)
         if failures:
             print(f"\n{len(failures)} file(s) failed:", file=sys.stderr)
@@ -186,7 +210,7 @@ def main():
         if not os.path.isfile(source_path):
             print(f"File not found: {args.file}", file=sys.stderr)
             sys.exit(1)
-        if not render_file(source_path, root, fmt, args.dry_run, animate=args.animate):
+        if not render_file(source_path, diagrams_dir, rendered_dir, root, fmt, args.dry_run, animate=args.animate, search_paths=search_paths):
             sys.exit(1)
 
 

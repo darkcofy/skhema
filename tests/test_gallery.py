@@ -113,3 +113,35 @@ class TestParseClientYaml:
         yaml_file.write_text('name: Acme Corp\nsubtitle: Data Platform\nsections:\n  - c4\n')
         result = parse_client_yaml(str(yaml_file))
         assert result["name"] == "Acme Corp"
+
+
+class TestGalleryDarkMode:
+    def test_dark_mode_toggle_present(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        html = generate_gallery_html("X", str(tmp_path / "rendered"), history=0)
+        assert "theme-toggle" in html
+        assert "arch-diagrams-theme" in html
+
+    def test_dark_mode_css_present(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        html = generate_gallery_html("X", str(tmp_path / "rendered"), history=0)
+        assert "#1a1a2e" in html
+        assert "#2d2d44" in html
+
+    def test_card_thumb_height_280(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
+        html = generate_gallery_html("X", str(tmp_path / "rendered"), history=0)
+        assert "280px" in html
+
+    def test_animated_badge_has_pulse(self, tmp_path):
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"><style>.marching-ant{}</style></svg>')
+        html = generate_gallery_html("X", str(tmp_path / "rendered"), history=0)
+        assert "pulse" in html

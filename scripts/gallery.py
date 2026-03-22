@@ -119,43 +119,137 @@ def diagram_name(svg_path: str) -> str:
 
 
 GALLERY_CSS = """
-body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background: #f9fafb; color: #333; }
-.header { max-width: 1200px; margin: 0 auto 30px; }
-.header h1 { color: #92400E; margin-bottom: 5px; }
-.header .meta { color: #78716C; font-size: 14px; }
-.search { max-width: 1200px; margin: 0 auto 20px; }
-.search input { width: 100%; padding: 10px 16px; border: 2px solid #D97706; border-radius: 8px; font-size: 16px; outline: none; box-sizing: border-box; }
-.search input:focus { border-color: #92400E; }
-.section { max-width: 1200px; margin: 0 auto 40px; }
-.section h2 { color: #92400E; border-bottom: 2px solid #D97706; padding-bottom: 8px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-.card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: box-shadow 0.2s, border-color 0.2s; border: 2px solid transparent; cursor: pointer; }
-.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-color: #D97706; }
-.card a { text-decoration: none; color: inherit; display: block; }
-.card .thumb { width: 100%; height: 200px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box; }
+:root {
+  --bg: #f9fafb; --text: #333; --card-bg: #fff; --card-border: transparent;
+  --card-hover: #D97706; --heading: #92400E; --accent: #D97706;
+  --meta: #78716C; --border: #f3f4f6; --input-bg: #fff;
+  --sidebar-bg: #fff; --sidebar-border: #e5e7eb;
+}
+[data-theme="dark"] {
+  --bg: #1a1a2e; --text: #e2e8f0; --card-bg: #2d2d44; --card-border: #3d3d5c;
+  --card-hover: #D97706; --heading: #FDE68A; --accent: #D97706;
+  --meta: #a1a1aa; --border: #3d3d5c; --input-bg: #2d2d44;
+  --sidebar-bg: #16162a; --sidebar-border: #2d2d44;
+}
+* { box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, Arial, sans-serif; margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+.header { max-width: 1400px; margin: 0 auto; padding: 20px 20px 0; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { color: var(--heading); margin: 0 0 5px; }
+.header .meta { color: var(--meta); font-size: 14px; }
+.theme-toggle { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; cursor: pointer; color: var(--text); font-size: 14px; }
+.theme-toggle:hover { border-color: var(--accent); }
+.layout { display: flex; max-width: 1400px; margin: 0 auto; min-height: calc(100vh - 80px); }
+.sidebar { width: 240px; flex-shrink: 0; padding: 20px; position: sticky; top: 0; height: 100vh; overflow-y: auto; border-right: 1px solid var(--sidebar-border); background: var(--sidebar-bg); }
+.sidebar .search input { width: 100%; padding: 8px 12px; border: 2px solid var(--accent); border-radius: 6px; font-size: 14px; outline: none; background: var(--input-bg); color: var(--text); }
+.sidebar .search input:focus { border-color: var(--heading); }
+.sidebar .match-count { font-size: 12px; color: var(--meta); margin-top: 6px; }
+.sidebar nav { margin-top: 16px; }
+.sidebar .nav-section { margin-bottom: 4px; }
+.sidebar .nav-section a { display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 6px; color: var(--text); text-decoration: none; font-size: 14px; font-weight: 500; }
+.sidebar .nav-section a:hover, .sidebar .nav-section a.active { background: var(--card-bg); color: var(--accent); }
+.sidebar .nav-section .badge { background: var(--accent); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.content { flex: 1; padding: 20px; min-width: 0; }
+.section { margin-bottom: 40px; }
+.section h2 { color: var(--heading); border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+.card { background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: box-shadow 0.2s, border-color 0.2s; border: 2px solid var(--card-border); cursor: pointer; }
+.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-color: var(--card-hover); }
+.card .thumb { width: 100%; height: 280px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center; padding: 12px; }
 .card .thumb svg { max-width: 100%; max-height: 100%; }
-.card .info { padding: 12px 16px; border-top: 1px solid #f3f4f6; }
-.card .info .name { font-weight: 600; font-size: 14px; }
-.card .info .badge { display: inline-block; font-size: 11px; background: #FDE68A; color: #92400E; padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+.card .info { padding: 12px 16px; border-top: 1px solid var(--border); }
+.card .info .name { font-weight: 600; font-size: 15px; }
+.card .info .type-label { font-size: 12px; color: var(--meta); margin-top: 2px; }
+.card .info .badge { display: inline-block; font-size: 11px; background: #FDE68A; color: #92400E; padding: 2px 6px; border-radius: 4px; margin-left: 6px; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 .history { padding: 0 16px 12px; }
-.history summary { font-size: 12px; color: #78716C; cursor: pointer; }
-.history .version { font-size: 12px; color: #78716C; padding: 4px 0; border-top: 1px solid #f3f4f6; }
+.history summary { font-size: 12px; color: var(--meta); cursor: pointer; }
+.history .version { font-size: 12px; color: var(--meta); padding: 4px 0; border-top: 1px solid var(--border); }
 .history .version .date { font-weight: 600; }
 .hidden { display: none; }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--card-bg); border-radius: 12px; max-width: 90vw; max-height: 90vh; overflow: auto; padding: 24px; position: relative; }
+.modal h3 { margin: 0 0 8px; color: var(--heading); }
+.modal .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--meta); }
+.modal .modal-close:hover { color: var(--text); }
+.modal .modal-link { display: inline-block; margin-bottom: 16px; color: var(--accent); font-size: 13px; }
+.modal svg { max-width: 100%; background: #fff; border-radius: 8px; padding: 16px; }
+.hamburger { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); padding: 8px; }
+@media (max-width: 768px) {
+  .sidebar { display: none; position: fixed; top: 0; left: 0; z-index: 900; height: 100vh; width: 280px; }
+  .sidebar.open { display: block; }
+  .hamburger { display: block; }
+}
 """
 
 GALLERY_JS = """
+function initTheme() {
+  const saved = localStorage.getItem('arch-diagrams-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+    document.documentElement.setAttribute('data-theme', 'dark');
+  updateToggleLabel();
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('arch-diagrams-theme', next);
+  updateToggleLabel();
+}
+function updateToggleLabel() {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  btn.textContent = dark ? '\\u2600 Light' : '\\u263e Dark';
+}
 function filterCards() {
   const q = document.getElementById('search').value.toLowerCase();
+  let total = 0, shown = 0;
   document.querySelectorAll('.card').forEach(c => {
-    const name = c.dataset.name.toLowerCase();
-    c.classList.toggle('hidden', !name.includes(q));
+    total++;
+    const match = c.dataset.name.toLowerCase().includes(q);
+    c.classList.toggle('hidden', !match);
+    if (match) shown++;
   });
   document.querySelectorAll('.section').forEach(s => {
     const visible = s.querySelectorAll('.card:not(.hidden)').length;
     s.style.display = visible ? '' : 'none';
   });
+  const mc = document.getElementById('matchCount');
+  if (mc) mc.textContent = q ? shown + ' of ' + total + ' diagrams' : total + ' diagrams';
 }
+function openModal(card) {
+  const modal = document.getElementById('modal');
+  const svg = card.querySelector('.thumb').innerHTML;
+  const name = card.querySelector('.name').textContent;
+  const href = card.dataset.href;
+  document.getElementById('modalTitle').textContent = name;
+  document.getElementById('modalSvg').innerHTML = svg;
+  document.getElementById('modalLink').href = href;
+  modal.classList.add('active');
+}
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function initScrollTracking() {
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.nav-section a');
+  if (!sections.length || !navLinks.length) return;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const id = e.target.id;
+        const link = document.querySelector('.nav-section a[href=\"#' + id + '\"]');
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
+  sections.forEach(s => observer.observe(s));
+}
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+initTheme();
+document.addEventListener('DOMContentLoaded', () => { initScrollTracking(); filterCards(); });
 """
 
 
@@ -164,6 +258,7 @@ def generate_gallery_html(
     rendered_dir: str,
     history: int = 3,
     diagrams_dir: str | None = None,
+    client_yaml_path: str | None = None,
 ) -> str:
     """Generate a self-contained HTML gallery page."""
     svg_files = discover_diagrams(rendered_dir)
@@ -171,8 +266,19 @@ def generate_gallery_html(
     total = len(svg_files)
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
+    config = parse_client_yaml(client_yaml_path) if client_yaml_path else {"sections": [], "accent_color": "#D97706"}
+    section_order = config["sections"] if config["sections"] else [t for t in TYPE_ORDER if t in groups]
+
+    nav_html = ""
+    for dtype in section_order:
+        if dtype not in groups:
+            continue
+        label = TYPE_LABELS.get(dtype, dtype.title())
+        count = len(groups[dtype])
+        nav_html += f'<div class="nav-section"><a href="#section-{dtype}">{html.escape(label)} <span class="badge">{count}</span></a></div>'
+
     cards_html = []
-    for dtype in TYPE_ORDER:
+    for dtype in section_order:
         if dtype not in groups:
             continue
         label = TYPE_LABELS.get(dtype, dtype.title())
@@ -180,14 +286,10 @@ def generate_gallery_html(
         for svg_path in groups[dtype]:
             name = diagram_name(svg_path)
             svg_content = open(svg_path).read()
-            # Strip XML declaration for inline embedding
             svg_inline = re.sub(r"<\?xml[^?]*\?>", "", svg_content).strip()
             rel_path = os.path.relpath(svg_path, os.path.dirname(rendered_dir))
-
-            # Check for animated arrows
             has_animation = "marching-ant" in svg_content
 
-            # Get history if available
             history_html = ""
             if history > 0 and diagrams_dir:
                 source = svg_to_source_path(svg_path, rendered_dir, diagrams_dir)
@@ -202,16 +304,17 @@ def generate_gallery_html(
 
             badge = '<span class="badge">animated</span>' if has_animation else ""
             search_text = f"{name} {dtype}"
+            type_label_text = TYPE_LABELS.get(dtype, dtype.title())
             section_cards.append(
-                f'<div class="card" data-name="{html.escape(search_text)}">'
-                f'<a href="{html.escape(rel_path)}" target="_blank">'
+                f'<div class="card" data-name="{html.escape(search_text)}" data-href="{html.escape(rel_path)}" onclick="openModal(this)">'
                 f'<div class="thumb">{svg_inline}</div>'
-                f'<div class="info"><span class="name">{html.escape(name)}</span>{badge}</div>'
-                f'</a>{history_html}</div>'
+                f'<div class="info"><span class="name">{html.escape(name)}</span>{badge}'
+                f'<div class="type-label">{html.escape(type_label_text)}</div></div>'
+                f'{history_html}</div>'
             )
 
         cards_html.append(
-            f'<div class="section"><h2>{html.escape(label)} ({len(groups[dtype])})</h2>'
+            f'<div class="section" id="section-{dtype}"><h2>{html.escape(label)} ({len(groups[dtype])})</h2>'
             f'<div class="grid">{"".join(section_cards)}</div></div>'
         )
 
@@ -221,9 +324,20 @@ def generate_gallery_html(
 <title>{html.escape(client_name)} — Architecture Diagrams</title>
 <style>{GALLERY_CSS}</style></head>
 <body>
-<div class="header"><h1>{html.escape(client_name)}</h1><p class="meta">Generated {now} — {total} diagram(s)</p></div>
-<div class="search"><input type="text" id="search" placeholder="Filter diagrams..." oninput="filterCards()"></div>
-{"".join(cards_html)}
+<div class="header">
+  <div><h1>{html.escape(client_name)}</h1><p class="meta">Generated {now} — {total} diagram(s)</p></div>
+  <div><button class="hamburger" onclick="toggleSidebar()">&#9776;</button><button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">&#9790; Dark</button></div>
+</div>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="search"><input type="text" id="search" placeholder="Filter diagrams..." oninput="filterCards()"><div class="match-count" id="matchCount">{total} diagrams</div></div>
+    <nav>{nav_html}</nav>
+  </aside>
+  <main class="content">{"".join(cards_html)}</main>
+</div>
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal"><button class="modal-close" onclick="closeModal()">&#10005;</button><h3 id="modalTitle"></h3><a class="modal-link" id="modalLink" target="_blank">Open in new tab</a><div id="modalSvg"></div></div>
+</div>
 <script>{GALLERY_JS}</script>
 </body></html>"""
 
@@ -247,12 +361,14 @@ def main():
         print(f"No rendered diagrams found. Run: python scripts/render.py --client {args.client} --all", file=sys.stderr)
         sys.exit(1)
 
+    client_yaml = os.path.join(client_dir, "client.yaml")
     client_name = args.title or args.client.replace("-", " ").replace("_", " ").title()
     gallery_html = generate_gallery_html(
         client_name=client_name,
         rendered_dir=rendered_dir,
         history=args.history,
         diagrams_dir=diagrams_dir,
+        client_yaml_path=client_yaml,
     )
 
     out_path = os.path.join(client_dir, "index.html")

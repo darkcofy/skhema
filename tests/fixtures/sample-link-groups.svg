@@ -1,0 +1,24 @@
+<?plantuml 1.2026.1?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300">
+<defs/>
+<g>
+<g id="lnk1" data-source-line="10">
+<path d="M 100 150 L 300 150" fill="none" style="stroke:#666666;stroke-width:1;"/>
+<polygon fill="#666666" points="300,150 294,146 296,150 294,154" style="stroke:#666666;stroke-width:1;"/>
+<text fill="#666666" font-family="sans-serif" font-size="13" lengthAdjust="spacing" x="170" y="143">~Streams</text>
+<text fill="#666666" font-family="sans-serif" font-size="13" lengthAdjust="spacing" x="210" y="143">to</text>
+<text fill="#666666" font-family="sans-serif" font-size="13" font-style="italic" lengthAdjust="spacing" x="180" y="158">[Avro]</text>
+</g>
+<g id="lnk2" data-source-line="11">
+<path d="M 100 250 L 300 250" fill="none" style="stroke:#666666;stroke-width:1;"/>
+<polygon fill="#666666" points="300,250 294,246 296,250 294,254" style="stroke:#666666;stroke-width:1;"/>
+<text fill="#666666" font-family="sans-serif" font-size="13" lengthAdjust="spacing" x="180" y="243">Queries</text>
+<text fill="#666666" font-family="sans-serif" font-size="13" font-style="italic" lengthAdjust="spacing" x="180" y="258">[SQL]</text>
+</g>
+<g id="lnk3" data-source-line="12">
+<path d="M 100 50 L 300 50" fill="none" style="stroke:#666666;stroke-width:1;"/>
+<polygon fill="#666666" points="300,50 294,46 296,50 294,54" style="stroke:#666666;stroke-width:1;"/>
+<text fill="#666666" font-family="sans-serif" font-size="13" lengthAdjust="spacing" x="170" y="43">~Loads</text>
+<text fill="#666666" font-family="sans-serif" font-size="13" lengthAdjust="spacing" x="200" y="43">to</text>
+</g>
+</g>
+</svg>

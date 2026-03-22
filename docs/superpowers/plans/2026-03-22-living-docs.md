@@ -720,7 +720,7 @@ def parse_markdown(md: str) -> str:
 cd /home/alfred/code/arch-diagrams && python3 -m pytest tests/test_docs.py::TestParseMarkdown -v
 ```
 
-Expected: All 12 tests PASS.
+Expected: All 11 tests PASS.
 
 - [ ] **Step 5: Commit**
 
@@ -972,7 +972,7 @@ def generate_docs_html(
 cd /home/alfred/code/arch-diagrams && python3 -m pytest tests/test_docs.py -v
 ```
 
-Expected: All 20 tests PASS (12 parser + 8 assembly).
+Expected: All 19 tests PASS (11 parser + 8 assembly).
 
 - [ ] **Step 5: Add `main()` to `scripts/docs.py`**
 

@@ -173,8 +173,16 @@ Diagrams appear in the deck in this order:
 2. Sequence diagrams (alphabetical)
 3. ERD diagrams (alphabetical)
 4. Deployment diagrams (alphabetical)
+5. Excalidraw diagrams (alphabetical)
 
 Same ordering as the gallery.
+
+### Excalidraw Handling
+
+Excalidraw `.svg` files in `clients/<name>/rendered/excalidraw/` are included in both gallery and deck:
+- **Gallery:** Inlined as SVG thumbnails, same as PlantUML diagrams
+- **PDF deck:** Excalidraw SVGs are not PlantUML, so they can't use Kroki's PDF endpoint. Instead, they are embedded as SVG-in-HTML pages converted to PDF (or included as-is if the PDF merger supports SVG pages). If neither works cleanly, fall back to skipping with a note: "Excalidraw diagrams included in gallery but not in PDF — open index.html for full set."
+- **PPTX deck:** Excalidraw SVGs converted to PNG via a headless browser or embedded directly. If conversion isn't possible stdlib-only, embed as SVG image (PowerPoint 2016+ supports SVG).
 
 ## Repo Changes
 
@@ -193,4 +201,4 @@ tests/test_deck.py                # New
 - Client-specific theming (all clients use shared yellow/white theme for now)
 - Diagram version history in the gallery
 - Live auto-refresh on the gallery page
-- Excalidraw files in the deck export (SVG/PlantUML only)
+- Excalidraw-to-PNG conversion for PDF deck (best-effort SVG embedding instead)

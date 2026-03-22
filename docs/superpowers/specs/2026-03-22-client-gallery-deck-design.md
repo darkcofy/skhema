@@ -82,8 +82,9 @@ This means client diagrams can write:
 ### Usage
 
 ```bash
-python scripts/gallery.py --client acme
-# -> clients/acme/index.html
+python scripts/gallery.py --client acme                     # Default: 3 history versions
+python scripts/gallery.py --client acme --history 0         # No history (faster)
+python scripts/gallery.py --client acme --history 5         # More history
 ```
 
 ### Output
@@ -125,6 +126,27 @@ Self-contained HTML file (`clients/acme/index.html`):
 - **Animated indicator:** Small badge on diagrams that contain `~` markers
 - **Text filter:** Vanilla JS, filters cards by diagram name. No dependencies.
 - **Styling:** Inline CSS. Light grey background (`#f9fafb`), white cards with subtle shadow, yellow accent (`#D97706`) for headings and card borders on hover.
+
+### Version History
+
+Each diagram card can show up to N previous versions (default 3, configurable via `--history`).
+
+**How it works:**
+1. For each rendered diagram, run `git log -N --format="%H %ai %s" -- <source_puml_file>` to get commit history
+2. For each historical commit, run `git show <hash>:<file>` to get the old `.puml` source
+3. Render old versions via Kroki API
+4. Cache historical renders in `clients/<name>/rendered/history/<hash>/` to avoid re-rendering on subsequent gallery builds
+
+**Gallery UI:**
+- Current version shown as the main thumbnail
+- Previous versions shown as smaller thumbnails below, with date and commit message
+- Click any version to open full SVG
+- Visual diff indicator: if the diagram changed between versions, show a subtle "changed" badge
+
+**Performance:**
+- Historical renders are cached — only new commits trigger Kroki calls
+- `--history 0` skips all git lookups and rendering (fastest)
+- Typical gallery build with 20 diagrams × 3 versions = ~60 Kroki calls on first run, near-zero on subsequent runs
 
 ### Client Name Detection
 
@@ -199,6 +221,6 @@ tests/test_deck.py                # New
 
 - Top-level client index/listing
 - Client-specific theming (all clients use shared yellow/white theme for now)
-- Diagram version history in the gallery
+- Visual diff highlighting between versions (side-by-side pixel comparison)
 - Live auto-refresh on the gallery page
 - Excalidraw-to-PNG conversion for PDF deck (best-effort SVG embedding instead)

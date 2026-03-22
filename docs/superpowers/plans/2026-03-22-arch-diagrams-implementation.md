@@ -60,7 +60,7 @@ Version-controlled enterprise architecture diagrams using PlantUML + C4-PlantUML
 
 ```bash
 # Render a single diagram
-python scripts/render.py diagrams/c4/data-platform-context.puml
+python scripts/render.py diagrams/c4/data-platform-container.puml
 
 # Render all diagrams
 python scripts/render.py --all
@@ -69,7 +69,7 @@ python scripts/render.py --all
 python scripts/validate.py
 
 # Dry-run (see resolved source without rendering)
-python scripts/render.py diagrams/c4/data-platform-context.puml --dry-run
+python scripts/render.py diagrams/c4/data-platform-container.puml --dry-run
 ```
 
 ## Architecture
@@ -1367,6 +1367,16 @@ class TestHardcodedColours:
         errors = check_hardcoded_colours(source, "lib/theme.puml")
         assert errors == []
 
+    def test_template_file_exempt(self):
+        source = 'skinparam backgroundColor #FFFFFF'
+        errors = check_hardcoded_colours(source, "templates/sequence.puml")
+        assert errors == []
+
+    def test_prompts_file_exempt(self):
+        source = 'skinparam backgroundColor #F0F0F0'
+        errors = check_hardcoded_colours(source, "prompts/examples/bad-inline-defs.puml")
+        assert errors == []
+
 
 class TestDuplicateIds:
     def test_no_duplicates_passes(self):
@@ -1438,9 +1448,11 @@ def check_inline_definitions(source: str, filepath: str) -> list[str]:
 
 
 def check_hardcoded_colours(source: str, filepath: str) -> list[str]:
-    """Check that hex colours only appear in theme.puml."""
+    """Check that hex colours only appear in theme.puml, templates, and prompts."""
     errors = []
-    if filepath.endswith("theme.puml"):
+    # Exempt: theme (defines colours), templates (need hardcoded skinparams),
+    # prompts (examples may intentionally show anti-patterns)
+    if filepath.endswith("theme.puml") or filepath.startswith("templates") or filepath.startswith("prompts"):
         return errors
     for i, line in enumerate(source.splitlines(), 1):
         if HEX_COLOUR_RE.search(line):
@@ -1464,24 +1476,45 @@ def check_duplicate_ids(models: dict[str, str]) -> list[str]:
     return errors
 
 
+def parse_manifest_element_ids(manifest_path: str) -> set[str]:
+    """Extract element IDs from manifest.yaml using simple line parsing (no PyYAML needed).
+
+    Relies on the manifest structure being consistently indented:
+      domains:
+        <domain>:
+          elements:
+            <element_id>:
+    Element IDs are at 8-space indent under 'elements:' sections.
+    """
+    ids = set()
+    in_elements = False
+    with open(manifest_path) as f:
+        for line in f:
+            stripped = line.rstrip()
+            if stripped.strip() == "elements:":
+                in_elements = True
+                continue
+            if in_elements:
+                # Element IDs are indented 8 spaces (or 2 levels deeper than 'elements:')
+                if stripped.startswith("        ") and stripped.strip().endswith(":"):
+                    eid = stripped.strip().rstrip(":")
+                    # Skip sub-keys like 'type:' and 'description:'
+                    if eid not in ("type", "description"):
+                        ids.add(eid)
+                elif not stripped.startswith("        ") and stripped.strip():
+                    # Left of element indent — exited the elements block
+                    if not stripped.startswith("          "):
+                        in_elements = stripped.strip() == "elements:"
+    return ids
+
+
 def check_manifest_sync(manifest_path: str, models_dir: str) -> list[str]:
     """Check manifest.yaml matches model file contents."""
     errors = []
-    try:
-        # Use simple YAML parsing (no dependency) — read key structure
-        import yaml
-        with open(manifest_path) as f:
-            manifest = yaml.safe_load(f)
-    except ImportError:
-        # Fallback: skip this check if PyYAML not available
-        return [f"SKIP: PyYAML not installed, cannot check manifest sync"]
-    except FileNotFoundError:
+    if not os.path.isfile(manifest_path):
         return [f"manifest.yaml not found at {manifest_path}"]
 
-    manifest_ids = set()
-    for domain in manifest.get("domains", {}).values():
-        for eid in domain.get("elements", {}).keys():
-            manifest_ids.add(eid)
+    manifest_ids = parse_manifest_element_ids(manifest_path)
 
     # Collect IDs from model files
     file_ids = set()
@@ -1629,7 +1662,7 @@ $ApplySkinparams()                      ← Skinparams THIRD
 
 ### Naming
 - Element IDs: `snake_case` (e.g., `data_lake`, `auth_gateway`)
-- File names: `kebab-case` (e.g., `data-platform-context.puml`)
+- File names: `kebab-case` (e.g., `data-platform-container.puml`)
 - Procedure names: `$PascalCase` (e.g., `$DataLake()`)
 
 ### Output Format
@@ -1713,9 +1746,9 @@ git commit -m "feat: add agent system prompt and good/bad examples"
 ### Task 13: Smoke Test — End-to-End Render
 
 **Files:**
-- Create: `diagrams/c4/data-platform-context.puml` (first real diagram)
+- Create: `diagrams/c4/data-platform-container.puml` (first real diagram)
 
-- [ ] **Step 1: Create `diagrams/c4/data-platform-context.puml`**
+- [ ] **Step 1: Create `diagrams/c4/data-platform-container.puml`**
 
 ```plantuml
 @startuml
@@ -1771,7 +1804,7 @@ Expected: All checks passed (or known SKIP for PyYAML).
 - [ ] **Step 3: Render via script**
 
 ```bash
-python scripts/render.py diagrams/c4/data-platform-context.puml
+python scripts/render.py diagrams/c4/data-platform-container.puml
 ```
 
 Expected: `rendered/c4/data-platform-context.svg` created, HTTP 200.
@@ -1779,7 +1812,7 @@ Expected: `rendered/c4/data-platform-context.svg` created, HTTP 200.
 - [ ] **Step 4: Render with --dry-run to verify include resolution**
 
 ```bash
-python scripts/render.py diagrams/c4/data-platform-context.puml --dry-run
+python scripts/render.py diagrams/c4/data-platform-container.puml --dry-run
 ```
 
 Expected: Printed source with local `!include` directives replaced by inlined content. Remote C4 URL still present.
@@ -1798,7 +1831,7 @@ Add to the `diagrams:` section of `manifest.yaml`:
 
 ```yaml
 diagrams:
-  - path: diagrams/c4/data-platform-context.puml
+  - path: diagrams/c4/data-platform-container.puml
     title: "Data Platform — Container View"
     type: c4_container
     includes_domains: [consumers, ingestion, storage, processing, serving]
@@ -1807,6 +1840,6 @@ diagrams:
 - [ ] **Step 7: Commit**
 
 ```bash
-git add diagrams/c4/data-platform-context.puml manifest.yaml
+git add diagrams/c4/data-platform-container.puml manifest.yaml
 git commit -m "feat: add data platform context diagram and smoke test"
 ```

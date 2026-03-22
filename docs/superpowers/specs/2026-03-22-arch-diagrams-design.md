@@ -31,7 +31,7 @@ arch-diagrams/
 │   ├── integration.puml
 │   ├── security.puml
 │   ├── iot.puml
-│   ├── ml_platform.puml
+│   ├── ml-platform.puml
 │   └── genai.puml
 ├── diagrams/
 │   ├── c4/
@@ -43,15 +43,15 @@ arch-diagrams/
 │   ├── render.py
 │   └── validate.py
 ├── templates/
-│   ├── c4_context.puml
-│   ├── c4_container.puml
+│   ├── c4-context.puml
+│   ├── c4-container.puml
 │   ├── sequence.puml
 │   └── erd.puml
 ├── prompts/
 │   ├── diagram-agent.md
 │   └── examples/
-│       ├── good_c4_context.puml
-│       └── bad_inline_defs.puml
+│       ├── good-c4-context.puml
+│       └── bad-inline-defs.puml
 ├── manifest.yaml
 ├── .gitignore
 └── README.md
@@ -125,7 +125,7 @@ Each file defines C4 elements as `!procedure` blocks. Technology is parameterise
 | `integration.puml` | `esb` (Container), `message_broker` (Container), `webhook_handler` (Container), `rest_api` (Container), `graphql_endpoint` (Container) |
 | `security.puml` | `identity_provider` (Container_Ext), `auth_gateway` (Container), `secrets_vault` (Container), `firewall` (Container_Ext), `certificate_mgr` (Container), `audit_log` (ContainerDb) |
 | `iot.puml` | `edge_device` (Container_Ext), `edge_gateway` (Container), `telemetry_collector` (Container), `device_registry` (ContainerDb), `command_dispatcher` (Container) |
-| `ml_platform.puml` | `feature_store` (ContainerDb), `model_registry` (ContainerDb), `training_infra` (Container), `experiment_tracker` (Container), `ml_pipeline` (Container) |
+| `ml-platform.puml` | `feature_store` (ContainerDb), `model_registry` (ContainerDb), `training_infra` (Container), `experiment_tracker` (Container), `ml_pipeline` (Container) |
 | `genai.puml` | `llm_gateway` (Container), `prompt_registry` (ContainerDb), `rag_pipeline` (Container), `vector_store` (ContainerDb), `eval_framework` (Container), `redteam_harness` (Container), `guardrails_engine` (Container), `agent_runtime` (Container), `feedback_collector` (Container) |
 
 ### View Layer (`diagrams/`)
@@ -222,8 +222,8 @@ Rules for any AI agent working in this repo:
 
 | File | Purpose |
 |---|---|
-| `c4_context.puml` | System context starter |
-| `c4_container.puml` | Container view starter |
+| `c4-context.puml` | System context starter |
+| `c4-container.puml` | Container view starter |
 | `sequence.puml` | Sequence diagram starter |
 | `erd.puml` | ERD starter |
 

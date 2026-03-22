@@ -1,0 +1,71 @@
+' ============================================================
+' arch-diagrams theme — Yellow & White palette
+' USAGE: !include this file BEFORE the C4 library include
+' ============================================================
+
+' --- Persons ---
+!$PERSON_BG_COLOR = "#FDE68A"
+!$PERSON_FONT_COLOR = "#333333"
+!$PERSON_BORDER_COLOR = "#D97706"
+
+' --- Systems ---
+!$SYSTEM_BG_COLOR = "#FEF3C7"
+!$SYSTEM_FONT_COLOR = "#333333"
+!$SYSTEM_BORDER_COLOR = "#D97706"
+
+' --- Containers ---
+!$CONTAINER_BG_COLOR = "#FEF3C7"
+!$CONTAINER_FONT_COLOR = "#333333"
+!$CONTAINER_BORDER_COLOR = "#D97706"
+
+' --- Container DBs ---
+!$CONTAINER_DB_BG_COLOR = "#FCD34D"
+!$CONTAINER_DB_FONT_COLOR = "#333333"
+!$CONTAINER_DB_BORDER_COLOR = "#B45309"
+
+' --- Components ---
+!$COMPONENT_BG_COLOR = "#FEF9C3"
+!$COMPONENT_FONT_COLOR = "#333333"
+!$COMPONENT_BORDER_COLOR = "#CA8A04"
+
+' --- External Persons ---
+!$EXTERNAL_PERSON_BG_COLOR = "#F5F5F4"
+!$EXTERNAL_PERSON_FONT_COLOR = "#666666"
+!$EXTERNAL_PERSON_BORDER_COLOR = "#A8A29E"
+
+' --- External Systems ---
+!$EXTERNAL_SYSTEM_BG_COLOR = "#F5F5F4"
+!$EXTERNAL_SYSTEM_FONT_COLOR = "#666666"
+!$EXTERNAL_SYSTEM_BORDER_COLOR = "#A8A29E"
+
+' --- External Containers ---
+!$EXTERNAL_CONTAINER_BG_COLOR = "#F5F5F4"
+!$EXTERNAL_CONTAINER_FONT_COLOR = "#666666"
+!$EXTERNAL_CONTAINER_BORDER_COLOR = "#A8A29E"
+
+' --- External Components ---
+!$EXTERNAL_COMPONENT_BG_COLOR = "#F5F5F4"
+!$EXTERNAL_COMPONENT_FONT_COLOR = "#666666"
+!$EXTERNAL_COMPONENT_BORDER_COLOR = "#A8A29E"
+
+' --- Relationships ---
+!$REL_TEXT_COLOR = "#78716C"
+!$REL_LINE_COLOR = "#92400E"
+
+' --- Boundaries ---
+!$BOUNDARY_COLOR = "#D97706"
+!$BOUNDARY_BG_COLOR = "#FFFBEB"
+
+' --- Skinparams (applied after C4 include) ---
+' These are defined as a procedure so views can call them after the C4 include
+!procedure $ApplySkinparams()
+  skinparam backgroundColor #FFFFFF
+  skinparam defaultFontName "Segoe UI", Arial, sans-serif
+  skinparam defaultFontSize 12
+  skinparam legend {
+    BackgroundColor #FFFBEB
+    BorderColor #D97706
+    FontColor #333333
+    FontSize 11
+  }
+!endprocedure

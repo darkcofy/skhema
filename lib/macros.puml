@@ -1,0 +1,21 @@
+' ============================================================
+' arch-diagrams shared macros
+' USAGE: !include after lib/theme.puml and C4 library
+' ============================================================
+
+' Force left-to-right layout
+!procedure $LayoutLR()
+  left to right direction
+!endprocedure
+
+' Domain boundary with consistent styling
+!procedure $DomainBoundary($alias, $label)
+  Boundary($alias, $label, "Domain")
+!endprocedure
+
+' Styled note attached to an element
+!procedure $Note($alias, $text)
+  note right of $alias
+    $text
+  end note
+!endprocedure

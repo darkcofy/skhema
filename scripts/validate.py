@@ -11,6 +11,14 @@ import re
 import sys
 from pathlib import Path
 
+# Ensure project root is on sys.path so `scripts.manifest` is importable
+# whether invoked as `python scripts/validate.py` or via pytest.
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
+from scripts.manifest import parse_manifest_ids
+
 ELEMENT_PATTERNS = [
     r"^\s*(?:Person|Person_Ext|System|System_Ext|Container|Container_Ext|ContainerDb|ContainerDb_Ext|Component|Component_Ext)\s*\(",
 ]
@@ -61,43 +69,13 @@ def check_duplicate_ids(models: dict[str, str]) -> list[str]:
     return errors
 
 
-def parse_manifest_element_ids(manifest_path: str) -> set[str]:
-    """Extract element IDs from manifest.yaml using simple line parsing (no PyYAML needed).
-
-    Manifest structure uses 2-space indentation:
-      domains:          (0)
-        <domain>:       (2)
-          elements:     (4)
-            <id>:       (6)  <- element IDs we want
-              type: ... (8)
-    """
-    ids = set()
-    in_elements = False
-    with open(manifest_path) as f:
-        for line in f:
-            raw = line.rstrip("\n")
-            stripped = raw.strip()
-            indent = len(raw) - len(raw.lstrip(" "))
-            if stripped == "elements:":
-                in_elements = True
-                continue
-            if in_elements:
-                if indent == 6 and stripped.endswith(":"):
-                    eid = stripped.rstrip(":")
-                    ids.add(eid)
-                elif indent <= 4 and stripped:
-                    # Left the elements block
-                    in_elements = stripped == "elements:"
-    return ids
-
-
 def check_manifest_sync(manifest_path: str, models_dir: str) -> list[str]:
     """Check manifest.yaml matches model file contents."""
     errors = []
     if not os.path.isfile(manifest_path):
         return [f"manifest.yaml not found at {manifest_path}"]
 
-    manifest_ids = parse_manifest_element_ids(manifest_path)
+    manifest_ids = parse_manifest_ids(manifest_path)
 
     file_ids = set()
     for fname in os.listdir(models_dir):

@@ -15,7 +15,8 @@ A Python script that reads `manifest.yaml` and generates an Excalidraw library f
 ## Repo Additions
 
 ```
-lib/arch-diagrams.excalidrawlib        # Generated library (committed)
+lib/arch-diagrams.excalidrawlib        # Generated library — light mode (committed)
+lib/arch-diagrams-dark.excalidrawlib   # Generated library — dark mode (committed)
 diagrams/excalidraw/.gitkeep           # Where .excalidraw files are saved
 scripts/manifest.py                    # Shared manifest parser (new)
 scripts/generate-excalidraw-lib.py     # Generator script
@@ -190,9 +191,34 @@ Behaviour:
 5. Drag elements onto canvas, connect with arrows, save as `.excalidraw`
 6. Save `.excalidraw` files to `diagrams/excalidraw/` and commit
 
+## Dark Mode Variant
+
+The generator produces two library files:
+
+- `lib/arch-diagrams.excalidrawlib` — light mode (default)
+- `lib/arch-diagrams-dark.excalidrawlib` — dark mode
+
+Dark mode colour mapping:
+
+| C4 Type | Background | Stroke | Text |
+|---|---|---|---|
+| Person | `#92400E` (deep amber) | `#FCD34D` | `#FDE68A` |
+| Container | `#78350F` (dark amber) | `#D97706` | `#FEF3C7` |
+| ContainerDb | `#713F12` (dark gold) | `#EAB308` | `#FEF9C3` |
+| System_Ext | `#44403C` (dark stone) | `#78716C` | `#D6D3D1` |
+| Container_Ext | `#44403C` (dark stone) | `#78716C` | `#D6D3D1` |
+
+Same shapes, same roughness, same emojis — just inverted hues. Dark backgrounds with light strokes/text.
+
+Usage:
+```bash
+python scripts/generate-excalidraw-lib.py           # Generates both
+python scripts/generate-excalidraw-lib.py --light    # Light only
+python scripts/generate-excalidraw-lib.py --dark     # Dark only
+```
+
 ## Out of Scope
 
 - Auto-layout or relationship generation
 - Bi-directional sync (Excalidraw back to PlantUML)
 - Custom Excalidraw shapes beyond styled rectangles
-- Excalidraw dark mode theme variant

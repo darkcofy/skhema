@@ -1,0 +1,36 @@
+@startuml
+' === TEMPLATE: Entity Relationship Diagram ===
+' 1. Copy this file to diagrams/erd/<your-diagram-name>.puml
+' 2. Define entities and relationships
+' 3. Remove these comments
+
+' No C4 include needed — standard PlantUML entity syntax
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+skinparam entity {
+  BackgroundColor #FEF3C7
+  BorderColor #D97706
+  FontColor #333333
+}
+
+' entity "Customer" as customer {
+'   *customer_id : uuid <<PK>>
+'   --
+'   name : varchar
+'   email : varchar
+'   created_at : timestamp
+' }
+
+' entity "Order" as order {
+'   *order_id : uuid <<PK>>
+'   --
+'   *customer_id : uuid <<FK>>
+'   total : decimal
+'   status : varchar
+' }
+
+' customer ||--o{ order : "places"
+
+@enduml

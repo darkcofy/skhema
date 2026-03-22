@@ -1,0 +1,32 @@
+@startuml
+' === TEMPLATE: Sequence Diagram ===
+' 1. Copy this file to diagrams/sequence/<your-diagram-name>.puml
+' 2. Define participants and interactions
+' 3. Remove these comments
+
+' No C4 include needed — standard PlantUML sequence syntax
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+skinparam sequence {
+  ArrowColor #92400E
+  LifeLineBorderColor #D97706
+  LifeLineBackgroundColor #FFFBEB
+  ParticipantBackgroundColor #FEF3C7
+  ParticipantBorderColor #D97706
+  ParticipantFontColor #333333
+}
+
+title Sequence Diagram Title
+
+' participant "Service A" as svc_a
+' participant "Service B" as svc_b
+' database "Data Store" as db
+
+' svc_a -> svc_b: Request
+' svc_b -> db: Query
+' db --> svc_b: Results
+' svc_b --> svc_a: Response
+
+@enduml

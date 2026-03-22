@@ -1,0 +1,25 @@
+@startuml
+' === TEMPLATE: C4 Context Diagram ===
+' 1. Copy this file to diagrams/c4/<your-diagram-name>.puml
+' 2. Include the model files you need
+' 3. Call element procedures and define relationships
+' 4. Remove these comments
+
+' Theme MUST come before C4 include
+!include ../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+$ApplySkinparams()
+
+' Include model files (uncomment what you need)
+' !include ../../models/consumers.puml
+' !include ../../models/storage.puml
+
+' Call element procedures
+' $DataAnalyst()
+' $DataWarehouse()
+
+' Define relationships
+' Rel(data_analyst, data_warehouse, "Queries", "SQL")
+
+LAYOUT_WITH_LEGEND()
+@enduml

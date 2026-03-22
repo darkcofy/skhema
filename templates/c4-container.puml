@@ -1,0 +1,34 @@
+@startuml
+' === TEMPLATE: C4 Container Diagram ===
+' 1. Copy this file to diagrams/c4/<your-diagram-name>.puml
+' 2. Include the model files you need
+' 3. Call element procedures and define relationships
+' 4. Remove these comments
+
+' Theme MUST come before C4 include
+!include ../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+$ApplySkinparams()
+
+' Include model files (uncomment what you need)
+' !include ../../models/consumers.puml
+' !include ../../models/ingestion.puml
+' !include ../../models/storage.puml
+' !include ../../models/processing.puml
+' !include ../../models/serving.puml
+
+' System boundary
+' System_Boundary(my_system, "My System") {
+'   $DataLake()
+'   $DataWarehouse()
+'   $DbtTransform()
+' }
+
+' External actors
+' $DataAnalyst()
+
+' Relationships
+' Rel(data_analyst, data_warehouse, "Queries", "SQL")
+
+LAYOUT_WITH_LEGEND()
+@enduml

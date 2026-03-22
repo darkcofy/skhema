@@ -1,0 +1,228 @@
+version: "1.0"
+
+domains:
+  consumers:
+    file: models/consumers.puml
+    elements:
+      data_analyst:
+        type: Person
+        description: "Queries data via BI/SQL tools"
+      data_engineer:
+        type: Person
+        description: "Builds and maintains pipelines"
+      data_scientist:
+        type: Person
+        description: "Builds models, explores data"
+      business_user:
+        type: Person
+        description: "Consumes reports and dashboards"
+      external_system:
+        type: System_Ext
+        description: "System outside the boundary"
+
+  ingestion:
+    file: models/ingestion.puml
+    elements:
+      api_gateway:
+        type: Container
+        description: "Entry point for API-based ingestion"
+      event_stream:
+        type: Container
+        description: "Real-time event ingestion"
+      batch_etl:
+        type: Container
+        description: "Scheduled batch data extraction"
+      cdc_pipeline:
+        type: Container
+        description: "Change data capture from source DBs"
+      file_drop:
+        type: Container
+        description: "SFTP/S3/blob file-based ingestion"
+
+  storage:
+    file: models/storage.puml
+    elements:
+      data_lake:
+        type: ContainerDb
+        description: "Raw + curated zones"
+      data_warehouse:
+        type: ContainerDb
+        description: "Dimensional models, governed data"
+      operational_db:
+        type: ContainerDb
+        description: "Transactional/operational database"
+      object_store:
+        type: ContainerDb
+        description: "Unstructured blob/file storage"
+      cache_layer:
+        type: Container
+        description: "Low-latency cache"
+
+  processing:
+    file: models/processing.puml
+    elements:
+      elt_pipeline:
+        type: Container
+        description: "Extract-load-transform pipeline"
+      stream_processor:
+        type: Container
+        description: "Real-time stream processing"
+      orchestrator:
+        type: Container
+        description: "Workflow orchestration"
+      dbt_transform:
+        type: Container
+        description: "SQL transformations"
+      spark_job:
+        type: Container
+        description: "Distributed compute processing"
+
+  serving:
+    file: models/serving.puml
+    elements:
+      bi_platform:
+        type: Container
+        description: "Dashboards and reports"
+      api_service:
+        type: Container
+        description: "Data API for downstream consumers"
+      ml_endpoint:
+        type: Container
+        description: "Deployed ML model serving predictions"
+      data_catalog:
+        type: Container
+        description: "Searchable metadata catalog"
+      report_dashboard:
+        type: Container
+        description: "Scheduled/static reports"
+
+  governance:
+    file: models/governance.puml
+    elements:
+      quality_engine:
+        type: Container
+        description: "Data quality checks and monitoring"
+      access_control:
+        type: Container
+        description: "RBAC/ABAC policy enforcement"
+      lineage_tracker:
+        type: Container
+        description: "End-to-end data lineage"
+      master_data_svc:
+        type: Container
+        description: "Master data management"
+      policy_engine:
+        type: Container
+        description: "Data classification and policy rules"
+
+  integration:
+    file: models/integration.puml
+    elements:
+      esb:
+        type: Container
+        description: "Enterprise service bus"
+      message_broker:
+        type: Container
+        description: "Async message routing"
+      webhook_handler:
+        type: Container
+        description: "Inbound webhook receiver"
+      rest_api:
+        type: Container
+        description: "RESTful integration endpoint"
+      graphql_endpoint:
+        type: Container
+        description: "GraphQL integration endpoint"
+
+  security:
+    file: models/security.puml
+    elements:
+      identity_provider:
+        type: Container_Ext
+        description: "OAuth/SAML/OIDC provider"
+      auth_gateway:
+        type: Container
+        description: "API auth enforcement"
+      secrets_vault:
+        type: Container
+        description: "Secrets/key management"
+      firewall:
+        type: Container_Ext
+        description: "Network perimeter / WAF"
+      certificate_mgr:
+        type: Container
+        description: "TLS cert provisioning and rotation"
+      audit_log:
+        type: ContainerDb
+        description: "Security audit trail"
+
+  iot:
+    file: models/iot.puml
+    elements:
+      edge_device:
+        type: Container_Ext
+        description: "Sensor / edge compute device"
+      edge_gateway:
+        type: Container
+        description: "Local aggregation and protocol translation"
+      telemetry_collector:
+        type: Container
+        description: "Ingests device telemetry at scale"
+      device_registry:
+        type: ContainerDb
+        description: "Device identity and configuration store"
+      command_dispatcher:
+        type: Container
+        description: "Cloud-to-device command routing"
+
+  ml_platform:
+    file: models/ml-platform.puml
+    elements:
+      feature_store:
+        type: ContainerDb
+        description: "Managed feature storage (online + offline)"
+      model_registry:
+        type: ContainerDb
+        description: "Versioned model artifacts and metadata"
+      training_infra:
+        type: Container
+        description: "Model training compute"
+      experiment_tracker:
+        type: Container
+        description: "Experiment logging and comparison"
+      ml_pipeline:
+        type: Container
+        description: "End-to-end ML pipeline orchestration"
+
+  genai:
+    file: models/genai.puml
+    elements:
+      llm_gateway:
+        type: Container
+        description: "Unified LLM API proxy"
+      prompt_registry:
+        type: ContainerDb
+        description: "Versioned prompt templates and system prompts"
+      rag_pipeline:
+        type: Container
+        description: "Retrieval-augmented generation orchestration"
+      vector_store:
+        type: ContainerDb
+        description: "Embedding storage and similarity search"
+      eval_framework:
+        type: Container
+        description: "Automated evaluation and benchmarking"
+      redteam_harness:
+        type: Container
+        description: "Adversarial testing and safety probing"
+      guardrails_engine:
+        type: Container
+        description: "Input/output filtering, PII detection"
+      agent_runtime:
+        type: Container
+        description: "Agent orchestration and tool execution"
+      feedback_collector:
+        type: Container
+        description: "Human feedback capture"
+
+diagrams: []

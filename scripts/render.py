@@ -91,7 +91,7 @@ def output_path(source_path: str, root: str, fmt: str) -> str:
     return os.path.join(root, RENDERED_DIR, name)
 
 
-def render_file(source_path: str, root: str, fmt: str, dry_run: bool) -> bool:
+def render_file(source_path: str, root: str, fmt: str, dry_run: bool, animate: bool = False) -> bool:
     """Render a single .puml file. Returns True on success."""
     print(f"Rendering: {os.path.relpath(source_path, root)}")
     source = open(source_path).read()
@@ -118,6 +118,16 @@ def render_file(source_path: str, root: str, fmt: str, dry_run: bool) -> bool:
     with open(out, "wb") as f:
         f.write(image_data)
     print(f"  -> {os.path.relpath(out, root)}")
+
+    if animate and fmt == "svg":
+        from scripts.animate import animate_svg
+        svg_content = open(out, "r").read()
+        result, count = animate_svg(svg_content, return_count=True)
+        if count > 0:
+            with open(out, "w") as f:
+                f.write(result)
+            print(f"  Animated {count} arrow(s)")
+
     return True
 
 
@@ -127,10 +137,14 @@ def main():
     parser.add_argument("--all", action="store_true", help="Render all diagrams/")
     parser.add_argument("--png", action="store_true", help="Output PNG instead of SVG")
     parser.add_argument("--dry-run", action="store_true", help="Print resolved source only")
+    parser.add_argument("--animate", action="store_true", help="Add marching-ant animation to ~ arrows (SVG only)")
     args = parser.parse_args()
 
     if not args.file and not args.all:
         parser.error("Provide a file path or use --all")
+
+    if args.animate and args.png:
+        print("Warning: --animate is ignored with --png (SVG only)", file=sys.stderr)
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fmt = "png" if args.png else "svg"
@@ -142,7 +156,7 @@ def main():
             return
         failures = []
         for f in files:
-            if not render_file(f, root, fmt, args.dry_run):
+            if not render_file(f, root, fmt, args.dry_run, animate=args.animate):
                 failures.append(f)
         if failures:
             print(f"\n{len(failures)} file(s) failed:", file=sys.stderr)
@@ -154,7 +168,7 @@ def main():
         if not os.path.isfile(source_path):
             print(f"File not found: {args.file}", file=sys.stderr)
             sys.exit(1)
-        if not render_file(source_path, root, fmt, args.dry_run):
+        if not render_file(source_path, root, fmt, args.dry_run, animate=args.animate):
             sys.exit(1)
 
 

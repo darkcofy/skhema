@@ -1,0 +1,24 @@
+@startuml
+' GOOD: Thin view file — includes models, defines only relationships
+
+!include ../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+$ApplySkinparams()
+
+!include ../../models/consumers.puml
+!include ../../models/storage.puml
+!include ../../models/serving.puml
+
+title Data Platform — System Context
+
+$DataAnalyst()
+$BusinessUser()
+$DataWarehouse()
+$BiPlatform()
+
+Rel(data_analyst, data_warehouse, "Queries", "SQL")
+Rel(business_user, bi_platform, "Views reports")
+Rel(bi_platform, data_warehouse, "Reads from", "DirectQuery")
+
+LAYOUT_WITH_LEGEND()
+@enduml

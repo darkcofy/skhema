@@ -1,0 +1,23 @@
+@startuml
+' BAD: Elements defined inline — violates three-layer architecture
+' DO NOT do this. Elements belong in models/ files.
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Data Platform — System Context
+
+' BAD: Inline person definition (should be in models/consumers.puml)
+Person(data_analyst, "Data Analyst", "Queries data via BI/SQL tools")
+
+' BAD: Inline container definition (should be in models/storage.puml)
+ContainerDb(data_warehouse, "Data Warehouse", "Snowflake", "Dimensional models")
+
+' BAD: Hardcoded colour (should use theme)
+skinparam backgroundColor #F0F0F0
+
+' BAD: Missing theme include — legend will have default blue colours
+
+Rel(data_analyst, data_warehouse, "Queries", "SQL")
+
+LAYOUT_WITH_LEGEND()
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+!include ../../../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+$ApplySkinparams()
+
+!include ../../../../models/ml-platform.puml
+!include ../../../../models/storage.puml
+
+title NovaPay — Fraud Detection System
+
+Container_Boundary(fd, "Fraud Detector") {
+  Component(scoring_api, "Scoring API", "FastAPI", "Real-time risk scoring\n<50ms p99 latency")
+  Component(rule_engine, "Rule Engine", "Python", "Configurable rules:\nvelocity, geo, amount")
+  Component(ml_scorer, "ML Scorer", "ONNX Runtime", "Gradient boosted model\ntrained on 18 months data")
+  Component(case_manager, "Case Manager", "Django", "Manual review queue\nfor flagged transactions")
+}
+
+$FeatureStore()
+$ModelRegistry()
+$CacheLayer()
+$OperationalDb()
+
+Rel(scoring_api, rule_engine, "~Evaluates rules")
+Rel(scoring_api, ml_scorer, "~Gets ML score")
+Rel(ml_scorer, feature_store, "~Reads features", "gRPC")
+Rel(ml_scorer, model_registry, "Loads model", "S3")
+Rel(rule_engine, cache_layer, "~Reads velocity", "Redis")
+Rel(case_manager, operational_db, "Persists cases", "PostgreSQL")
+Rel(scoring_api, case_manager, "Flags for review")
+
+LAYOUT_WITH_LEGEND()
+@enduml

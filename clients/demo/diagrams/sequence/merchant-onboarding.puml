@@ -1,0 +1,36 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Merchant Onboarding
+
+actor Merchant as merchant
+participant "Merchant Portal" as mp
+participant "Compliance Svc" as cs
+participant "Identity Provider" as idp
+database "Merchant DB" as db
+participant "Notification Svc" as ns
+
+merchant -> mp: Sign up
+mp -> idp: Create account
+idp --> mp: account_id
+
+mp -> cs: Submit KYC documents
+cs -> cs: AML screening\n(Sanctions, PEP lists)
+cs -> cs: Document verification\n(ID + proof of business)
+
+alt KYC Approved
+  cs --> mp: KYC_APPROVED
+  mp -> db: Create merchant profile\nstatus=ACTIVE
+  mp -> ns: Send welcome email
+  ns -> merchant: "Welcome to NovaPay!\nYour API keys are ready"
+  mp --> merchant: Dashboard access granted
+else KYC Rejected
+  cs --> mp: KYC_REJECTED\nreason="Document mismatch"
+  mp -> db: Create merchant profile\nstatus=REJECTED
+  mp -> ns: Send rejection email
+  ns -> merchant: "Additional documents required"
+  mp --> merchant: Show rejection + next steps
+end
+
+@enduml

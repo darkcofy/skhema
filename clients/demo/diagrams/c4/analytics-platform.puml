@@ -1,0 +1,36 @@
+@startuml
+!include ../../../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+$ApplySkinparams()
+
+!include ../../../../models/ingestion.puml
+!include ../../../../models/storage.puml
+!include ../../../../models/processing.puml
+!include ../../../../models/serving.puml
+!include ../../../../models/governance.puml
+
+title NovaPay — Analytics Platform
+
+$EventStream()
+$BatchEtl()
+$DataLake()
+$DataWarehouse()
+$DbtTransform()
+$StreamProcessor()
+$BiPlatform()
+$DataCatalog()
+$QualityEngine()
+$LineageTracker()
+
+Rel(event_stream, stream_processor, "~Real-time events", "Kafka")
+Rel(stream_processor, data_lake, "~Lands raw", "Parquet")
+Rel(batch_etl, data_lake, "~Daily extracts", "Parquet")
+Rel(data_lake, dbt_transform, "~Transforms", "SQL")
+Rel(dbt_transform, data_warehouse, "~Loads", "Snowflake")
+Rel(data_warehouse, bi_platform, "~Serves", "SQL")
+Rel(data_warehouse, data_catalog, "~Indexes", "API")
+Rel(dbt_transform, quality_engine, "~Validates", "Great Expectations")
+Rel(dbt_transform, lineage_tracker, "~Tracks", "OpenLineage")
+
+LAYOUT_WITH_LEGEND()
+@enduml

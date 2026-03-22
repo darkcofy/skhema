@@ -1,0 +1,39 @@
+' ============================================================
+' Domain: NovaPay — core platform components
+' ============================================================
+
+!procedure $PaymentEngine()
+  Container(payment_engine, "Payment Engine", "Java / Spring Boot", "Orchestrates payment lifecycle:\nauth, capture, settle, refund")
+!endprocedure
+
+!procedure $FraudDetector()
+  Container(fraud_detector, "Fraud Detector", "Python / ML", "Real-time risk scoring\nand transaction blocking")
+!endprocedure
+
+!procedure $MerchantPortal()
+  Container(merchant_portal, "Merchant Portal", "React SPA", "Dashboard for merchants:\ntransactions, payouts, disputes")
+!endprocedure
+
+!procedure $MobileApp()
+  Container(mobile_app, "NovaPay App", "React Native", "Consumer payment app\nwith NFC & QR support")
+!endprocedure
+
+!procedure $NotificationSvc()
+  Container(notification_svc, "Notification Service", "Go", "Email, SMS, push\ndelivery & templating")
+!endprocedure
+
+!procedure $LedgerSvc()
+  Container(ledger_svc, "Ledger Service", "Rust", "Double-entry bookkeeping\nimmutable transaction log")
+!endprocedure
+
+!procedure $ReconciliationSvc()
+  Container(recon_svc, "Reconciliation Service", "Python", "Matches internal vs.\nexternal settlement records")
+!endprocedure
+
+!procedure $ComplianceSvc()
+  Container(compliance_svc, "Compliance Service", "Java", "KYC/AML checks,\nSAR filing, PSD2 SCA")
+!endprocedure
+
+!procedure $WebhookEngine()
+  Container(webhook_engine, "Webhook Engine", "Go", "Outbound event delivery\nwith retry & signing")
+!endprocedure

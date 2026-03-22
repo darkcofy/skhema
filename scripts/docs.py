@@ -37,7 +37,6 @@ a { color: var(--accent); }
 
 /* Cover */
 .cover {
-  max-width: 860px; margin: 0 auto;
   padding: 80px 40px 60px;
   border-bottom: 3px solid var(--accent);
 }
@@ -47,7 +46,6 @@ a { color: var(--accent); }
 
 /* TOC */
 .toc {
-  max-width: 860px; margin: 0 auto;
   padding: 40px 40px 32px;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -59,14 +57,12 @@ a { color: var(--accent); }
 
 /* Overview */
 .overview {
-  max-width: 860px; margin: 0 auto;
   padding: 32px 40px;
   border-bottom: 1px solid #e5e7eb;
 }
 
 /* Doc section */
 .doc-section {
-  max-width: 860px; margin: 0 auto;
   padding: 40px 40px 32px;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -107,8 +103,8 @@ a { color: var(--accent); }
 
 /* Footer */
 .footer {
-  max-width: 860px; margin: 40px auto 0;
   padding: 24px 40px;
+  margin-top: 40px;
   border-top: 1px solid #e5e7eb;
   font-size: 0.82rem; color: #999;
 }
@@ -120,9 +116,19 @@ a { color: var(--accent); }
   .cover h1 { font-size: 2rem; }
   .toc, .overview, .doc-section, .footer { padding: 20px; }
   .doc-section { page-break-before: always; }
-  .diagram-block { page-break-inside: avoid; }
-  .diagram-svg { border: 1pt solid #ccc; background: #fff; }
+  .diagram-block { margin-bottom: 32px; }
+  .diagram-block h3 { break-after: avoid; page-break-after: avoid; }
+  .diagram-svg { break-inside: avoid; page-break-inside: avoid; border: 1pt solid #ccc; background: #fff; }
   .diagram-svg svg { max-width: 100%; max-height: 480pt; }
+  .prose h1, .prose h2, .prose h3, .prose h4 { break-after: avoid; page-break-after: avoid; }
+  .prose p { orphans: 4; widows: 4; }
+  .prose li { orphans: 3; widows: 3; }
+  .prose table { break-inside: avoid; page-break-inside: avoid; }
+  .prose blockquote { break-inside: avoid; page-break-inside: avoid; }
+  .prose pre { break-inside: avoid; page-break-inside: avoid; }
+  .prose ul, .prose ol { orphans: 3; widows: 3; }
+  .section-overview { break-inside: avoid; page-break-inside: avoid; }
+  h2 { break-after: avoid; page-break-after: avoid; }
   a { color: inherit; text-decoration: none; }
 }
 """

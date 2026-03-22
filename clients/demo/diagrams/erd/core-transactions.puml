@@ -1,0 +1,81 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Core Transaction Data Model
+
+entity "merchants" as m {
+  * merchant_id : uuid <<PK>>
+  --
+  * name : varchar(255)
+  * status : enum(ACTIVE, SUSPENDED, CLOSED)
+  * kyc_status : enum(PENDING, APPROVED, REJECTED)
+  mcc_code : varchar(4)
+  settlement_currency : char(3)
+  created_at : timestamptz
+}
+
+entity "consumers" as c {
+  * consumer_id : uuid <<PK>>
+  --
+  * email : varchar(255)
+  * phone : varchar(20)
+  preferred_currency : char(3)
+  created_at : timestamptz
+}
+
+entity "payment_methods" as pm {
+  * method_id : uuid <<PK>>
+  --
+  * consumer_id : uuid <<FK>>
+  * type : enum(CARD, BANK, WALLET)
+  * token : varchar(255)
+  last_four : char(4)
+  expiry : date
+  is_default : boolean
+}
+
+entity "transactions" as t {
+  * txn_id : uuid <<PK>>
+  --
+  * merchant_id : uuid <<FK>>
+  * consumer_id : uuid <<FK>>
+  * method_id : uuid <<FK>>
+  * amount : decimal(12,2)
+  * currency : char(3)
+  * status : enum(CREATED, AUTHORIZED, CAPTURED, SETTLED, REFUNDED, FAILED)
+  auth_code : varchar(20)
+  risk_score : decimal(3,2)
+  created_at : timestamptz
+  settled_at : timestamptz
+}
+
+entity "refunds" as r {
+  * refund_id : uuid <<PK>>
+  --
+  * txn_id : uuid <<FK>>
+  * amount : decimal(12,2)
+  * reason : varchar(255)
+  * status : enum(PENDING, COMPLETED, FAILED)
+  created_at : timestamptz
+}
+
+entity "ledger_entries" as le {
+  * entry_id : uuid <<PK>>
+  --
+  * txn_id : uuid <<FK>>
+  * type : enum(AUTH, CAPTURE, SETTLE, REFUND, FEE)
+  * debit_account : varchar(50)
+  * credit_account : varchar(50)
+  * amount : decimal(12,2)
+  created_at : timestamptz
+}
+
+m ||--o{ t
+c ||--o{ t
+c ||--o{ pm
+pm ||--o{ t
+t ||--o{ r
+t ||--o{ le
+
+@enduml

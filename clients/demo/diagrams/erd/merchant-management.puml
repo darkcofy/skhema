@@ -1,0 +1,81 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Merchant Management Data Model
+
+entity "merchants" as m {
+  * merchant_id : uuid <<PK>>
+  --
+  * name : varchar(255)
+  * legal_entity : varchar(255)
+  * status : enum(ACTIVE, SUSPENDED, CLOSED)
+  * tier : enum(STARTER, GROWTH, ENTERPRISE)
+  mcc_code : varchar(4)
+  website : varchar(500)
+  created_at : timestamptz
+}
+
+entity "merchant_contacts" as mc {
+  * contact_id : uuid <<PK>>
+  --
+  * merchant_id : uuid <<FK>>
+  * role : enum(OWNER, ADMIN, FINANCE, TECH)
+  * name : varchar(255)
+  * email : varchar(255)
+  phone : varchar(20)
+}
+
+entity "bank_accounts" as ba {
+  * account_id : uuid <<PK>>
+  --
+  * merchant_id : uuid <<FK>>
+  * iban : varchar(34)
+  * bic : varchar(11)
+  * currency : char(3)
+  * is_primary : boolean
+  verified_at : timestamptz
+}
+
+entity "api_keys" as ak {
+  * key_id : uuid <<PK>>
+  --
+  * merchant_id : uuid <<FK>>
+  * environment : enum(TEST, LIVE)
+  * prefix : varchar(10)
+  * hash : varchar(255)
+  * permissions : jsonb
+  created_at : timestamptz
+  revoked_at : timestamptz
+}
+
+entity "payout_schedules" as ps {
+  * schedule_id : uuid <<PK>>
+  --
+  * merchant_id : uuid <<FK>>
+  * account_id : uuid <<FK>>
+  * frequency : enum(DAILY, WEEKLY, MONTHLY)
+  * min_amount : decimal(12,2)
+  next_payout_at : timestamptz
+}
+
+entity "disputes" as d {
+  * dispute_id : uuid <<PK>>
+  --
+  * merchant_id : uuid <<FK>>
+  * txn_id : uuid
+  * type : enum(CHARGEBACK, INQUIRY, PRE_ARB)
+  * status : enum(OPEN, EVIDENCE_NEEDED, WON, LOST)
+  * amount : decimal(12,2)
+  deadline : timestamptz
+  created_at : timestamptz
+}
+
+m ||--o{ mc
+m ||--o{ ba
+m ||--o{ ak
+m ||--o{ ps
+m ||--o{ d
+ps }o--|| ba
+
+@enduml

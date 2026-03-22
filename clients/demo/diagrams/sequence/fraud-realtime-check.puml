@@ -1,0 +1,43 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Real-Time Fraud Check
+
+participant "Payment Engine" as pe
+participant "Scoring API" as api
+participant "Rule Engine" as re
+participant "ML Scorer" as ml
+database "Feature Store" as fs
+database "Redis" as redis
+participant "Case Manager" as cm
+
+pe -> api: ScoreTransaction(txn)
+
+par Rule evaluation
+  api -> re: Evaluate rules
+  re -> redis: Get velocity counters\n(txn count last 1h, 24h)
+  redis --> re: count_1h=3, count_24h=12
+  re -> re: Check: geo anomaly,\namount threshold,\nvelocity limits
+  re --> api: rule_score=0.3, flags=[]
+else ML scoring
+  api -> ml: Predict risk
+  ml -> fs: Get features\n(merchant avg, user history)
+  fs --> ml: feature_vector
+  ml -> ml: ONNX inference
+  ml --> api: ml_score=0.15
+end
+
+api -> api: Combined score =\nmax(rule=0.3, ml=0.15) = 0.3
+
+alt score < 0.5
+  api --> pe: ALLOW (score=0.3)
+else score 0.5-0.8
+  api -> cm: Create review case
+  api --> pe: ALLOW_WITH_REVIEW
+else score > 0.8
+  api -> cm: Create urgent case
+  api --> pe: BLOCK (score=0.85)
+end
+
+@enduml

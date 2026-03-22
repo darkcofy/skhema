@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — CI/CD Pipeline
+
+node "Developer" as dev {
+  component "Local Dev" as local
+}
+
+node "GitHub" as gh {
+  component "Repository" as repo
+  component "Actions Runner" as runner
+}
+
+node "Build & Test" as build {
+  component "Unit Tests" as unit
+  component "Integration Tests" as integ
+  component "SAST / DAST\n(Snyk + ZAP)" as sec
+  component "Container Build\n(Docker)" as docker
+}
+
+node "Artifact Store" as art {
+  component "ECR Registry" as ecr
+  component "Helm Charts\n(S3)" as helm
+}
+
+node "Environments" as envs {
+  node "Staging" as stg {
+    component "EKS Staging" as stg_eks
+    database "Aurora Staging" as stg_db
+  }
+  node "Production" as prod {
+    component "EKS Production" as prod_eks
+    database "Aurora Production" as prod_db
+  }
+}
+
+node "Observability" as obs {
+  component "Datadog" as dd
+  component "PagerDuty" as pd
+}
+
+local --> repo : git push
+repo --> runner : trigger
+runner --> unit
+unit --> integ
+integ --> sec
+sec --> docker
+docker --> ecr
+docker --> helm
+
+helm --> stg_eks : deploy staging
+stg_eks --> stg_db
+stg_eks --> prod_eks : promote\n(manual gate)
+prod_eks --> prod_db
+prod_eks --> dd : metrics + logs
+dd --> pd : alerts
+
+@enduml

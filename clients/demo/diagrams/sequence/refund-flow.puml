@@ -1,0 +1,35 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Refund Processing Flow
+
+actor Merchant as merchant
+participant "Merchant Portal" as mp
+participant "Payment Engine" as pe
+participant "Card Network" as cn
+participant "Ledger Service" as ls
+queue "Kafka" as kafka
+participant "Notification Svc" as ns
+
+merchant -> mp: Initiate refund
+mp -> pe: POST /payments/{id}/refund\n{ amount: 42.50 }
+
+pe -> pe: Validate: txn exists,\namount <= captured
+
+pe -> cn: Refund request
+cn --> pe: Refund approved
+
+pe -> ls: Record refund entry\n(reversal of original)
+ls --> pe: refund_entry_id
+
+pe -> kafka: payment.refunded event
+kafka -> ns: Trigger notifications
+
+ns -> merchant: Email: "Refund processed"
+ns -> mp: Push: "£42.50 refunded to consumer"
+
+pe --> mp: 200 OK { status: "refunded" }
+mp --> merchant: Show refund confirmation
+
+@enduml

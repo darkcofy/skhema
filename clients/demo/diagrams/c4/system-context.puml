@@ -1,0 +1,29 @@
+@startuml
+!include ../../../../lib/theme.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+$ApplySkinparams()
+
+!include ../../models/novapay-personas.puml
+!include ../../models/legacy-erp.puml
+
+title NovaPay — System Context
+
+$Consumer()
+$Merchant()
+$ComplianceOfficer()
+
+System(novapay, "NovaPay Platform", "Digital payments platform\nprocessing 2M+ txns/day")
+
+$CardNetwork()
+$LegacyCore()
+$RegulatorPortal()
+
+Rel(consumer, novapay, "~Pays via", "App / Web")
+Rel(merchant, novapay, "~Manages payments", "Portal / API")
+Rel(compliance_officer, novapay, "Reviews flags", "Portal")
+Rel(novapay, card_network, "~Authorizes", "ISO 8583")
+Rel(novapay, legacy_core, "~Settles", "SFTP / MQ")
+Rel(novapay, regulator_portal, "Reports", "API / SFTP")
+
+LAYOUT_WITH_LEGEND()
+@enduml

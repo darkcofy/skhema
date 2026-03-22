@@ -1,7 +1,19 @@
 ' ============================================================
-' Domain: Demo Client — legacy systems
+' Domain: NovaPay — legacy & external systems
 ' ============================================================
 
 !procedure $LegacyErp()
-  System_Ext(legacy_erp, "Legacy ERP", "SAP R/3, on-prem")
+  System_Ext(legacy_erp, "Legacy ERP", "SAP R/3, on-prem\nMerchant billing & settlements")
+!endprocedure
+
+!procedure $LegacyCore()
+  System_Ext(legacy_core, "Core Banking", "COBOL mainframe\nAccount ledger & clearing")
+!endprocedure
+
+!procedure $CardNetwork()
+  System_Ext(card_network, "Card Networks", "Visa / Mastercard\nAuthorization & settlement")
+!endprocedure
+
+!procedure $RegulatorPortal()
+  System_Ext(regulator_portal, "Regulator Portal", "FCA / PSD2\nCompliance reporting")
 !endprocedure

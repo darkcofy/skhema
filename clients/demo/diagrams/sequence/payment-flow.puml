@@ -1,0 +1,47 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Payment Processing Flow
+
+actor Consumer as consumer
+participant "Mobile App" as app
+participant "API Gateway" as gw
+participant "Payment Engine" as pe
+participant "Fraud Detector" as fd
+participant "Card Network" as cn
+participant "Ledger Service" as ls
+queue "Kafka" as kafka
+participant "Notification Svc" as ns
+participant "Webhook Engine" as wh
+
+consumer -> app: Tap to pay
+app -> gw: POST /payments
+gw -> pe: Create payment
+pe -> fd: Score transaction
+fd --> pe: risk_score=0.12 (ALLOW)
+
+pe -> cn: Authorization request
+cn --> pe: Approved (auth_code=A7X92)
+
+pe -> ls: Record authorization
+ls --> pe: entry_id=TXN-88421
+
+pe -> kafka: payment.authorized event
+kafka -> ns: Trigger notification
+ns -> consumer: Push: "Payment of £42.50 approved"
+kafka -> wh: Trigger webhook
+wh -> app: POST merchant callback
+
+pe --> gw: 201 Created
+gw --> app: Payment confirmed
+app --> consumer: Show success screen
+
+== Settlement (T+1) ==
+
+pe -> cn: Settlement batch
+cn --> pe: Settlement confirmed
+pe -> ls: Record settlement
+pe -> kafka: payment.settled event
+
+@enduml

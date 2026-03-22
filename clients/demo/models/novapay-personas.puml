@@ -1,0 +1,19 @@
+' ============================================================
+' Domain: NovaPay — user personas
+' ============================================================
+
+!procedure $Consumer()
+  Person(consumer, "Consumer", "Pays via NovaPay app\nor checkout widget")
+!endprocedure
+
+!procedure $Merchant()
+  Person(merchant, "Merchant", "Accepts NovaPay payments\nand manages payouts")
+!endprocedure
+
+!procedure $OpsEngineer()
+  Person(ops_engineer, "Platform Ops", "Monitors health,\nhandles incidents")
+!endprocedure
+
+!procedure $ComplianceOfficer()
+  Person(compliance_officer, "Compliance Officer", "Reviews KYC/AML flags,\nfiles regulatory reports")
+!endprocedure

@@ -1,0 +1,78 @@
+@startuml
+!include ../../../../lib/theme.puml
+$ApplySkinparams()
+
+title NovaPay — Fraud Case Data Model
+
+entity "fraud_scores" as fs {
+  * score_id : uuid <<PK>>
+  --
+  * txn_id : uuid
+  * rule_score : decimal(3,2)
+  * ml_score : decimal(3,2)
+  * combined_score : decimal(3,2)
+  * decision : enum(ALLOW, REVIEW, BLOCK)
+  flags : jsonb
+  latency_ms : integer
+  scored_at : timestamptz
+}
+
+entity "fraud_rules" as fr {
+  * rule_id : uuid <<PK>>
+  --
+  * name : varchar(100)
+  * category : enum(VELOCITY, GEO, AMOUNT, DEVICE, CUSTOM)
+  * expression : text
+  * threshold : decimal(3,2)
+  * is_active : boolean
+  updated_at : timestamptz
+}
+
+entity "fraud_cases" as fc {
+  * case_id : uuid <<PK>>
+  --
+  * score_id : uuid <<FK>>
+  * priority : enum(LOW, MEDIUM, HIGH, CRITICAL)
+  * status : enum(OPEN, INVESTIGATING, RESOLVED, ESCALATED)
+  * assigned_to : uuid
+  resolution : varchar(255)
+  created_at : timestamptz
+  resolved_at : timestamptz
+}
+
+entity "case_notes" as cn {
+  * note_id : uuid <<PK>>
+  --
+  * case_id : uuid <<FK>>
+  * author_id : uuid
+  * content : text
+  created_at : timestamptz
+}
+
+entity "fraud_models" as fm {
+  * model_id : uuid <<PK>>
+  --
+  * version : varchar(20)
+  * algorithm : varchar(50)
+  * auc_roc : decimal(4,3)
+  * precision_at_95 : decimal(4,3)
+  * is_active : boolean
+  trained_at : timestamptz
+  deployed_at : timestamptz
+}
+
+entity "model_features" as mf {
+  * feature_id : uuid <<PK>>
+  --
+  * model_id : uuid <<FK>>
+  * name : varchar(100)
+  * importance : decimal(5,4)
+  * source : varchar(100)
+}
+
+fs ||--o| fc
+fc ||--o{ cn
+fm ||--o{ mf
+fs }o--o{ fr : "triggered_rules"
+
+@enduml

@@ -16,7 +16,7 @@ Both outputs are single self-contained HTML files with zero external dependencie
 - **Single HTML file** for docs deliverable — no zip, no folder structure, just email one file
 - **Markdown companions** alongside diagrams — one `.md` per diagram, `_overview.md` per section, `overview.md` per client
 - **Lightweight client `client.yaml`** for metadata and section ordering (distinct from root `manifest.yaml` which describes shared domains/elements)
-- **Simple regex markdown parser** — no dependencies, single-pass, no nested inline formatting. Covers headings/paragraphs/bold/italic/code/links/lists/blockquotes. Multi-line list items not supported — each `- ` or `1. ` line is one item
+- **Simple regex markdown parser** — no dependencies, single-pass, no nested inline formatting. Covers headings/paragraphs/bold/italic/inline code/links/lists/blockquotes/tables/fenced code blocks. Multi-line list items not supported — each `- ` or `1. ` line is one item
 - **Gallery and docs are separate tools** — gallery for internal dev browsing, docs for client delivery
 - **Demo client gets full showcase** — all 17 diagrams with companion prose, manifest, section overviews
 
@@ -187,8 +187,8 @@ Regex-based, ~60 lines, covering:
 - Links (`[text](url)`)
 - Bullet lists (`- item`) and numbered lists (`1. item`)
 - Blockquotes (`> text`)
-
-No tables, images, or fenced code blocks needed for architectural prose.
+- Tables (`| col | col |` with `|---|---|` separator)
+- Fenced code blocks (triple backtick with optional language hint, rendered as `<pre><code>`)
 
 ### Error Handling
 
@@ -254,5 +254,5 @@ clients/demo/docs/             # New: 22 markdown files
 - Automatic PDF generation from docs.html (use browser print for now)
 - Excalidraw diagram support in docs (handled separately)
 - Version history in docs deliverable (gallery-only feature)
-- Markdown features beyond the basics (tables, images, code blocks)
-- Multi-language support
+- Images in markdown (no `![alt](src)` support — diagrams are inlined from SVGs instead)
+- Multi-language support (companion markdown is single-language only)

@@ -59,3 +59,20 @@ See `prompts/examples/good-c4-context.puml`
 ## Example: Bad Output (Anti-Pattern)
 
 See `prompts/examples/bad-inline-defs.puml`
+
+### Animated Arrows
+
+To animate a relationship arrow (marching-ant flow effect), prefix the label with `~`:
+
+```plantuml
+Rel(event_stream, data_lake, "~Streams to", "Avro/JSON")   ' animated
+Rel(data_analyst, data_warehouse, "Queries", "SQL")          ' static
+```
+
+Use animation sparingly — only on key data flows to draw attention. Too many animated arrows causes visual fatigue. Good candidates:
+- Real-time streaming flows
+- Active data pipelines
+- Critical integration paths
+
+After rendering, run: `python scripts/animate.py rendered/path/to/diagram.svg`
+Or use: `python scripts/render.py diagram.puml --animate`

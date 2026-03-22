@@ -29,6 +29,36 @@ TYPE_LABELS = {
 }
 
 
+def parse_client_yaml(path: str) -> dict:
+    """Parse a client.yaml file. Returns dict with name, subtitle, accent_color, sections."""
+    defaults = {"name": "", "subtitle": "", "accent_color": "#D97706", "sections": []}
+    if not os.path.isfile(path):
+        return defaults
+    result = dict(defaults)
+    result["sections"] = []
+    in_sections = False
+    with open(path) as f:
+        for line in f:
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            if stripped == "sections:":
+                in_sections = True
+                continue
+            if in_sections:
+                if stripped.startswith("- "):
+                    result["sections"].append(stripped[2:].strip())
+                else:
+                    in_sections = False
+            if not in_sections and ":" in stripped and not stripped.endswith(":"):
+                key, _, val = stripped.partition(":")
+                key = key.strip()
+                val = val.strip().strip('"').strip("'")
+                if key in result:
+                    result[key] = val
+    return result
+
+
 def discover_diagrams(rendered_dir: str) -> list[str]:
     """Find all .svg files in the rendered directory."""
     results = []
@@ -171,8 +201,9 @@ def generate_gallery_html(
                     history_html = f'<details class="history"><summary>{len(versions)} previous version(s)</summary>{ver_items}</details>'
 
             badge = '<span class="badge">animated</span>' if has_animation else ""
+            search_text = f"{name} {dtype}"
             section_cards.append(
-                f'<div class="card" data-name="{html.escape(name)}">'
+                f'<div class="card" data-name="{html.escape(search_text)}">'
                 f'<a href="{html.escape(rel_path)}" target="_blank">'
                 f'<div class="thumb">{svg_inline}</div>'
                 f'<div class="info"><span class="name">{html.escape(name)}</span>{badge}</div>'

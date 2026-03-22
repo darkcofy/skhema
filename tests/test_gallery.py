@@ -5,6 +5,7 @@ from scripts.gallery import (
     discover_diagrams,
     group_by_type,
     generate_gallery_html,
+    parse_client_yaml,
 )
 
 
@@ -84,3 +85,31 @@ class TestGenerateGalleryHtml:
         html = generate_gallery_html("X", str(rendered), history=0)
         assert "C4" in html
         assert "Sequence" in html
+
+
+class TestParseClientYaml:
+    def test_parses_name_and_sections(self, tmp_path):
+        yaml_file = tmp_path / "client.yaml"
+        yaml_file.write_text('name: "Acme"\nsubtitle: "Platform"\nsections:\n  - c4\n  - sequence\n')
+        result = parse_client_yaml(str(yaml_file))
+        assert result["name"] == "Acme"
+        assert result["subtitle"] == "Platform"
+        assert result["sections"] == ["c4", "sequence"]
+
+    def test_optional_accent_color(self, tmp_path):
+        yaml_file = tmp_path / "client.yaml"
+        yaml_file.write_text('name: "X"\naccent_color: "#FF0000"\nsections:\n  - erd\n')
+        result = parse_client_yaml(str(yaml_file))
+        assert result["accent_color"] == "#FF0000"
+
+    def test_defaults_when_missing(self, tmp_path):
+        result = parse_client_yaml(str(tmp_path / "nonexistent.yaml"))
+        assert result["name"] == ""
+        assert result["sections"] == []
+        assert result["accent_color"] == "#D97706"
+
+    def test_no_quotes_in_values(self, tmp_path):
+        yaml_file = tmp_path / "client.yaml"
+        yaml_file.write_text('name: Acme Corp\nsubtitle: Data Platform\nsections:\n  - c4\n')
+        result = parse_client_yaml(str(yaml_file))
+        assert result["name"] == "Acme Corp"

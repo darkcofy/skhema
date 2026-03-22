@@ -11,7 +11,7 @@ Thumbs.db
 
 # Client rendered output and generated galleries
 clients/*/rendered/
-clients/*/index.html
+clients/*/*.html
 clients/*/*.pdf
 clients/*/*.pptx
 

@@ -1,0 +1,5060 @@
+{
+  "type": "excalidrawlib",
+  "version": 2,
+  "source": "arch-diagrams",
+  "libraryItems": [
+    {
+      "id": "business_user",
+      "status": "published",
+      "name": "Business User (consumers)",
+      "elements": [
+        {
+          "id": "business_user_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#FCD34D",
+          "backgroundColor": "#92400E",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 480608705,
+          "version": 1,
+          "versionNonce": 480608705,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "business_user_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": [
+            {
+              "id": "business_user_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "business_user_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FDE68A",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 480608706,
+          "version": 1,
+          "versionNonce": 480608706,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "business_user_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\udc64 Business User\nConsumes reports and dashboards",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "business_user_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "data_analyst",
+      "status": "published",
+      "name": "Data Analyst (consumers)",
+      "elements": [
+        {
+          "id": "data_analyst_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#FCD34D",
+          "backgroundColor": "#92400E",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1046975495,
+          "version": 1,
+          "versionNonce": 1046975495,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_analyst_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": [
+            {
+              "id": "data_analyst_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "data_analyst_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FDE68A",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1046975496,
+          "version": 1,
+          "versionNonce": 1046975496,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_analyst_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\udc64 Data Analyst\nQueries data via BI/SQL tools",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "data_analyst_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "data_engineer",
+      "status": "published",
+      "name": "Data Engineer (consumers)",
+      "elements": [
+        {
+          "id": "data_engineer_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#FCD34D",
+          "backgroundColor": "#92400E",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1265283831,
+          "version": 1,
+          "versionNonce": 1265283831,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_engineer_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": [
+            {
+              "id": "data_engineer_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "data_engineer_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FDE68A",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1265283832,
+          "version": 1,
+          "versionNonce": 1265283832,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_engineer_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\udc64 Data Engineer\nBuilds and maintains pipelines",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "data_engineer_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "data_scientist",
+      "status": "published",
+      "name": "Data Scientist (consumers)",
+      "elements": [
+        {
+          "id": "data_scientist_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#FCD34D",
+          "backgroundColor": "#92400E",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 238296529,
+          "version": 1,
+          "versionNonce": 238296529,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_scientist_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": [
+            {
+              "id": "data_scientist_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "data_scientist_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FDE68A",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 238296530,
+          "version": 1,
+          "versionNonce": 238296530,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_scientist_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\udc64 Data Scientist\nBuilds models, explores data",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "data_scientist_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "external_system",
+      "status": "published",
+      "name": "External System (consumers)",
+      "elements": [
+        {
+          "id": "external_system_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#78716C",
+          "backgroundColor": "#44403C",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "dashed",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1841102106,
+          "version": 1,
+          "versionNonce": 1841102106,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "external_system_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": [
+            {
+              "id": "external_system_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "external_system_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#D6D3D1",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1841102107,
+          "version": 1,
+          "versionNonce": 1841102107,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "external_system_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "External System\nSystem outside the boundary",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "external_system_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "agent_runtime",
+      "status": "published",
+      "name": "Agent Runtime (genai)",
+      "elements": [
+        {
+          "id": "agent_runtime_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1136545939,
+          "version": 1,
+          "versionNonce": 1136545939,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "agent_runtime_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "agent_runtime_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "agent_runtime_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1136545940,
+          "version": 1,
+          "versionNonce": 1136545940,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "agent_runtime_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Agent Runtime\nAgent orchestration and tool execution",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "agent_runtime_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "eval_framework",
+      "status": "published",
+      "name": "Eval Framework (genai)",
+      "elements": [
+        {
+          "id": "eval_framework_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1199174303,
+          "version": 1,
+          "versionNonce": 1199174303,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "eval_framework_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "eval_framework_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "eval_framework_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1199174304,
+          "version": 1,
+          "versionNonce": 1199174304,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "eval_framework_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Eval Framework\nAutomated evaluation and benchmarking",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "eval_framework_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "feedback_collector",
+      "status": "published",
+      "name": "Feedback Collector (genai)",
+      "elements": [
+        {
+          "id": "feedback_collector_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 817858803,
+          "version": 1,
+          "versionNonce": 817858803,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "feedback_collector_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "feedback_collector_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "feedback_collector_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 817858804,
+          "version": 1,
+          "versionNonce": 817858804,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "feedback_collector_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Feedback Collector\nHuman feedback capture",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "feedback_collector_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "feedback_collector",
+      "status": "published",
+      "name": "Feedback Collector (genai)",
+      "elements": [
+        {
+          "id": "feedback_collector_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 817858803,
+          "version": 1,
+          "versionNonce": 817858803,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "feedback_collector_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "feedback_collector_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "feedback_collector_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 817858804,
+          "version": 1,
+          "versionNonce": 817858804,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "feedback_collector_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Feedback Collector\nHuman feedback capture",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "feedback_collector_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "guardrails_engine",
+      "status": "published",
+      "name": "Guardrails Engine (genai)",
+      "elements": [
+        {
+          "id": "guardrails_engine_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1871766775,
+          "version": 1,
+          "versionNonce": 1871766775,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "guardrails_engine_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "guardrails_engine_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "guardrails_engine_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1871766776,
+          "version": 1,
+          "versionNonce": 1871766776,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "guardrails_engine_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Guardrails Engine\nInput/output filtering, PII detection",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "guardrails_engine_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "llm_gateway",
+      "status": "published",
+      "name": "Llm Gateway (genai)",
+      "elements": [
+        {
+          "id": "llm_gateway_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 471275345,
+          "version": 1,
+          "versionNonce": 471275345,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "llm_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "llm_gateway_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "llm_gateway_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 471275346,
+          "version": 1,
+          "versionNonce": 471275346,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "llm_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Llm Gateway\nUnified LLM API proxy",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "llm_gateway_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "prompt_registry",
+      "status": "published",
+      "name": "Prompt Registry (genai)",
+      "elements": [
+        {
+          "id": "prompt_registry_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 19863737,
+          "version": 1,
+          "versionNonce": 19863737,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "prompt_registry_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "prompt_registry_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "prompt_registry_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 19863738,
+          "version": 1,
+          "versionNonce": 19863738,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "prompt_registry_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Prompt Registry\nVersioned prompt templates and system prompts",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "prompt_registry_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "rag_pipeline",
+      "status": "published",
+      "name": "Rag Pipeline (genai)",
+      "elements": [
+        {
+          "id": "rag_pipeline_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1362230029,
+          "version": 1,
+          "versionNonce": 1362230029,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "rag_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "rag_pipeline_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "rag_pipeline_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1362230030,
+          "version": 1,
+          "versionNonce": 1362230030,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "rag_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Rag Pipeline\nRetrieval-augmented generation orchestration",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "rag_pipeline_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "redteam_harness",
+      "status": "published",
+      "name": "Redteam Harness (genai)",
+      "elements": [
+        {
+          "id": "redteam_harness_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 426000202,
+          "version": 1,
+          "versionNonce": 426000202,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "redteam_harness_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "redteam_harness_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "redteam_harness_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 426000203,
+          "version": 1,
+          "versionNonce": 426000203,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "redteam_harness_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Redteam Harness\nAdversarial testing and safety probing",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "redteam_harness_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "vector_store",
+      "status": "published",
+      "name": "Vector Store (genai)",
+      "elements": [
+        {
+          "id": "vector_store_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1258129199,
+          "version": 1,
+          "versionNonce": 1258129199,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "vector_store_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "vector_store_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "vector_store_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1258129200,
+          "version": 1,
+          "versionNonce": 1258129200,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "vector_store_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Vector Store\nEmbedding storage and similarity search",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "vector_store_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "access_control",
+      "status": "published",
+      "name": "Access Control (governance)",
+      "elements": [
+        {
+          "id": "access_control_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 888962897,
+          "version": 1,
+          "versionNonce": 888962897,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "access_control_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "access_control_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "access_control_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 888962898,
+          "version": 1,
+          "versionNonce": 888962898,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "access_control_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Access Control\nRBAC/ABAC policy enforcement",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "access_control_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "lineage_tracker",
+      "status": "published",
+      "name": "Lineage Tracker (governance)",
+      "elements": [
+        {
+          "id": "lineage_tracker_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 501195197,
+          "version": 1,
+          "versionNonce": 501195197,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "lineage_tracker_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "lineage_tracker_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "lineage_tracker_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 501195198,
+          "version": 1,
+          "versionNonce": 501195198,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "lineage_tracker_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Lineage Tracker\nEnd-to-end data lineage",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "lineage_tracker_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "master_data_svc",
+      "status": "published",
+      "name": "Master Data Svc (governance)",
+      "elements": [
+        {
+          "id": "master_data_svc_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 359905401,
+          "version": 1,
+          "versionNonce": 359905401,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "master_data_svc_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "master_data_svc_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "master_data_svc_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 359905402,
+          "version": 1,
+          "versionNonce": 359905402,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "master_data_svc_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Master Data Svc\nMaster data management",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "master_data_svc_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "policy_engine",
+      "status": "published",
+      "name": "Policy Engine (governance)",
+      "elements": [
+        {
+          "id": "policy_engine_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 917218434,
+          "version": 1,
+          "versionNonce": 917218434,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "policy_engine_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "policy_engine_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "policy_engine_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 917218435,
+          "version": 1,
+          "versionNonce": 917218435,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "policy_engine_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Policy Engine\nData classification and policy rules",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "policy_engine_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "quality_engine",
+      "status": "published",
+      "name": "Quality Engine (governance)",
+      "elements": [
+        {
+          "id": "quality_engine_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1865596200,
+          "version": 1,
+          "versionNonce": 1865596200,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "quality_engine_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "quality_engine_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "quality_engine_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1865596201,
+          "version": 1,
+          "versionNonce": 1865596201,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "quality_engine_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Quality Engine\nData quality checks and monitoring",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "quality_engine_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "api_gateway",
+      "status": "published",
+      "name": "Api Gateway (ingestion)",
+      "elements": [
+        {
+          "id": "api_gateway_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 857732685,
+          "version": 1,
+          "versionNonce": 857732685,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "api_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "api_gateway_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "api_gateway_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 857732686,
+          "version": 1,
+          "versionNonce": 857732686,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "api_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Api Gateway\nEntry point for API-based ingestion",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "api_gateway_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "batch_etl",
+      "status": "published",
+      "name": "Batch Etl (ingestion)",
+      "elements": [
+        {
+          "id": "batch_etl_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 325376534,
+          "version": 1,
+          "versionNonce": 325376534,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "batch_etl_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "batch_etl_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "batch_etl_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 325376535,
+          "version": 1,
+          "versionNonce": 325376535,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "batch_etl_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Batch Etl\nScheduled batch data extraction",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "batch_etl_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "cdc_pipeline",
+      "status": "published",
+      "name": "Cdc Pipeline (ingestion)",
+      "elements": [
+        {
+          "id": "cdc_pipeline_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 811700801,
+          "version": 1,
+          "versionNonce": 811700801,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "cdc_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "cdc_pipeline_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "cdc_pipeline_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 811700802,
+          "version": 1,
+          "versionNonce": 811700802,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "cdc_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Cdc Pipeline\nChange data capture from source DBs",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "cdc_pipeline_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "event_stream",
+      "status": "published",
+      "name": "Event Stream (ingestion)",
+      "elements": [
+        {
+          "id": "event_stream_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1392798787,
+          "version": 1,
+          "versionNonce": 1392798787,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "event_stream_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "event_stream_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "event_stream_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1392798788,
+          "version": 1,
+          "versionNonce": 1392798788,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "event_stream_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Event Stream\nReal-time event ingestion",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "event_stream_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "file_drop",
+      "status": "published",
+      "name": "File Drop (ingestion)",
+      "elements": [
+        {
+          "id": "file_drop_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1076321376,
+          "version": 1,
+          "versionNonce": 1076321376,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "file_drop_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "file_drop_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "file_drop_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1076321377,
+          "version": 1,
+          "versionNonce": 1076321377,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "file_drop_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "File Drop\nSFTP/S3/blob file-based ingestion",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "file_drop_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "esb",
+      "status": "published",
+      "name": "Esb (integration)",
+      "elements": [
+        {
+          "id": "esb_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 541350854,
+          "version": 1,
+          "versionNonce": 541350854,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "esb_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "esb_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "esb_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 541350855,
+          "version": 1,
+          "versionNonce": 541350855,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "esb_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Esb\nEnterprise service bus",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "esb_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "graphql_endpoint",
+      "status": "published",
+      "name": "Graphql Endpoint (integration)",
+      "elements": [
+        {
+          "id": "graphql_endpoint_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1030353963,
+          "version": 1,
+          "versionNonce": 1030353963,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "graphql_endpoint_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "graphql_endpoint_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "graphql_endpoint_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1030353964,
+          "version": 1,
+          "versionNonce": 1030353964,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "graphql_endpoint_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Graphql Endpoint\nGraphQL integration endpoint",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "graphql_endpoint_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "message_broker",
+      "status": "published",
+      "name": "Message Broker (integration)",
+      "elements": [
+        {
+          "id": "message_broker_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 893834156,
+          "version": 1,
+          "versionNonce": 893834156,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "message_broker_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "message_broker_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "message_broker_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 893834157,
+          "version": 1,
+          "versionNonce": 893834157,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "message_broker_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Message Broker\nAsync message routing",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "message_broker_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "rest_api",
+      "status": "published",
+      "name": "Rest Api (integration)",
+      "elements": [
+        {
+          "id": "rest_api_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 107701447,
+          "version": 1,
+          "versionNonce": 107701447,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "rest_api_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "rest_api_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "rest_api_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 107701448,
+          "version": 1,
+          "versionNonce": 107701448,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "rest_api_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Rest Api\nRESTful integration endpoint",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "rest_api_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "webhook_handler",
+      "status": "published",
+      "name": "Webhook Handler (integration)",
+      "elements": [
+        {
+          "id": "webhook_handler_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 239925449,
+          "version": 1,
+          "versionNonce": 239925449,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "webhook_handler_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "webhook_handler_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "webhook_handler_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 239925450,
+          "version": 1,
+          "versionNonce": 239925450,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "webhook_handler_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Webhook Handler\nInbound webhook receiver",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "webhook_handler_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "command_dispatcher",
+      "status": "published",
+      "name": "Command Dispatcher (iot)",
+      "elements": [
+        {
+          "id": "command_dispatcher_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 172247649,
+          "version": 1,
+          "versionNonce": 172247649,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "command_dispatcher_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "command_dispatcher_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "command_dispatcher_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 172247650,
+          "version": 1,
+          "versionNonce": 172247650,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "command_dispatcher_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Command Dispatcher\nCloud-to-device command routing",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "command_dispatcher_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "device_registry",
+      "status": "published",
+      "name": "Device Registry (iot)",
+      "elements": [
+        {
+          "id": "device_registry_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1858275410,
+          "version": 1,
+          "versionNonce": 1858275410,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "device_registry_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "device_registry_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "device_registry_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1858275411,
+          "version": 1,
+          "versionNonce": 1858275411,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "device_registry_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Device Registry\nDevice identity and configuration store",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "device_registry_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "edge_device",
+      "status": "published",
+      "name": "Edge Device (iot)",
+      "elements": [
+        {
+          "id": "edge_device_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#78716C",
+          "backgroundColor": "#44403C",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "dashed",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1846405789,
+          "version": 1,
+          "versionNonce": 1846405789,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "edge_device_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "edge_device_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "edge_device_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#D6D3D1",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1846405790,
+          "version": 1,
+          "versionNonce": 1846405790,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "edge_device_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Edge Device\nSensor / edge compute device",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "edge_device_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "edge_gateway",
+      "status": "published",
+      "name": "Edge Gateway (iot)",
+      "elements": [
+        {
+          "id": "edge_gateway_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 493195081,
+          "version": 1,
+          "versionNonce": 493195081,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "edge_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "edge_gateway_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "edge_gateway_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 493195082,
+          "version": 1,
+          "versionNonce": 493195082,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "edge_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Edge Gateway\nLocal aggregation and protocol translation",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "edge_gateway_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "telemetry_collector",
+      "status": "published",
+      "name": "Telemetry Collector (iot)",
+      "elements": [
+        {
+          "id": "telemetry_collector_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1804650790,
+          "version": 1,
+          "versionNonce": 1804650790,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "telemetry_collector_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "telemetry_collector_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "telemetry_collector_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1804650791,
+          "version": 1,
+          "versionNonce": 1804650791,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "telemetry_collector_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Telemetry Collector\nIngests device telemetry at scale",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "telemetry_collector_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "experiment_tracker",
+      "status": "published",
+      "name": "Experiment Tracker (ml_platform)",
+      "elements": [
+        {
+          "id": "experiment_tracker_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1366888934,
+          "version": 1,
+          "versionNonce": 1366888934,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "experiment_tracker_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "experiment_tracker_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "experiment_tracker_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1366888935,
+          "version": 1,
+          "versionNonce": 1366888935,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "experiment_tracker_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Experiment Tracker\nExperiment logging and comparison",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "experiment_tracker_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "feature_store",
+      "status": "published",
+      "name": "Feature Store (ml_platform)",
+      "elements": [
+        {
+          "id": "feature_store_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1993405996,
+          "version": 1,
+          "versionNonce": 1993405996,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "feature_store_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "feature_store_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "feature_store_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1993405997,
+          "version": 1,
+          "versionNonce": 1993405997,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "feature_store_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Feature Store\nManaged feature storage (online + offline)",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "feature_store_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "ml_pipeline",
+      "status": "published",
+      "name": "Ml Pipeline (ml_platform)",
+      "elements": [
+        {
+          "id": "ml_pipeline_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1341686727,
+          "version": 1,
+          "versionNonce": 1341686727,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "ml_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "ml_pipeline_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "ml_pipeline_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1341686728,
+          "version": 1,
+          "versionNonce": 1341686728,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "ml_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Ml Pipeline\nEnd-to-end ML pipeline orchestration",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "ml_pipeline_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "model_registry",
+      "status": "published",
+      "name": "Model Registry (ml_platform)",
+      "elements": [
+        {
+          "id": "model_registry_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 2032428647,
+          "version": 1,
+          "versionNonce": 2032428647,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "model_registry_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "model_registry_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "model_registry_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 2032428648,
+          "version": 1,
+          "versionNonce": 2032428648,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "model_registry_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Model Registry\nVersioned model artifacts and metadata",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "model_registry_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "training_infra",
+      "status": "published",
+      "name": "Training Infra (ml_platform)",
+      "elements": [
+        {
+          "id": "training_infra_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 378851460,
+          "version": 1,
+          "versionNonce": 378851460,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "training_infra_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "training_infra_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "training_infra_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 378851461,
+          "version": 1,
+          "versionNonce": 378851461,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "training_infra_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Training Infra\nModel training compute",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "training_infra_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "dbt_transform",
+      "status": "published",
+      "name": "Dbt Transform (processing)",
+      "elements": [
+        {
+          "id": "dbt_transform_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 714933637,
+          "version": 1,
+          "versionNonce": 714933637,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "dbt_transform_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "dbt_transform_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "dbt_transform_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 714933638,
+          "version": 1,
+          "versionNonce": 714933638,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "dbt_transform_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Dbt Transform\nSQL transformations",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "dbt_transform_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "elt_pipeline",
+      "status": "published",
+      "name": "Elt Pipeline (processing)",
+      "elements": [
+        {
+          "id": "elt_pipeline_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 696995475,
+          "version": 1,
+          "versionNonce": 696995475,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "elt_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "elt_pipeline_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "elt_pipeline_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 696995476,
+          "version": 1,
+          "versionNonce": 696995476,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "elt_pipeline_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Elt Pipeline\nExtract-load-transform pipeline",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "elt_pipeline_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "orchestrator",
+      "status": "published",
+      "name": "Orchestrator (processing)",
+      "elements": [
+        {
+          "id": "orchestrator_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 86260945,
+          "version": 1,
+          "versionNonce": 86260945,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "orchestrator_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "orchestrator_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "orchestrator_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 86260946,
+          "version": 1,
+          "versionNonce": 86260946,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "orchestrator_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Orchestrator\nWorkflow orchestration",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "orchestrator_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "spark_job",
+      "status": "published",
+      "name": "Spark Job (processing)",
+      "elements": [
+        {
+          "id": "spark_job_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1376183570,
+          "version": 1,
+          "versionNonce": 1376183570,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "spark_job_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "spark_job_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "spark_job_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1376183571,
+          "version": 1,
+          "versionNonce": 1376183571,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "spark_job_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Spark Job\nDistributed compute processing",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "spark_job_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "stream_processor",
+      "status": "published",
+      "name": "Stream Processor (processing)",
+      "elements": [
+        {
+          "id": "stream_processor_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 753396074,
+          "version": 1,
+          "versionNonce": 753396074,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "stream_processor_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "stream_processor_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "stream_processor_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 753396075,
+          "version": 1,
+          "versionNonce": 753396075,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "stream_processor_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Stream Processor\nReal-time stream processing",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "stream_processor_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "audit_log",
+      "status": "published",
+      "name": "Audit Log (security)",
+      "elements": [
+        {
+          "id": "audit_log_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 477913812,
+          "version": 1,
+          "versionNonce": 477913812,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "audit_log_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "audit_log_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "audit_log_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 477913813,
+          "version": 1,
+          "versionNonce": 477913813,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "audit_log_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Audit Log\nSecurity audit trail",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "audit_log_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "auth_gateway",
+      "status": "published",
+      "name": "Auth Gateway (security)",
+      "elements": [
+        {
+          "id": "auth_gateway_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 376903169,
+          "version": 1,
+          "versionNonce": 376903169,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "auth_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "auth_gateway_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "auth_gateway_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 376903170,
+          "version": 1,
+          "versionNonce": 376903170,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "auth_gateway_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Auth Gateway\nAPI auth enforcement",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "auth_gateway_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "certificate_mgr",
+      "status": "published",
+      "name": "Certificate Mgr (security)",
+      "elements": [
+        {
+          "id": "certificate_mgr_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 163837685,
+          "version": 1,
+          "versionNonce": 163837685,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "certificate_mgr_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "certificate_mgr_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "certificate_mgr_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 163837686,
+          "version": 1,
+          "versionNonce": 163837686,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "certificate_mgr_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Certificate Mgr\nTLS cert provisioning and rotation",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "certificate_mgr_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "firewall",
+      "status": "published",
+      "name": "Firewall (security)",
+      "elements": [
+        {
+          "id": "firewall_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#78716C",
+          "backgroundColor": "#44403C",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "dashed",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 527023632,
+          "version": 1,
+          "versionNonce": 527023632,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "firewall_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "firewall_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "firewall_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#D6D3D1",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 527023633,
+          "version": 1,
+          "versionNonce": 527023633,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "firewall_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Firewall\nNetwork perimeter / WAF",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "firewall_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "identity_provider",
+      "status": "published",
+      "name": "Identity Provider (security)",
+      "elements": [
+        {
+          "id": "identity_provider_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#78716C",
+          "backgroundColor": "#44403C",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "dashed",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 486010204,
+          "version": 1,
+          "versionNonce": 486010204,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "identity_provider_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "identity_provider_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "identity_provider_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#D6D3D1",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 486010205,
+          "version": 1,
+          "versionNonce": 486010205,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "identity_provider_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Identity Provider\nOAuth/SAML/OIDC provider",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "identity_provider_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "secrets_vault",
+      "status": "published",
+      "name": "Secrets Vault (security)",
+      "elements": [
+        {
+          "id": "secrets_vault_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1289779942,
+          "version": 1,
+          "versionNonce": 1289779942,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "secrets_vault_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "secrets_vault_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "secrets_vault_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1289779943,
+          "version": 1,
+          "versionNonce": 1289779943,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "secrets_vault_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Secrets Vault\nSecrets/key management",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "secrets_vault_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "api_service",
+      "status": "published",
+      "name": "Api Service (serving)",
+      "elements": [
+        {
+          "id": "api_service_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1040008260,
+          "version": 1,
+          "versionNonce": 1040008260,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "api_service_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "api_service_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "api_service_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1040008261,
+          "version": 1,
+          "versionNonce": 1040008261,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "api_service_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Api Service\nData API for downstream consumers",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "api_service_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "bi_platform",
+      "status": "published",
+      "name": "Bi Platform (serving)",
+      "elements": [
+        {
+          "id": "bi_platform_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1986648673,
+          "version": 1,
+          "versionNonce": 1986648673,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "bi_platform_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "bi_platform_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "bi_platform_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1986648674,
+          "version": 1,
+          "versionNonce": 1986648674,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "bi_platform_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Bi Platform\nDashboards and reports",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "bi_platform_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "data_catalog",
+      "status": "published",
+      "name": "Data Catalog (serving)",
+      "elements": [
+        {
+          "id": "data_catalog_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 474643109,
+          "version": 1,
+          "versionNonce": 474643109,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_catalog_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "data_catalog_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "data_catalog_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 474643110,
+          "version": 1,
+          "versionNonce": 474643110,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_catalog_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Data Catalog\nSearchable metadata catalog",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "data_catalog_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "ml_endpoint",
+      "status": "published",
+      "name": "Ml Endpoint (serving)",
+      "elements": [
+        {
+          "id": "ml_endpoint_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1185684226,
+          "version": 1,
+          "versionNonce": 1185684226,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "ml_endpoint_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "ml_endpoint_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "ml_endpoint_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1185684227,
+          "version": 1,
+          "versionNonce": 1185684227,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "ml_endpoint_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Ml Endpoint\nDeployed ML model serving predictions",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "ml_endpoint_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "report_dashboard",
+      "status": "published",
+      "name": "Report Dashboard (serving)",
+      "elements": [
+        {
+          "id": "report_dashboard_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 1735934658,
+          "version": 1,
+          "versionNonce": 1735934658,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "report_dashboard_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "report_dashboard_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "report_dashboard_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 1735934659,
+          "version": 1,
+          "versionNonce": 1735934659,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "report_dashboard_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Report Dashboard\nScheduled/static reports",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "report_dashboard_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "cache_layer",
+      "status": "published",
+      "name": "Cache Layer (storage)",
+      "elements": [
+        {
+          "id": "cache_layer_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#D97706",
+          "backgroundColor": "#78350F",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 405837316,
+          "version": 1,
+          "versionNonce": 405837316,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "cache_layer_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "cache_layer_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "cache_layer_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF3C7",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 405837317,
+          "version": 1,
+          "versionNonce": 405837317,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "cache_layer_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "Cache Layer\nLow-latency cache",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "cache_layer_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "data_lake",
+      "status": "published",
+      "name": "Data Lake (storage)",
+      "elements": [
+        {
+          "id": "data_lake_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 390329666,
+          "version": 1,
+          "versionNonce": 390329666,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_lake_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "data_lake_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "data_lake_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 390329667,
+          "version": 1,
+          "versionNonce": 390329667,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_lake_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Data Lake\nRaw + curated zones",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "data_lake_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "data_warehouse",
+      "status": "published",
+      "name": "Data Warehouse (storage)",
+      "elements": [
+        {
+          "id": "data_warehouse_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 223173540,
+          "version": 1,
+          "versionNonce": 223173540,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_warehouse_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "data_warehouse_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "data_warehouse_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 223173541,
+          "version": 1,
+          "versionNonce": 223173541,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "data_warehouse_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Data Warehouse\nDimensional models, governed data",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "data_warehouse_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "object_store",
+      "status": "published",
+      "name": "Object Store (storage)",
+      "elements": [
+        {
+          "id": "object_store_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 268632461,
+          "version": 1,
+          "versionNonce": 268632461,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "object_store_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "object_store_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "object_store_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 268632462,
+          "version": 1,
+          "versionNonce": 268632462,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "object_store_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Object Store\nUnstructured blob/file storage",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "object_store_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    },
+    {
+      "id": "operational_db",
+      "status": "published",
+      "name": "Operational Db (storage)",
+      "elements": [
+        {
+          "id": "operational_db_shape",
+          "type": "rectangle",
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 120,
+          "angle": 0,
+          "strokeColor": "#EAB308",
+          "backgroundColor": "#713F12",
+          "fillStyle": "hachure",
+          "strokeWidth": 2,
+          "strokeStyle": "solid",
+          "roughness": 2,
+          "opacity": 100,
+          "seed": 509881603,
+          "version": 1,
+          "versionNonce": 509881603,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "operational_db_group"
+          ],
+          "frameId": null,
+          "index": "a0",
+          "link": null,
+          "locked": false,
+          "roundness": {
+            "type": 3
+          },
+          "boundElements": [
+            {
+              "id": "operational_db_text",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "id": "operational_db_text",
+          "type": "text",
+          "x": 10,
+          "y": 30,
+          "width": 200,
+          "height": 60,
+          "angle": 0,
+          "strokeColor": "#FEF9C3",
+          "backgroundColor": "transparent",
+          "fillStyle": "solid",
+          "strokeWidth": 1,
+          "strokeStyle": "solid",
+          "roughness": 0,
+          "opacity": 100,
+          "seed": 509881604,
+          "version": 1,
+          "versionNonce": 509881604,
+          "updated": 1774182655659,
+          "isDeleted": false,
+          "groupIds": [
+            "operational_db_group"
+          ],
+          "frameId": null,
+          "index": "a1",
+          "link": null,
+          "locked": false,
+          "roundness": null,
+          "boundElements": null,
+          "text": "\ud83d\uddc4 Operational Db\nTransactional/operational database",
+          "fontSize": 16,
+          "fontFamily": 1,
+          "textAlign": "center",
+          "verticalAlign": "middle",
+          "containerId": "operational_db_shape",
+          "autoResize": true,
+          "lineHeight": 1.25
+        }
+      ],
+      "created": 1774182655659
+    }
+  ]
+}

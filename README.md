@@ -49,17 +49,29 @@ skhema help
 ## Quick Start
 
 ```bash
-# Generate everything for the demo client (render + gallery + docs + deck)
-skhema demo
+# Scaffold a new client
+skhema init acme
 
-# Or step by step:
-skhema render --client demo --all --animate
-skhema gallery --client demo
-skhema docs --client demo
-skhema deck --client demo
+# Add your diagrams to clients/acme/diagrams/c4/, then generate everything
+skhema demo acme
+
+# Or try the included demo client
+skhema demo
 ```
 
 ## CLI Reference
+
+### `skhema init` — Scaffold a new client
+
+```bash
+# Create client directory structure with manifest and skeleton docs
+skhema init acme
+
+# Kebab-case names are title-cased automatically: "acme-corp" → "Acme Corp"
+skhema init acme-corp
+```
+
+Creates `clients/<name>/` with `client.yaml`, `docs/overview.md`, and empty diagram directories for c4, sequence, erd, and deployment.
 
 ### `skhema render` — Render diagrams
 
@@ -190,15 +202,13 @@ When rendering with `--client`, includes are resolved in order:
 ### Adding a New Client
 
 ```bash
-mkdir -p clients/acme/diagrams/c4 clients/acme/models
+# Scaffold the directory structure
+skhema init acme
 
-# Create diagrams, then generate everything
-skhema render --client acme --all --animate
-skhema gallery --client acme
-skhema docs --client acme
-skhema deck --client acme
+# Add your .puml diagrams to clients/acme/diagrams/c4/ (or sequence/, erd/, deployment/)
+# Optionally add companion prose to clients/acme/docs/c4/<diagram-name>.md
 
-# Or all at once
+# Generate all outputs
 skhema demo acme
 ```
 

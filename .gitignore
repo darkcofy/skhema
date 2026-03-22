@@ -9,6 +9,12 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Client rendered output and generated galleries
+clients/*/rendered/
+clients/*/index.html
+clients/*/*.pdf
+clients/*/*.pptx
+
 # Editor
 .vscode/
 .idea/

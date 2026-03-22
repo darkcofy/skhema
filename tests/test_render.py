@@ -44,3 +44,39 @@ class TestResolveIncludes:
         source = "!include a.puml"
         with pytest.raises(ValueError, match="[Cc]ircular"):
             resolve_includes(source, base_dir=str(tmp_path))
+
+
+class TestResolveIncludesSearchPath:
+    """Test include resolution with search paths."""
+
+    def test_search_path_fallback(self, tmp_path):
+        """If not found relative to source, search paths are tried."""
+        shared = tmp_path / "shared"
+        shared.mkdir()
+        (shared / "common.puml").write_text("' shared content")
+        source = "!include common.puml"
+        result = resolve_includes(source, base_dir=str(tmp_path), search_paths=[str(shared)])
+        assert "' shared content" in result
+
+    def test_local_takes_priority(self, tmp_path):
+        """Local file wins over search path."""
+        shared = tmp_path / "shared"
+        shared.mkdir()
+        (shared / "item.puml").write_text("' shared version")
+        (tmp_path / "item.puml").write_text("' local version")
+        source = "!include item.puml"
+        result = resolve_includes(source, base_dir=str(tmp_path), search_paths=[str(shared)])
+        assert "' local version" in result
+        assert "' shared version" not in result
+
+    def test_search_path_order(self, tmp_path):
+        """First search path wins when file exists in multiple."""
+        path_a = tmp_path / "a"
+        path_b = tmp_path / "b"
+        path_a.mkdir()
+        path_b.mkdir()
+        (path_a / "item.puml").write_text("' from a")
+        (path_b / "item.puml").write_text("' from b")
+        source = "!include item.puml"
+        result = resolve_includes(source, base_dir=str(tmp_path / "empty"), search_paths=[str(path_a), str(path_b)])
+        assert "' from a" in result

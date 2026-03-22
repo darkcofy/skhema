@@ -23,8 +23,15 @@ RENDERED_DIR = "rendered"
 INCLUDE_RE = re.compile(r"^\s*!include\s+(.+)\s*$", re.MULTILINE)
 
 
-def resolve_includes(source: str, base_dir: str, seen: set | None = None) -> str:
-    """Recursively inline local !include directives. Remote URLs are left untouched."""
+def resolve_includes(source: str, base_dir: str, search_paths: list[str] | None = None, seen: set | None = None) -> str:
+    """Recursively inline local !include directives. Remote URLs are left untouched.
+
+    Args:
+        source: PlantUML source text
+        base_dir: Directory to resolve relative includes from
+        search_paths: Additional directories to search if include not found relative to base_dir
+        seen: Set of already-included paths (circular detection)
+    """
     if seen is None:
         seen = set()
 
@@ -34,7 +41,18 @@ def resolve_includes(source: str, base_dir: str, seen: set | None = None) -> str
             return match.group(0)
         if path_str.startswith("<") and path_str.endswith(">"):
             return match.group(0)
+
+        # Try relative to base_dir first
         full_path = os.path.normpath(os.path.join(base_dir, path_str))
+
+        # If not found, try search paths
+        if not os.path.isfile(full_path) and search_paths:
+            for sp in search_paths:
+                candidate = os.path.normpath(os.path.join(sp, path_str))
+                if os.path.isfile(candidate):
+                    full_path = candidate
+                    break
+
         if full_path in seen:
             raise ValueError(f"Circular include detected: {full_path}")
         if not os.path.isfile(full_path):
@@ -42,7 +60,7 @@ def resolve_includes(source: str, base_dir: str, seen: set | None = None) -> str
         seen.add(full_path)
         content = open(full_path).read()
         inc_dir = os.path.dirname(full_path)
-        resolved = resolve_includes(content, base_dir=inc_dir, seen=seen)
+        resolved = resolve_includes(content, base_dir=inc_dir, search_paths=search_paths, seen=seen)
         seen.discard(full_path)
         return resolved
 

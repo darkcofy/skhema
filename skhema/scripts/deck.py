@@ -9,16 +9,12 @@ import argparse
 import os
 import re
 import sys
-import time
-import urllib.request
-import urllib.error
 
 # Add parent dir to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from scripts.render import resolve_includes, INCLUDE_RE
+from scripts.render import resolve_includes, render_plantuml, INCLUDE_RE
 
-KROKI_BASE = "https://kroki.io/plantuml"
 TYPE_ORDER = ["c4", "sequence", "erd", "deployment", "excalidraw"]
 
 
@@ -53,36 +49,13 @@ def diagram_name(puml_path: str) -> str:
 
 
 def render_to_pdf(source: str) -> bytes:
-    """Render PlantUML source to PDF via Kroki."""
-    url = f"{KROKI_BASE}/pdf"
-    data = source.encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={
-        "Content-Type": "text/plain",
-        "User-Agent": "skhema/1.0",
-    })
-    max_retries = 3
-    for attempt in range(max_retries):
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read()
-        except urllib.error.HTTPError as e:
-            if e.code in (429, 503) and attempt < max_retries - 1:
-                time.sleep(2 ** attempt)
-            else:
-                raise
-    return b""
+    """Render PlantUML source to PDF via local binary."""
+    return render_plantuml(source, fmt="pdf")
 
 
 def render_to_png(source: str, scale: int = 2) -> bytes:
-    """Render PlantUML source to high-res PNG via Kroki."""
-    url = f"{KROKI_BASE}/png"
-    data = source.encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={
-        "Content-Type": "text/plain",
-        "User-Agent": "skhema/1.0",
-    })
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return resp.read()
+    """Render PlantUML source to PNG via local binary."""
+    return render_plantuml(source, fmt="png")
 
 
 def generate_pdf_deck(client_name: str, diagrams_dir: str, search_paths: list[str], output_path: str):

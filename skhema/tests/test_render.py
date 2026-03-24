@@ -2,6 +2,7 @@
 import os
 import tempfile
 import pytest
+from unittest.mock import patch, MagicMock
 
 from scripts.render import resolve_includes
 
@@ -80,3 +81,42 @@ class TestResolveIncludesSearchPath:
         source = "!include item.puml"
         result = resolve_includes(source, base_dir=str(tmp_path / "empty"), search_paths=[str(path_a), str(path_b)])
         assert "' from a" in result
+
+
+class TestRenderPlantUml:
+    def test_renders_svg_via_subprocess(self):
+        from scripts.render import render_plantuml
+        fake_svg = b"<svg>test</svg>"
+        mock_result = MagicMock()
+        mock_result.stdout = fake_svg
+        mock_result.returncode = 0
+
+        with patch("scripts.render.subprocess.run", return_value=mock_result) as mock_run:
+            result = render_plantuml("@startuml\nA -> B\n@enduml", fmt="svg")
+
+        assert result == fake_svg
+        mock_run.assert_called_once()
+        call_args = mock_run.call_args
+        assert "-tsvg" in call_args[0][0]
+
+    def test_raises_on_plantuml_error(self):
+        from scripts.render import render_plantuml
+        mock_result = MagicMock()
+        mock_result.returncode = 1
+        mock_result.stderr = b"Syntax Error line 2"
+
+        with patch("scripts.render.subprocess.run", return_value=mock_result):
+            try:
+                render_plantuml("@startuml\nbad syntax\n@enduml")
+                assert False, "Should have raised"
+            except RuntimeError as e:
+                assert "Syntax Error" in str(e)
+
+    def test_missing_plantuml_binary(self):
+        from scripts.render import render_plantuml
+        with patch("scripts.render.subprocess.run", side_effect=FileNotFoundError()):
+            try:
+                render_plantuml("@startuml\nA -> B\n@enduml")
+                assert False, "Should have raised"
+            except RuntimeError as e:
+                assert "PlantUML not found" in str(e)

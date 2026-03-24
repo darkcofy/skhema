@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render PlantUML diagrams via the Kroki public API.
+"""Render PlantUML diagrams via the local PlantUML binary.
 
 Usage:
     python scripts/render.py <file.puml>              # Render single file to SVG
@@ -11,13 +11,10 @@ Usage:
 import argparse
 import os
 import re
+import subprocess
 import sys
-import time
-import urllib.request
-import urllib.error
 from pathlib import Path
 
-KROKI_BASE = "https://kroki.io/plantuml"
 DIAGRAMS_DIR = "diagrams"
 RENDERED_DIR = "rendered"
 INCLUDE_RE = re.compile(r"^\s*!include\s+(.+)\s*$", re.MULTILINE)
@@ -67,28 +64,30 @@ def resolve_includes(source: str, base_dir: str, search_paths: list[str] | None 
     return INCLUDE_RE.sub(replacer, source)
 
 
-def post_to_kroki(source: str, fmt: str = "svg") -> bytes:
-    """POST resolved PlantUML source to Kroki and return the response bytes."""
-    url = f"{KROKI_BASE}/{fmt}"
-    data = source.encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={
-        "Content-Type": "text/plain",
-        "User-Agent": "skhema/1.0 (PlantUML renderer)",
-    })
+def _get_plantuml_bin() -> str:
+    """Get PlantUML binary path from env var."""
+    return os.environ.get("PLANTUML_BIN", "plantuml")
 
-    max_retries = 3
-    for attempt in range(max_retries):
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read()
-        except urllib.error.HTTPError as e:
-            if e.code in (429, 503) and attempt < max_retries - 1:
-                wait = 2 ** attempt
-                print(f"  Retrying in {wait}s (HTTP {e.code})...", file=sys.stderr)
-                time.sleep(wait)
-            else:
-                raise
-    return b""
+
+def render_plantuml(source: str, fmt: str = "svg") -> bytes:
+    """Render PlantUML source via local PlantUML binary."""
+    plantuml_bin = _get_plantuml_bin()
+    try:
+        result = subprocess.run(
+            [plantuml_bin, f"-t{fmt}", "-pipe"],
+            input=source.encode("utf-8"),
+            capture_output=True,
+        )
+    except FileNotFoundError:
+        raise RuntimeError(
+            f"PlantUML not found at '{plantuml_bin}'. "
+            "Run via Docker or set PLANTUML_BIN."
+        )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"PlantUML rendering failed:\n{result.stderr.decode('utf-8', errors='replace')}"
+        )
+    return result.stdout
 
 
 def get_client_paths(root: str, client: str) -> tuple[str, str, list[str]]:
@@ -141,9 +140,9 @@ def render_file(source_path: str, diagrams_dir: str, rendered_dir: str, root: st
         return True
 
     try:
-        image_data = post_to_kroki(resolved, fmt)
+        image_data = render_plantuml(resolved, fmt=fmt)
     except Exception as e:
-        print(f"  ERROR: Kroki request failed: {e}", file=sys.stderr)
+        print(f"  ERROR: PlantUML rendering failed: {e}", file=sys.stderr)
         return False
 
     if output_override:
@@ -168,7 +167,7 @@ def render_file(source_path: str, diagrams_dir: str, rendered_dir: str, root: st
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Render PlantUML diagrams via Kroki API")
+    parser = argparse.ArgumentParser(description="Render PlantUML diagrams via local PlantUML binary")
     parser.add_argument("file", nargs="?", help="Path to .puml file")
     parser.add_argument("--all", action="store_true", help="Render all diagrams/")
     parser.add_argument("--client", help="Client name (looks in clients/<name>/diagrams/)")

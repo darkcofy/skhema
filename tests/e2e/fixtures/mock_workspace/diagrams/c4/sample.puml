@@ -1,0 +1,6 @@
+@startuml
+!include <C4/C4_Context>
+Person(user, "User", "A test user")
+System(system, "System", "A test system")
+Rel(user, system, "Uses")
+@enduml

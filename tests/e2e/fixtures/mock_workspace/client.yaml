@@ -1,0 +1,6 @@
+name: "E2E Test Client"
+subtitle: "Test Workspace"
+accent_color: "#D97706"
+sections:
+  - c4
+  - sequence

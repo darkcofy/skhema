@@ -8,34 +8,20 @@ import re
 import os
 
 
-def _safe_yaml_load(path: str):
-    """Load YAML using only stdlib. Returns non-blank, non-comment lines."""
-    entries = []
-    with open(path, "r") as f:
-        for line in f:
-            stripped = line.rstrip()
-            if not stripped or stripped.startswith("#"):
-                continue
-            entries.append(stripped)
-    return entries
-
-
 def count_yaml_entries(path: str) -> int:
-    """Count top-level list items or mapping keys in a YAML file."""
+    """Count top-level entries in a YAML file using PyYAML."""
+    import yaml
     if not os.path.isfile(path):
         return 0
-    lines = _safe_yaml_load(path)
-    if not lines:
+    with open(path) as f:
+        data = yaml.safe_load(f)
+    if data is None:
         return 0
-    first = lines[0]
-    if first.startswith("- "):
-        return sum(1 for line in lines if line.startswith("- "))
-    else:
-        count = 0
-        for line in lines:
-            if not line[0].isspace() and ":" in line:
-                count += 1
-        return count
+    if isinstance(data, list):
+        return len(data)
+    if isinstance(data, dict):
+        return len(data)
+    return 0
 
 
 def count_csv_rows(path: str) -> int:

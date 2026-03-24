@@ -1,0 +1,6 @@
+services:
+  skhema:
+    build: .
+    volumes:
+      - ./clients:/workspace/clients
+      - ./manifest.yaml:/workspace/manifest.yaml:ro

@@ -11,6 +11,7 @@ dependencies = [
     "mistune",
     "pypdf",
     "python-pptx",
+    "weasyprint",
 ]
 
 [project.optional-dependencies]

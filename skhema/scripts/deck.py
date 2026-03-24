@@ -79,44 +79,40 @@ COVER_HTML = """<!DOCTYPE html>
 </body></html>"""
 
 
+def _html_to_pdf(html: str, landscape: bool = False) -> bytes | None:
+    """Convert HTML to PDF via weasyprint. Returns None if unavailable."""
+    try:
+        from weasyprint import HTML
+        doc = HTML(string=html)
+        if landscape:
+            css = "@page { size: A4 landscape; margin: 0; }"
+        else:
+            css = "@page { size: A4; margin: 0; }"
+        from weasyprint import CSS
+        return doc.write_pdf(stylesheets=[CSS(string=css)])
+    except ImportError:
+        return None
+
+
 def _svg_to_pdf(svg_bytes: bytes) -> bytes | None:
-    """Convert SVG to PDF via wkhtmltopdf. Returns None if unavailable."""
-    import subprocess
+    """Convert SVG to PDF via weasyprint. Returns None if unavailable."""
+    import base64
     html = (
         '<!DOCTYPE html><html><head><style>'
         'body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }'
         'img { max-width: 95%; max-height: 95%; }'
         '</style></head><body>'
-        f'<img src="data:image/svg+xml;base64,{__import__("base64").b64encode(svg_bytes).decode()}">'
+        f'<img src="data:image/svg+xml;base64,{base64.b64encode(svg_bytes).decode()}">'
         '</body></html>'
     )
-    try:
-        result = subprocess.run(
-            ["wkhtmltopdf", "--page-size", "A4", "--orientation", "Landscape", "-", "-"],
-            input=html.encode(), capture_output=True,
-        )
-        if result.returncode == 0:
-            return result.stdout
-    except FileNotFoundError:
-        pass
-    return None
+    return _html_to_pdf(html, landscape=True)
 
 
 def render_cover_page(client_name: str, subtitle: str = "",
                       accent_color: str = "#D97706") -> bytes | None:
-    """Render cover page HTML to PDF via wkhtmltopdf. Returns None if unavailable."""
-    import subprocess
+    """Render cover page HTML to PDF via weasyprint. Returns None if unavailable."""
     html = COVER_HTML.format(name=client_name, subtitle=subtitle, accent=accent_color)
-    try:
-        result = subprocess.run(
-            ["wkhtmltopdf", "--page-size", "A4", "-", "-"],
-            input=html.encode(), capture_output=True,
-        )
-        if result.returncode == 0:
-            return result.stdout
-    except FileNotFoundError:
-        pass
-    return None
+    return _html_to_pdf(html)
 
 
 def ordered_diagrams(diagrams_dir: str, search_paths: list[str]) -> list[tuple[str, str]]:

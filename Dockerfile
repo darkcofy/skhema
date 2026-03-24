@@ -9,22 +9,28 @@ RUN uv sync --no-dev --frozen --no-install-project
 COPY . .
 RUN uv sync --no-dev --frozen --no-editable
 
-# Stage 2: runtime
-FROM python:3.13-slim-bookworm
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    wkhtmltopdf \
-    graphviz \
-    unzip \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# PlantUML native binary (GraalVM-compiled, no JRE needed)
+# Stage 2: PlantUML extraction
+FROM python:3.13-slim-bookworm AS plantuml
+RUN apt-get update && apt-get install -y --no-install-recommends unzip \
+    && rm -rf /var/lib/apt/lists/*
 ADD https://github.com/plantuml/plantuml/releases/download/v1.2025.4-native/plantuml-headless-linux-amd64-1.2025.4.zip \
     /tmp/plantuml.zip
 RUN unzip /tmp/plantuml.zip -d /opt/plantuml && \
-    chmod +x /opt/plantuml/plantuml-headless && \
-    ln -s /opt/plantuml/plantuml-headless /usr/local/bin/plantuml && \
-    rm /tmp/plantuml.zip
+    chmod +x /opt/plantuml/plantuml-headless
+
+# Stage 3: runtime
+FROM python:3.13-slim-bookworm
+
+# weasyprint needs pango + gdk-pixbuf for HTML→PDF; graphviz for PlantUML diagrams
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    graphviz \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libgdk-pixbuf2.0-0 \
+    && apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY --from=plantuml /opt/plantuml /opt/plantuml
+RUN ln -s /opt/plantuml/plantuml-headless /usr/local/bin/plantuml
 
 COPY --from=builder /opt/skhema /opt/skhema
 COPY --from=builder /opt/skhema/.venv /opt/skhema/.venv

@@ -240,12 +240,21 @@ def generate_gallery_html(
     history: int = 3,
     diagrams_dir: str | None = None,
     client_yaml_path: str | None = None,
+    client_path: str | None = None,
 ) -> str:
     """Generate a self-contained HTML gallery page."""
     svg_files = discover_diagrams(rendered_dir)
     groups = group_by_type(svg_files, rendered_dir)
     total = len(svg_files)
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    element_adr_map: dict = {}
+    if client_path:
+        from scripts.adr import discover_adrs
+        adrs = discover_adrs(client_path)
+        for adr in adrs:
+            for elem_id in adr.elements:
+                element_adr_map.setdefault(elem_id, []).append(adr)
 
     config = parse_client_yaml(client_yaml_path) if client_yaml_path else {"sections": [], "accent_color": "#D97706"}
     section_order = config["sections"] if config["sections"] else [t for t in TYPE_ORDER if t in groups]
@@ -286,12 +295,22 @@ def generate_gallery_html(
             badge = '<span class="badge">animated</span>' if has_animation else ""
             search_text = f"{name} {dtype}"
             type_label_text = TYPE_LABELS.get(dtype, dtype.title())
+
+            diagram_id = os.path.splitext(os.path.basename(svg_path))[0]
+            related_adrs = element_adr_map.get(diagram_id, [])
+            adr_html = ""
+            if related_adrs:
+                adr_html = '<div class="adr-panel"><h4>Architectural Decisions</h4><ul>'
+                for adr in related_adrs:
+                    adr_html += f'<li>ADR{adr.number:02d}: {html.escape(adr.title)} ({html.escape(adr.status)})</li>'
+                adr_html += '</ul></div>'
+
             section_cards.append(
                 f'<div class="card" data-name="{html.escape(search_text)}" data-href="{html.escape(rel_path)}" onclick="openModal(this)">'
                 f'<div class="thumb">{svg_inline}</div>'
                 f'<div class="info"><span class="name">{html.escape(name)}</span>{badge}'
                 f'<div class="type-label">{html.escape(type_label_text)}</div></div>'
-                f'{history_html}</div>'
+                f'{history_html}{adr_html}</div>'
             )
 
         cards_html.append(

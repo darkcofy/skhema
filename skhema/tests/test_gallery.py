@@ -115,6 +115,36 @@ class TestParseClientYaml:
         assert result["name"] == "Acme Corp"
 
 
+class TestGalleryAdrIntegration:
+    def test_gallery_shows_adr_links(self, tmp_path):
+        from scripts.gallery import generate_gallery_html
+
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "main.svg").write_text("<svg></svg>")
+
+        adrs = tmp_path / "adrs"
+        adrs.mkdir()
+        (adrs / "ADR01-test.md").write_text(
+            "# ADR01: Test Decision\n\n## Status\nAccepted\n\n"
+            "## Decision\nDo the thing.\n\n"
+            "<!-- skhema:elements main -->\n"
+        )
+
+        client_yaml = tmp_path / "client.yaml"
+        client_yaml.write_text("name: Test\naccent_color: '#D97706'\nsections:\n  - c4\n")
+
+        html = generate_gallery_html(
+            client_name="Test",
+            rendered_dir=str(tmp_path / "rendered"),
+            history=0,
+            client_yaml_path=str(client_yaml),
+            client_path=str(tmp_path),
+        )
+        assert "ADR01" in html
+        assert "Test Decision" in html
+
+
 class TestGalleryDarkMode:
     def test_dark_mode_toggle_present(self, tmp_path):
         rendered = tmp_path / "rendered" / "c4"

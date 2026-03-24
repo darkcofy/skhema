@@ -147,3 +147,35 @@ class TestGenerateDocsHtml:
         (rendered / "a.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"></svg>')
         html = generate_docs_html("X", "", str(tmp_path / "rendered"), str(tmp_path / "docs"))
         assert "@media print" in html
+
+
+class TestDocsAdrIntegration:
+    def test_docs_includes_adr_subsection(self, tmp_path):
+        from scripts.docs import generate_docs_html
+
+        rendered = tmp_path / "rendered" / "c4"
+        rendered.mkdir(parents=True)
+        (rendered / "main.svg").write_text("<svg>diagram</svg>")
+
+        docs = tmp_path / "docs" / "c4"
+        docs.mkdir(parents=True)
+        (docs / "overview.md").write_text("# Overview\nThis is the overview.")
+
+        adrs = tmp_path / "adrs"
+        adrs.mkdir()
+        (adrs / "ADR01-test.md").write_text(
+            "# ADR01: Test Decision\n\n## Status\nAccepted\n\n"
+            "## Context\nContext here.\n\n## Decision\nDecision here.\n\n"
+            "<!-- skhema:elements main -->\n"
+        )
+
+        html = generate_docs_html(
+            client_name="Test",
+            subtitle="",
+            rendered_dir=str(tmp_path / "rendered"),
+            docs_dir=str(tmp_path / "docs"),
+            client_path=str(tmp_path),
+        )
+        assert "Architectural Decisions" in html
+        assert "ADR01" in html
+        assert "Test Decision" in html

@@ -147,12 +147,21 @@ def generate_docs_html(
     docs_dir: str,
     accent_color: str = "#D97706",
     section_order: list[str] | None = None,
+    client_path: str | None = None,
 ) -> str:
     """Generate a self-contained HTML architecture handbook."""
     svg_files = discover_diagrams(rendered_dir)
     groups = group_by_type(svg_files, rendered_dir)
     total = len(svg_files)
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
+
+    element_adr_map: dict = {}
+    if client_path:
+        from scripts.adr import discover_adrs
+        adrs = discover_adrs(client_path)
+        for adr in adrs:
+            for elem_id in adr.elements:
+                element_adr_map.setdefault(elem_id, []).append(adr)
 
     effective_order = section_order or [t for t in TYPE_ORDER if t in groups]
 
@@ -225,11 +234,29 @@ def generate_docs_html(
                         companion_md = f.read()
                     prose_html = f'<div class="prose">{parse_markdown(companion_md)}</div>'
 
+            adr_section_html = ""
+            if element_adr_map:
+                stem = os.path.splitext(os.path.basename(svg_path))[0]
+                related_adrs = element_adr_map.get(stem, [])
+                if related_adrs:
+                    import mistune
+                    adr_section_html = '<div class="adr-section"><h4>Architectural Decisions</h4>'
+                    for adr in related_adrs:
+                        adr_text = open(adr.path).read()
+                        adr_section_html += (
+                            f'<div class="adr-entry">'
+                            f'<h5>ADR{adr.number:02d}: {html_mod.escape(adr.title)} ({html_mod.escape(adr.status)})</h5>'
+                            f'{mistune.html(adr_text)}'
+                            f'</div>'
+                        )
+                    adr_section_html += '</div>'
+
             diagrams_html += (
                 f'<div class="diagram-block">'
                 f'<h3>{html_mod.escape(name)}</h3>'
                 f'<div class="diagram-svg">{svg_inline}</div>'
                 f'{prose_html}'
+                f'{adr_section_html}'
                 f'</div>'
             )
 

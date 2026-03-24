@@ -1,0 +1,46 @@
+artifacts:
+  engagement_brief:
+    name: "Engagement Brief"
+    stage: 0
+    output: "generated/reports/engagement-brief.md"
+    requires:
+      files:
+        - path: "00_scope/engagement.md"
+          sections: ["domain", "outcomes", "out_of_scope"]
+        - path: "00_scope/stakeholders.yaml"
+          min_entries: 1
+    optional:
+      - path: "00_scope/success-criteria.md"
+
+  draft_glossary:
+    name: "Draft Glossary"
+    stage: 1
+    output: "generated/glossary/draft-glossary.md"
+    requires:
+      files:
+        - path: "01_language/glossary-seeds.csv"
+          min_rows: 5
+    optional:
+      - path: "01_language/stakeholder-terms.md"
+      - path: "02_concepts/concept-definitions.md"
+
+  terminology_conflict_report:
+    name: "Terminology Conflict Report"
+    stage: 1
+    output: "generated/reports/terminology-conflicts.md"
+    requires:
+      files:
+        - path: "01_language/synonym-conflicts.md"
+          min_entries: 3
+
+  concept_map:
+    name: "Concept Map"
+    stage: 2
+    output: "generated/diagrams/concept-map.puml"
+    requires:
+      files:
+        - path: "02_concepts/candidate-concepts.yaml"
+          min_entries: 5
+        - path: "02_concepts/concept-definitions.md"
+          min_entries: 3
+    renders_via: skhema

@@ -360,13 +360,20 @@ def main():
 
     if args.artifact == "available":
         available = list_available(rules, workspace_path)
-        if available:
-            print("Ready to generate:")
-            for key, state in available:
-                name = rules.get(key, {}).get("name", key)
-                print(f"  [{state}] {name} (gnosis generate {key})")
-        else:
+        if not available:
             print("No artifacts are READY yet. Run 'gnosis status' to see what's needed.")
+            return
+        generated = []
+        for key, state in available:
+            rule = rules[key]
+            name = rule.get("name", key)
+            output_path = os.path.join(workspace_path, rule["output"])
+            GENERATORS[key](workspace_path, output_path)
+            generated.append(name)
+            print(f"  Generated: {name} -> {rule['output']}")
+            if rule.get("renders_via") == "skhema":
+                _render_via_skhema(root, output_path)
+        print(f"\n{len(generated)} artifact(s) generated.")
         return
 
     # Generate a specific artifact

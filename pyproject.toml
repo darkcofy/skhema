@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "skhema"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "PyYAML",
+    "mistune",
+    "pypdf",
+    "python-pptx",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["skhema", "gnosis"]

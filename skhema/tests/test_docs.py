@@ -57,7 +57,7 @@ class TestParseMarkdown:
     def test_fenced_code_block(self):
         md = "Example:\n\n```bash\ngit status\ngit diff\n```"
         html = parse_markdown(md)
-        assert "<pre><code>" in html
+        assert "<pre><code" in html
         assert "git status" in html
 
     def test_table(self):

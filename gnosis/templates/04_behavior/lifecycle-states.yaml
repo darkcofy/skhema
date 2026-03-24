@@ -1,0 +1,40 @@
+# Lifecycle states for key concepts
+# What states can each concept be in, and what transitions are valid?
+#
+# Schema:
+#   - concept: Concept name
+#     states:
+#       - name: State name
+#         description: What this state means
+#         terminal: true/false (is this a final state?)
+#     transitions:
+#       - from: State name
+#         to: State name
+#         trigger: What causes this transition
+#         conditions: Any preconditions (optional)
+#
+# Example:
+# - concept: Transaction
+#   states:
+#     - name: initiated
+#       description: Payment request received, not yet processed
+#       terminal: false
+#     - name: authorized
+#       description: Card network approved, funds reserved
+#       terminal: false
+#     - name: settled
+#       description: Funds transferred to merchant
+#       terminal: true
+#     - name: declined
+#       description: Payment rejected by card network or fraud check
+#       terminal: true
+#   transitions:
+#     - from: initiated
+#       to: authorized
+#       trigger: Card network approval
+#     - from: initiated
+#       to: declined
+#       trigger: Card network rejection or fraud block
+#     - from: authorized
+#       to: settled
+#       trigger: End-of-day settlement batch

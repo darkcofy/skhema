@@ -1,0 +1,28 @@
+# Concrete examples for each candidate concept
+# Real or realistic instances that make abstract concepts tangible.
+#
+# Schema:
+#   - concept: Concept name (matches candidate-concepts.yaml)
+#     examples:
+#       - description: What this example illustrates
+#         attributes:
+#           key: value
+#
+# Example:
+# - concept: Transaction
+#   examples:
+#     - description: Successful card payment
+#       attributes:
+#         id: txn_001
+#         amount: 49.99
+#         currency: USD
+#         status: settled
+#         payment_method: visa_ending_4242
+#         merchant: acme_store
+#     - description: Declined transaction (insufficient funds)
+#       attributes:
+#         id: txn_002
+#         amount: 1250.00
+#         currency: USD
+#         status: declined
+#         decline_reason: insufficient_funds

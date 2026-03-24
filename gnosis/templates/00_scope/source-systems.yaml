@@ -1,0 +1,18 @@
+# Source systems relevant to this domain
+# What systems hold data, enforce rules, or define entities we need to model?
+#
+# Schema:
+#   - name: System name
+#     type: Database / API / ERP / CRM / Spreadsheet / Manual process
+#     owner: Team or person responsible
+#     description: What it does in 1-2 sentences
+#     key_entities: List of main entities/tables this system manages
+#     access: How to get at the data (API, DB access, exports, ask someone)
+#
+# Example:
+# - name: Payment Gateway
+#   type: API
+#   owner: Platform Engineering
+#   description: Processes card transactions and manages payment state
+#   key_entities: [transaction, payment_method, settlement]
+#   access: REST API with docs at internal-wiki/pg-api

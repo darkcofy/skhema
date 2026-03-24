@@ -1,0 +1,22 @@
+domain: "{{DOMAIN}}"
+initialized: "{{DATE}}"
+
+stages:
+  - id: 0_scope
+    name: "Setup"
+    path: "00_scope"
+  - id: 1_language
+    name: "Language Capture"
+    path: "01_language"
+  - id: 2_concepts
+    name: "Concept Modeling"
+    path: "02_concepts"
+  - id: 3_mappings
+    name: "System Mapping"
+    path: "03_mappings"
+  - id: 4_behavior
+    name: "Behavior & Constraints"
+    path: "04_behavior"
+  - id: 5_formalization
+    name: "Formalization"
+    path: "05_formalization"

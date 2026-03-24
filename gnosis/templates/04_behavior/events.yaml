@@ -1,0 +1,18 @@
+# Domain events — things that happen in this domain that other parts of the
+# business care about.
+#
+# Schema:
+#   - name: Event name (PascalCase, past tense)
+#     concept: Which concept this event is about
+#     description: What happened
+#     triggers: What causes this event
+#     consumers: Who/what reacts to this event
+#     payload: Key data included in the event
+#
+# Example:
+# - name: TransactionSettled
+#   concept: Transaction
+#   description: A transaction has been settled and funds transferred
+#   triggers: End-of-day settlement batch processing
+#   consumers: [Billing Ledger, Merchant Dashboard, Analytics]
+#   payload: [transaction_id, amount, currency, merchant_id, settled_at]

@@ -1,0 +1,17 @@
+# Canonical domain model — classes and relationships
+# This is the formalized output of all prior stages.
+#
+# Schema:
+#   classes:
+#     - name: Class name (PascalCase)
+#       definition: One-sentence canonical definition
+#       properties: List of property names (detailed in properties.yaml)
+#       identifier: Primary identifier property
+#       relationships:
+#         - target: Target class
+#           type: has_many / has_one / belongs_to / references
+#           label: Relationship name
+#           cardinality: 1:1 / 1:N / N:M
+#
+# Fill this in after completing stages 0-4. Each class should trace back to
+# a candidate concept from 02_concepts/ with a reviewed definition.

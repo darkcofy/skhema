@@ -1,0 +1,16 @@
+# Stakeholders for this engagement
+# Who has domain knowledge, decision authority, or will use the outputs?
+#
+# Schema:
+#   - name: Full name
+#     role: Their role/title
+#     department: Team or department
+#     perspective: What unique knowledge they bring
+#     availability: How often they can participate (e.g., weekly, ad-hoc)
+#
+# Example:
+# - name: Jane Chen
+#   role: Product Owner
+#   department: Payments
+#   perspective: Owns the payment flow requirements and business rules
+#   availability: weekly 1hr sessions

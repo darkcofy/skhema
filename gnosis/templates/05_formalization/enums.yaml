@@ -1,0 +1,25 @@
+# Enumerated types used across the domain model
+#
+# Schema:
+#   - name: Enum name (PascalCase)
+#     description: What this enum represents
+#     values:
+#       - name: Value name (snake_case)
+#         description: What this value means
+#
+# Example:
+# - name: TransactionStatus
+#   description: Lifecycle states of a payment transaction
+#   values:
+#     - name: initiated
+#       description: Payment request received, not yet processed
+#     - name: authorized
+#       description: Approved by card network, funds reserved
+#     - name: captured
+#       description: Authorization converted to charge
+#     - name: settled
+#       description: Funds transferred to merchant account
+#     - name: declined
+#       description: Rejected by card network or fraud system
+#     - name: refunded
+#       description: Full or partial refund issued

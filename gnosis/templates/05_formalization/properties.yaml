@@ -1,0 +1,31 @@
+# Property definitions for canonical classes
+# Details the attributes of each class in the ontology.
+#
+# Schema:
+#   - class: Class name (matches ontology.yaml)
+#     properties:
+#       - name: Property name (snake_case)
+#         type: String / Integer / Money / DateTime / Boolean / Enum / Reference
+#         required: true / false
+#         description: What this property represents
+#         enum_ref: Reference to enums.yaml entry (if type is Enum)
+#         source_mapping: Brief note on where this data comes from
+#
+# Example:
+# - class: Transaction
+#   properties:
+#     - name: id
+#       type: String
+#       required: true
+#       description: Unique transaction identifier
+#       source_mapping: payment_gateway.transactions.txn_id
+#     - name: amount
+#       type: Money
+#       required: true
+#       description: Transaction amount in minor units
+#       source_mapping: payment_gateway.transactions.amount_cents
+#     - name: status
+#       type: Enum
+#       required: true
+#       description: Current lifecycle state
+#       enum_ref: TransactionStatus

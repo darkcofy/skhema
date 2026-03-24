@@ -1,0 +1,23 @@
+# Candidate concepts for the domain model
+# These are the nouns of the domain — things that have identity, lifecycle, and relationships.
+#
+# Schema:
+#   - name: Concept name (PascalCase)
+#     definition: One-sentence definition
+#     domain: Which subdomain this belongs to (e.g., "core", "fraud", "billing")
+#     relationships:
+#       - target: Other concept name
+#         type: has_many / belongs_to / references / contains
+#         label: Human-readable relationship description
+#
+# Example:
+# - name: Transaction
+#   definition: A single payment attempt from a consumer to a merchant
+#   domain: core
+#   relationships:
+#     - target: PaymentMethod
+#       type: references
+#       label: paid via
+#     - target: Merchant
+#       type: belongs_to
+#       label: received by

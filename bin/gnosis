@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(dirname "$SCRIPT_DIR")"
+PYTHON="${GNOSIS_PYTHON:-python3}"
+
+usage() {
+  cat <<'EOF'
+gnosis — ontology discovery toolkit
+
+Usage: gnosis <command> [options]
+
+Commands:
+  init      Scaffold a new ontology workspace for a client
+  status    Show stage completion and artifact readiness
+  generate  Generate artifacts from workspace data
+
+Run 'gnosis <command> --help' for command-specific options.
+EOF
+  exit 0
+}
+
+[[ $# -eq 0 ]] && usage
+
+cmd="$1"; shift
+
+case "$cmd" in
+  init)     PYTHONPATH="$ROOT/gnosis" exec "$PYTHON" -m scripts.init "$@" ;;
+  status)   PYTHONPATH="$ROOT/gnosis" exec "$PYTHON" -m scripts.status "$@" ;;
+  generate) PYTHONPATH="$ROOT/gnosis" exec "$PYTHON" -m scripts.generate "$@" ;;
+  help|-h|--help) usage ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    echo "Run 'gnosis help' for usage." >&2
+    exit 1
+    ;;
+esac

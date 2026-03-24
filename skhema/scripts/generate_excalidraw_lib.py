@@ -184,14 +184,14 @@ def main():
 
     if gen_light:
         lib = build_library(manifest, C4_SHAPE_MAP_LIGHT)
-        out_path = os.path.join(root, "lib", "skhema.excalidrawlib")
+        out_path = os.path.join(root, "skhema", "lib", "skhema.excalidrawlib")
         with open(out_path, "w") as f:
             json.dump(lib, f, indent=2)
         print(f"Light: {out_path}")
 
     if gen_dark:
         lib = build_library(manifest, C4_SHAPE_MAP_DARK)
-        out_path = os.path.join(root, "lib", "skhema-dark.excalidrawlib")
+        out_path = os.path.join(root, "skhema", "lib", "skhema-dark.excalidrawlib")
         with open(out_path, "w") as f:
             json.dump(lib, f, indent=2)
         print(f"Dark:  {out_path}")

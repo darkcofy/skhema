@@ -116,7 +116,7 @@ def main():
         all_errors.extend(check_inline_definitions(source, relpath))
         all_errors.extend(check_hardcoded_colours(source, relpath))
 
-    models_dir = os.path.join(root, "models")
+    models_dir = os.path.join(root, "skhema", "models")
     if os.path.isdir(models_dir):
         models = {}
         for f in os.listdir(models_dir):

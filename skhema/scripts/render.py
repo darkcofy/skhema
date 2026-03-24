@@ -181,6 +181,9 @@ def main():
     if not args.file and not args.all:
         parser.error("Provide a file path or use --all")
 
+    if args.output and args.all:
+        parser.error("--output cannot be used with --all")
+
     if args.animate and args.png:
         print("Warning: --animate is ignored with --png (SVG only)", file=sys.stderr)
 

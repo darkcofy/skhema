@@ -16,7 +16,7 @@ import sys
 from datetime import datetime
 
 # Add parent dir to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 TYPE_ORDER = ["c4", "sequence", "erd", "deployment", "excalidraw", "other"]
 TYPE_LABELS = {
@@ -349,7 +349,7 @@ def main():
     parser.add_argument("--title", help="Override client display name")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     client_dir = os.path.join(root, "clients", args.client)
     if not os.path.isdir(client_dir):
         print(f"Client '{args.client}' not found in clients/", file=sys.stderr)

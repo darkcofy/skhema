@@ -13,7 +13,7 @@ import re
 import sys
 from datetime import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from scripts.gallery import (
     discover_diagrams,
@@ -369,7 +369,7 @@ def main():
     parser.add_argument("--output", help="Output filename (relative to client dir)")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     client_dir = os.path.join(root, "clients", args.client)
     if not os.path.isdir(client_dir):
         print(f"Client '{args.client}' not found in clients/", file=sys.stderr)

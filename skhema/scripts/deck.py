@@ -14,7 +14,7 @@ import urllib.request
 import urllib.error
 
 # Add parent dir to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from scripts.render import resolve_includes, INCLUDE_RE
 
@@ -217,7 +217,7 @@ def main():
     parser.add_argument("--pptx", action="store_true", help="PowerPoint output (needs python-pptx)")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     client_dir = os.path.join(root, "clients", args.client)
     if not os.path.isdir(client_dir):
         print(f"Client '{args.client}' not found in clients/", file=sys.stderr)
@@ -226,8 +226,8 @@ def main():
     diagrams_dir = os.path.join(client_dir, "diagrams")
     search_paths = [
         os.path.join(client_dir, "models"),
-        os.path.join(root, "models"),
-        os.path.join(root, "lib"),
+        os.path.join(root, "skhema", "models"),
+        os.path.join(root, "skhema", "lib"),
     ]
 
     client_name = args.client.replace("-", " ").replace("_", " ").title()

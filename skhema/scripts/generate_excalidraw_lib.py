@@ -175,7 +175,7 @@ def main():
         gen_light = True
         gen_dark = True
 
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     manifest_path = os.path.join(root, "manifest.yaml")
     manifest = parse_manifest(manifest_path)
 

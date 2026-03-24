@@ -101,8 +101,8 @@ def get_client_paths(root: str, client: str) -> tuple[str, str, list[str]]:
     rendered_dir = os.path.join(client_dir, "rendered")
     search_paths = [
         os.path.join(client_dir, "models"),
-        os.path.join(root, "models"),
-        os.path.join(root, "lib"),
+        os.path.join(root, "skhema", "models"),
+        os.path.join(root, "skhema", "lib"),
     ]
     return diagrams_dir, rendered_dir, search_paths
 
@@ -124,7 +124,7 @@ def output_path(source_path: str, diagrams_dir: str, rendered_dir: str, fmt: str
     return os.path.join(rendered_dir, name)
 
 
-def render_file(source_path: str, diagrams_dir: str, rendered_dir: str, root: str, fmt: str, dry_run: bool, animate: bool = False, search_paths: list[str] | None = None) -> bool:
+def render_file(source_path: str, diagrams_dir: str, rendered_dir: str, root: str, fmt: str, dry_run: bool, animate: bool = False, search_paths: list[str] | None = None, output_override: str | None = None) -> bool:
     """Render a single .puml file. Returns True on success."""
     print(f"Rendering: {os.path.relpath(source_path, root)}")
     source = open(source_path).read()
@@ -146,7 +146,10 @@ def render_file(source_path: str, diagrams_dir: str, rendered_dir: str, root: st
         print(f"  ERROR: Kroki request failed: {e}", file=sys.stderr)
         return False
 
-    out = output_path(source_path, diagrams_dir, rendered_dir, fmt)
+    if output_override:
+        out = os.path.abspath(output_override)
+    else:
+        out = output_path(source_path, diagrams_dir, rendered_dir, fmt)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "wb") as f:
         f.write(image_data)
@@ -172,6 +175,7 @@ def main():
     parser.add_argument("--png", action="store_true", help="Output PNG instead of SVG")
     parser.add_argument("--dry-run", action="store_true", help="Print resolved source only")
     parser.add_argument("--animate", action="store_true", help="Add marching-ant animation to ~ arrows (SVG only)")
+    parser.add_argument("--output", help="Explicit output path for rendered file")
     args = parser.parse_args()
 
     if not args.file and not args.all:
@@ -180,14 +184,14 @@ def main():
     if args.animate and args.png:
         print("Warning: --animate is ignored with --png (SVG only)", file=sys.stderr)
 
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     fmt = "png" if args.png else "svg"
 
     # Determine directories based on --client flag
     if args.client:
         diagrams_dir, rendered_dir, search_paths = get_client_paths(root, args.client)
     else:
-        diagrams_dir = os.path.join(root, DIAGRAMS_DIR)
+        diagrams_dir = os.path.join(root, "skhema", DIAGRAMS_DIR)
         rendered_dir = os.path.join(root, RENDERED_DIR)
         search_paths = None
 
@@ -210,7 +214,7 @@ def main():
         if not os.path.isfile(source_path):
             print(f"File not found: {args.file}", file=sys.stderr)
             sys.exit(1)
-        if not render_file(source_path, diagrams_dir, rendered_dir, root, fmt, args.dry_run, animate=args.animate, search_paths=search_paths):
+        if not render_file(source_path, diagrams_dir, rendered_dir, root, fmt, args.dry_run, animate=args.animate, search_paths=search_paths, output_override=args.output):
             sys.exit(1)
 
 

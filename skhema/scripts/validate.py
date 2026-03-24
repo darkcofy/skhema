@@ -13,7 +13,7 @@ from pathlib import Path
 
 # Ensure project root is on sys.path so `scripts.manifest` is importable
 # whether invoked as `python scripts/validate.py` or via pytest.
-_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
@@ -99,7 +99,7 @@ def main():
     parser.add_argument("path", nargs="?", default=".", help="Path to check")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     check_path = os.path.abspath(args.path)
 
     all_errors = []

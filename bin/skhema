@@ -68,24 +68,24 @@ MD
     echo "  4. Docs:    skhema docs --client $name"
     echo "  5. Or all:  skhema demo $name"
     ;;
-  render)   exec "$PYTHON" -m scripts.render "$@" ;;
-  gallery)  exec "$PYTHON" -m scripts.gallery "$@" ;;
-  docs)     exec "$PYTHON" -m scripts.docs "$@" ;;
-  deck)     exec "$PYTHON" -m scripts.deck "$@" ;;
-  validate) exec "$PYTHON" -m scripts.validate "$@" ;;
+  render)   PYTHONPATH="$ROOT/skhema" exec "$PYTHON" -m scripts.render "$@" ;;
+  gallery)  PYTHONPATH="$ROOT/skhema" exec "$PYTHON" -m scripts.gallery "$@" ;;
+  docs)     PYTHONPATH="$ROOT/skhema" exec "$PYTHON" -m scripts.docs "$@" ;;
+  deck)     PYTHONPATH="$ROOT/skhema" exec "$PYTHON" -m scripts.deck "$@" ;;
+  validate) PYTHONPATH="$ROOT/skhema" exec "$PYTHON" -m scripts.validate "$@" ;;
   demo)
     client="${1:-demo}"
     echo "=== Rendering diagrams for '$client' ==="
-    "$PYTHON" -m scripts.render --client "$client" --all --animate
+    PYTHONPATH="$ROOT/skhema" "$PYTHON" -m scripts.render --client "$client" --all --animate
     echo ""
     echo "=== Generating gallery ==="
-    "$PYTHON" -m scripts.gallery --client "$client" --history 0
+    PYTHONPATH="$ROOT/skhema" "$PYTHON" -m scripts.gallery --client "$client" --history 0
     echo ""
     echo "=== Generating living docs ==="
-    "$PYTHON" -m scripts.docs --client "$client"
+    PYTHONPATH="$ROOT/skhema" "$PYTHON" -m scripts.docs --client "$client"
     echo ""
     echo "=== Generating PDF deck ==="
-    "$PYTHON" -m scripts.deck --client "$client"
+    PYTHONPATH="$ROOT/skhema" "$PYTHON" -m scripts.deck --client "$client"
     echo ""
     echo "Done. Outputs in clients/$client/"
     ;;

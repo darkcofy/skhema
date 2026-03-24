@@ -74,7 +74,7 @@ diagrams: []
     def test_real_manifest(self):
         """Test against the actual project manifest."""
         manifest_path = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
             "manifest.yaml"
         )
         if not os.path.isfile(manifest_path):

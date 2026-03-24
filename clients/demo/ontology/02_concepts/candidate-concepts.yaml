@@ -1,0 +1,167 @@
+# Candidate concepts for the domain model
+# These are the nouns of the domain — things that have identity, lifecycle, and relationships.
+#
+# Schema:
+#   - name: Concept name (PascalCase)
+#     definition: One-sentence definition
+#     domain: Which subdomain this belongs to (e.g., "core", "fraud", "billing")
+#     relationships:
+#       - target: Other concept name
+#         type: has_many / belongs_to / references / contains
+#         label: Human-readable relationship description
+#
+# Example:
+# - name: Transaction
+#   definition: A single payment attempt from a consumer to a merchant
+#   domain: core
+#   relationships:
+#     - target: PaymentMethod
+#       type: references
+#       label: paid via
+#     - target: Merchant
+#       type: belongs_to
+#       label: received by
+
+- name: Transaction
+  definition: A single payment attempt from a consumer to a merchant, tracked from initiation through final settlement or decline
+  domain: core
+  relationships:
+    - target: PaymentMethod
+      type: references
+      label: paid via
+    - target: Merchant
+      type: belongs_to
+      label: received by
+    - target: SettlementBatch
+      type: belongs_to
+      label: settled in
+    - target: FeeSchedule
+      type: references
+      label: fees calculated by
+
+- name: PaymentMethod
+  definition: A specific payment instrument (credit card, debit card, bank transfer) used by a consumer, stored as a token
+  domain: core
+  relationships:
+    - target: Transaction
+      type: has_many
+      label: used for
+    - target: Issuer
+      type: references
+      label: issued by
+
+- name: Merchant
+  definition: A business entity that accepts payments through the NovaPay platform under a contractual agreement
+  domain: merchant
+  relationships:
+    - target: Transaction
+      type: has_many
+      label: receives
+    - target: Account
+      type: has_one
+      label: funds tracked in
+    - target: FeeSchedule
+      type: has_one
+      label: pricing defined by
+    - target: Payout
+      type: has_many
+      label: receives payouts via
+    - target: WebhookEvent
+      type: has_many
+      label: notified via
+
+- name: SettlementBatch
+  definition: A daily collection of captured transactions submitted together to the acquiring bank for fund transfer
+  domain: core
+  relationships:
+    - target: Transaction
+      type: has_many
+      label: contains
+    - target: Acquirer
+      type: references
+      label: processed by
+
+- name: Chargeback
+  definition: A forced reversal of a previously settled transaction, initiated by the cardholder's issuing bank through the dispute process
+  domain: fraud
+  relationships:
+    - target: Transaction
+      type: belongs_to
+      label: reverses
+    - target: FraudCase
+      type: references
+      label: may trigger
+
+- name: FraudCase
+  definition: An investigation record created when the fraud engine flags a transaction or pattern as suspicious
+  domain: fraud
+  relationships:
+    - target: Transaction
+      type: references
+      label: investigates
+    - target: Merchant
+      type: references
+      label: involves
+
+- name: FeeSchedule
+  definition: A merchant-specific pricing configuration that defines processing fees, monthly charges, and rate tiers
+  domain: merchant
+  relationships:
+    - target: Merchant
+      type: belongs_to
+      label: applies to
+
+- name: Acquirer
+  definition: The bank or financial institution that processes card transactions and settles funds on behalf of merchants
+  domain: core
+  relationships:
+    - target: SettlementBatch
+      type: has_many
+      label: processes
+    - target: Merchant
+      type: has_many
+      label: serves
+
+- name: Issuer
+  definition: The bank or financial institution that issued the consumer's payment card and is responsible for cardholder funds
+  domain: core
+  relationships:
+    - target: PaymentMethod
+      type: has_many
+      label: issued
+    - target: Chargeback
+      type: has_many
+      label: initiates
+
+- name: Account
+  definition: A financial account within NovaPay that tracks a merchant's running balance, settlements, and payout history
+  domain: merchant
+  relationships:
+    - target: Merchant
+      type: belongs_to
+      label: owned by
+    - target: Payout
+      type: has_many
+      label: funds disbursed via
+
+- name: Payout
+  definition: A disbursement of accumulated settled funds from a merchant's NovaPay account to their external bank account
+  domain: merchant
+  relationships:
+    - target: Account
+      type: belongs_to
+      label: drawn from
+    - target: Merchant
+      type: belongs_to
+      label: paid to
+
+- name: WebhookEvent
+  definition: An asynchronous HTTP notification sent to a merchant's registered endpoint when a significant payment event occurs
+  domain: core
+  relationships:
+    - target: Transaction
+      type: references
+      label: triggered by
+    - target: Merchant
+      type: belongs_to
+      label: delivered to

@@ -1,0 +1,26 @@
+term,definition,source,status,notes
+transaction,"A single payment attempt from a consumer to a merchant, whether it succeeds or fails",Payment Gateway,accepted,Atomic unit of payment processing
+settlement,"The process of transferring captured funds from the acquiring bank to the merchant's account",Billing Ledger,accepted,Occurs in daily batches
+chargeback,"A forced reversal of a transaction initiated by the cardholder's issuing bank",Fraud Engine,accepted,Distinct from refund — initiated by issuer not merchant
+acquirer,"The bank or financial institution that processes card payments on behalf of the merchant",Payments Architect,accepted,Also called acquiring bank
+issuer,"The bank or financial institution that issued the payment card to the consumer",Payments Architect,accepted,Also called issuing bank
+refund,"A merchant-initiated return of funds to the consumer for a previously captured transaction",Payment Gateway,accepted,Can be full or partial
+authorization,"A request to the card network to verify and reserve funds on the cardholder's account",Payment Gateway,accepted,Precedes capture; may expire
+capture,"The conversion of an authorization hold into an actual charge against the cardholder's account",Payment Gateway,accepted,Can be partial capture
+payout,"The disbursement of settled funds from NovaPay to the merchant's bank account",Billing Ledger,accepted,Typically aggregated from multiple settlements
+merchant,"A business entity that accepts payments through the NovaPay platform",Merchant Portal,accepted,Has a contractual relationship with NovaPay
+account,"A financial account within NovaPay that tracks a merchant's balance and transactions",Billing Ledger,accepted,Not the consumer's bank account
+ledger entry,"A single debit or credit record in the double-entry billing ledger",Billing Ledger,accepted,Immutable once created
+payment method,"A specific instrument used by a consumer to make a payment (e.g. credit card or bank transfer)",Payment Gateway,accepted,Tokenized for PCI compliance
+card network,"The payment network that routes transactions between issuers and acquirers (e.g. Visa or Mastercard)",Payments Architect,accepted,Also called card scheme
+PCI compliance,"Adherence to Payment Card Industry Data Security Standards for handling cardholder data",Risk & Compliance,accepted,Affects how we store and transmit card data
+gateway,"The technical infrastructure that receives payment requests and routes them to card networks",Payment Gateway,accepted,Synonym for Payment Gateway in internal usage
+webhook,"An HTTP callback notification sent to a merchant's endpoint when a payment event occurs",Merchant Portal,accepted,Must be idempotent on receiver side
+idempotency key,"A unique client-generated identifier ensuring a payment request is processed exactly once",Payment Gateway,accepted,Prevents duplicate charges on retry
+settlement batch,"A group of captured transactions settled together in a single processing cycle",Billing Ledger,accepted,Typically one batch per day per acquirer
+dispute,"A formal challenge to a transaction raised by the cardholder through their issuing bank",Fraud Engine,accepted,May escalate to chargeback
+fee schedule,"A merchant-specific configuration defining processing fees and rates for each transaction type",Merchant Portal,accepted,Varies by merchant tier and volume
+interchange fee,"The fee paid by the acquiring bank to the issuing bank for each card transaction",Payments Architect,accepted,Set by card networks; not negotiable
+acquiring bank,"The bank that maintains the merchant's account and receives funds from card network settlement",Payments Architect,accepted,Synonym for acquirer in most contexts
+issuing bank,"The bank that issued the consumer's payment card and is liable for cardholder funds",Payments Architect,accepted,Synonym for issuer in most contexts
+tokenization,"The process of replacing sensitive card data with a non-sensitive token for secure storage and transmission",Payment Gateway,accepted,Required for PCI compliance

@@ -1,0 +1,226 @@
+# Concrete examples for each candidate concept
+# Real or realistic instances that make abstract concepts tangible.
+#
+# Schema:
+#   - concept: Concept name (matches candidate-concepts.yaml)
+#     examples:
+#       - description: What this example illustrates
+#         attributes:
+#           key: value
+#
+# Example:
+# - concept: Transaction
+#   examples:
+#     - description: Successful card payment
+#       attributes:
+#         id: txn_001
+#         amount: 49.99
+#         currency: USD
+#         status: settled
+#         payment_method: visa_ending_4242
+#         merchant: acme_store
+#     - description: Declined transaction (insufficient funds)
+#       attributes:
+#         id: txn_002
+#         amount: 1250.00
+#         currency: USD
+#         status: declined
+#         decline_reason: insufficient_funds
+
+- concept: Transaction
+  examples:
+    - description: Successful card payment that has been settled
+      attributes:
+        id: txn_8a3f2b01
+        amount: 79.99
+        currency: USD
+        status: settled
+        payment_method: visa_ending_4242
+        merchant_id: mcht_acme_coffee
+        idempotency_key: req_abc123
+    - description: Declined transaction due to insufficient funds
+      attributes:
+        id: txn_8a3f2b02
+        amount: 2500.00
+        currency: USD
+        status: declined
+        decline_reason: insufficient_funds
+        payment_method: mc_ending_1234
+        merchant_id: mcht_big_electronics
+    - description: Partial capture on a hotel pre-authorization
+      attributes:
+        id: txn_8a3f2b03
+        amount: 150.00
+        currency: EUR
+        status: captured
+        original_auth_amount: 500.00
+        parent_transaction_id: txn_8a3f2b00
+        merchant_id: mcht_hotel_europa
+
+- concept: PaymentMethod
+  examples:
+    - description: Tokenized Visa credit card
+      attributes:
+        token: pm_tok_visa_4242
+        type: card
+        last_four: "4242"
+        card_network: visa
+        expiry_month: 12
+        expiry_year: 2028
+        issuer_id: iss_chase
+        is_active: true
+    - description: ACH bank transfer
+      attributes:
+        token: pm_tok_ach_9876
+        type: bank
+        last_four: "9876"
+        card_network: null
+        is_active: true
+
+- concept: Merchant
+  examples:
+    - description: Active coffee shop chain
+      attributes:
+        id: mcht_acme_coffee
+        legal_name: Acme Coffee Inc.
+        dba_name: Acme Coffee
+        mcc_code: "5814"
+        status: active
+        integration_tier: silver
+        country: US
+    - description: Suspended merchant under fraud investigation
+      attributes:
+        id: mcht_sketchy_deals
+        legal_name: Quick Deals LLC
+        dba_name: QuickDeals Online
+        mcc_code: "5999"
+        status: suspended
+        integration_tier: bronze
+        country: US
+
+- concept: SettlementBatch
+  examples:
+    - description: Completed daily settlement batch
+      attributes:
+        id: batch_20260323_001
+        batch_date: "2026-03-23"
+        acquirer_id: acq_first_national
+        total_amount: 284750.43
+        transaction_count: 3842
+        status: reconciled
+
+- concept: Chargeback
+  examples:
+    - description: Active chargeback with evidence due
+      attributes:
+        id: cb_f9210a
+        transaction_id: txn_8a3f2b01
+        amount: 79.99
+        reason_code: "10.4"
+        reason_description: "Other fraud — card-absent environment"
+        status: evidence_due
+        opened_at: "2026-03-20T14:30:00Z"
+        evidence_due_by: "2026-04-03T23:59:59Z"
+        fee_amount: 15.00
+
+- concept: FraudCase
+  examples:
+    - description: High-risk transaction flagged by velocity check
+      attributes:
+        id: fc_e8821b
+        risk_score: 890
+        trigger_type: transaction
+        status: investigating
+        outcome: null
+        transaction_ids: [txn_8a3f2b05, txn_8a3f2b06, txn_8a3f2b07]
+        assigned_to: elena.rodriguez
+    - description: Resolved false positive
+      attributes:
+        id: fc_c3310d
+        risk_score: 720
+        trigger_type: pattern
+        status: resolved
+        outcome: false_positive
+        notes: "Legitimate bulk purchase by corporate buyer"
+
+- concept: FeeSchedule
+  examples:
+    - description: Standard silver-tier pricing
+      attributes:
+        id: fs_silver_std
+        merchant_id: mcht_acme_coffee
+        tier: silver
+        per_txn_flat_fee: 0.30
+        per_txn_percentage: 2.9
+        monthly_fee: 25.00
+        chargeback_fee: 15.00
+        refund_fee: 0.00
+        effective_from: "2026-01-01"
+
+- concept: Acquirer
+  examples:
+    - description: Primary acquiring bank
+      attributes:
+        id: acq_first_national
+        name: First National Processing
+        supported_networks: [visa, mastercard, amex]
+        supported_currencies: [USD, CAD]
+        settlement_schedule: daily
+        is_active: true
+
+- concept: Issuer
+  examples:
+    - description: Major US card issuer
+      attributes:
+        id: iss_chase
+        name: Chase Bank
+        country: US
+        supported_networks: [visa, mastercard]
+
+- concept: Account
+  examples:
+    - description: Active merchant account with available balance
+      attributes:
+        id: acct_acme_001
+        merchant_id: mcht_acme_coffee
+        currency: USD
+        available_balance: 12450.82
+        pending_balance: 3200.00
+        total_settled: 892400.00
+        total_paid_out: 876749.18
+
+- concept: Payout
+  examples:
+    - description: Completed weekly payout
+      attributes:
+        id: po_w12_acme
+        merchant_id: mcht_acme_coffee
+        account_id: acct_acme_001
+        amount: 8500.00
+        currency: USD
+        status: completed
+        scheduled_at: "2026-03-21T06:00:00Z"
+        completed_at: "2026-03-21T14:22:00Z"
+        bank_account_last_four: "7890"
+
+- concept: WebhookEvent
+  examples:
+    - description: Successfully delivered settlement notification
+      attributes:
+        id: wh_evt_9f301a
+        event_type: transaction.settled
+        merchant_id: mcht_acme_coffee
+        endpoint_url: "https://api.acmecoffee.com/webhooks/novapay"
+        status: delivered
+        created_at: "2026-03-23T02:15:00Z"
+        delivered_at: "2026-03-23T02:15:02Z"
+        retry_count: 0
+    - description: Failed webhook with retries
+      attributes:
+        id: wh_evt_9f301b
+        event_type: chargeback.opened
+        merchant_id: mcht_big_electronics
+        endpoint_url: "https://payments.bigelectronics.com/hooks"
+        status: retrying
+        created_at: "2026-03-23T14:30:00Z"
+        retry_count: 3

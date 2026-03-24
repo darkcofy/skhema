@@ -1,0 +1,175 @@
+# Enumerated types used across the domain model
+#
+# Schema:
+#   - name: Enum name (PascalCase)
+#     description: What this enum represents
+#     values:
+#       - name: Value name (snake_case)
+#         description: What this value means
+#
+# Example:
+# - name: TransactionStatus
+#   description: Lifecycle states of a payment transaction
+#   values:
+#     - name: initiated
+#       description: Payment request received, not yet processed
+#     - name: authorized
+#       description: Approved by card network, funds reserved
+#     - name: captured
+#       description: Authorization converted to charge
+#     - name: settled
+#       description: Funds transferred to merchant account
+#     - name: declined
+#       description: Rejected by card network or fraud system
+#     - name: refunded
+#       description: Full or partial refund issued
+
+- name: TransactionStatus
+  description: Lifecycle states of a payment transaction
+  values:
+    - name: initiated
+      description: Payment request received by gateway, not yet sent to card network
+    - name: authorized
+      description: Approved by card network, funds reserved on cardholder account
+    - name: captured
+      description: Authorization converted to a charge, included in next settlement batch
+    - name: settled
+      description: Funds transferred from acquirer to NovaPay
+    - name: declined
+      description: Rejected by card network, issuer, or fraud engine
+    - name: voided
+      description: Authorization cancelled before capture
+    - name: refunded
+      description: Full or partial refund issued to cardholder
+    - name: disputed
+      description: Cardholder filed a dispute through their issuing bank
+    - name: charged_back
+      description: Dispute resolved in cardholder's favor, funds reversed
+
+- name: PaymentMethodType
+  description: Types of payment instruments accepted by the platform
+  values:
+    - name: credit_card
+      description: Consumer credit card (Visa, Mastercard, Amex, etc.)
+    - name: debit_card
+      description: Consumer debit card linked to a bank account
+    - name: bank_transfer
+      description: Direct bank-to-bank transfer (ACH, SEPA, etc.)
+    - name: digital_wallet
+      description: Digital wallet (Apple Pay, Google Pay, etc.)
+
+- name: CardNetwork
+  description: Payment card networks that route transactions
+  values:
+    - name: visa
+      description: Visa network
+    - name: mastercard
+      description: Mastercard network
+    - name: amex
+      description: American Express network
+    - name: discover
+      description: Discover network
+
+- name: MerchantStatus
+  description: Lifecycle states of a merchant on the platform
+  values:
+    - name: pending
+      description: Application submitted, KYC and underwriting in progress
+    - name: active
+      description: Merchant is live and can process payments
+    - name: suspended
+      description: Temporarily disabled for fraud, compliance, or merchant request
+    - name: deactivated
+      description: Permanently removed from the platform
+
+- name: IntegrationTier
+  description: Merchant API access and support tier levels
+  values:
+    - name: bronze
+      description: Basic API access, email support, standard webhooks
+    - name: silver
+      description: Full API access, priority support, custom webhooks
+    - name: gold
+      description: Full API access, dedicated support, custom integrations, SLA guarantees
+
+- name: FraudCaseStatus
+  description: Investigation lifecycle states for fraud cases
+  values:
+    - name: opened
+      description: Case created by fraud engine, awaiting analyst review
+    - name: investigating
+      description: Analyst assigned and actively reviewing evidence
+    - name: escalated
+      description: Requires senior review or external investigation
+    - name: resolved
+      description: Investigation complete, outcome determined
+
+- name: FraudCaseOutcome
+  description: Final determination of a fraud investigation
+  values:
+    - name: confirmed_fraud
+      description: Investigation confirmed the activity was fraudulent
+    - name: false_positive
+      description: Activity was legitimate, incorrectly flagged
+    - name: inconclusive
+      description: Unable to determine with certainty
+
+- name: FraudTriggerType
+  description: What caused a fraud case to be opened
+  values:
+    - name: transaction
+      description: Single transaction exceeded risk score threshold
+    - name: pattern
+      description: Pattern detection rule identified suspicious behavior across multiple transactions
+    - name: manual
+      description: Analyst or merchant manually reported suspicious activity
+
+- name: ChargebackStatus
+  description: Lifecycle states of a chargeback dispute
+  values:
+    - name: opened
+      description: Chargeback received from card network
+    - name: evidence_due
+      description: Awaiting merchant evidence for representment
+    - name: representment
+      description: Evidence submitted, awaiting card network decision
+    - name: won
+      description: Dispute resolved in merchant's favor
+    - name: lost
+      description: Dispute resolved in cardholder's favor, funds reversed
+
+- name: SettlementBatchStatus
+  description: Processing states for daily settlement batches
+  values:
+    - name: open
+      description: Batch is accumulating captured transactions
+    - name: submitted
+      description: Batch sent to acquirer for processing
+    - name: processed
+      description: Acquirer confirmed receipt and processing
+    - name: reconciled
+      description: Fund transfer confirmed and matched against ledger
+
+- name: PayoutStatus
+  description: Lifecycle states of a merchant payout
+  values:
+    - name: pending
+      description: Payout scheduled but not yet initiated
+    - name: processing
+      description: Bank transfer in progress
+    - name: completed
+      description: Funds successfully deposited to merchant's bank account
+    - name: failed
+      description: Bank transfer failed, funds returned to NovaPay account
+
+- name: WebhookEventStatus
+  description: Delivery states for webhook notifications
+  values:
+    - name: pending
+      description: Event created, delivery not yet attempted
+    - name: delivered
+      description: Successfully delivered to merchant endpoint
+    - name: failed
+      description: All retry attempts exhausted, delivery failed permanently
+    - name: retrying
+      description: Delivery failed, retrying with exponential backoff

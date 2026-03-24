@@ -16,6 +16,9 @@ clients/*/*.pdf
 clients/*/*.pptx
 clients/*/deck_pages/
 
+# Worktrees
+.worktrees/
+
 # Editor
 .vscode/
 .idea/

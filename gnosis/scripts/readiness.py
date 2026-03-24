@@ -52,98 +52,12 @@ class ArtifactStatus:
     details: dict[str, str] = field(default_factory=dict)
 
 
-def _safe_yaml_parse(path: str) -> dict:
-    """Minimal YAML parser for artifacts.yaml. Handles the specific structure
-    of our rules files without requiring PyYAML."""
-    with open(path, "r") as f:
-        content = f.read()
-
-    result = {}
-    current_artifact = None
-    current_key = None
-    current_file = None
-    in_requires = False
-    in_files = False
-    in_optional = False
-
-    for line in content.split("\n"):
-        stripped = line.strip()
-        if not stripped or stripped.startswith("#"):
-            continue
-
-        indent = len(line) - len(line.lstrip())
-
-        # Top-level 'artifacts:' key
-        if indent == 0 and stripped == "artifacts:":
-            continue
-
-        # Artifact name (indent 2)
-        if indent == 2 and stripped.endswith(":") and ":" not in stripped[:-1]:
-            current_artifact = stripped[:-1]
-            result[current_artifact] = {}
-            in_requires = False
-            in_optional = False
-            in_files = False
-            continue
-
-        if current_artifact is None:
-            continue
-
-        art = result[current_artifact]
-
-        # Simple key-value at artifact level (indent 4)
-        if indent == 4:
-            if stripped.startswith("name:"):
-                art["name"] = stripped.split(":", 1)[1].strip().strip('"')
-            elif stripped.startswith("stage:"):
-                art["stage"] = int(stripped.split(":", 1)[1].strip())
-            elif stripped.startswith("output:"):
-                art["output"] = stripped.split(":", 1)[1].strip().strip('"')
-            elif stripped.startswith("renders_via:"):
-                art["renders_via"] = stripped.split(":", 1)[1].strip()
-            elif stripped == "requires:":
-                in_requires = True
-                in_optional = False
-                art["requires"] = {"files": []}
-            elif stripped == "optional:":
-                in_optional = True
-                in_requires = False
-                art["optional"] = []
-            continue
-
-        # Inside requires
-        if in_requires:
-            if indent == 6 and stripped == "files:":
-                in_files = True
-                continue
-            if in_files:
-                if indent == 8 and stripped.startswith("- path:"):
-                    path_val = stripped.split(":", 1)[1].strip().strip('"')
-                    current_file = {"path": path_val}
-                    art["requires"]["files"].append(current_file)
-                elif indent == 10 and current_file:
-                    key, val = stripped.split(":", 1)
-                    key = key.strip()
-                    val = val.strip().strip('"').strip("[]")
-                    if key == "sections":
-                        current_file["sections"] = [
-                            s.strip().strip('"') for s in val.split(",")
-                        ]
-                    elif key in ("min_entries", "min_rows"):
-                        current_file[key] = int(val)
-
-        # Inside optional
-        if in_optional:
-            if stripped.startswith("- path:"):
-                path_val = stripped.split(":", 1)[1].strip().strip('"')
-                art["optional"].append({"path": path_val})
-
-    return result
-
-
 def load_rules(rules_path: str) -> dict:
-    """Load artifact rules from YAML file."""
-    return _safe_yaml_parse(rules_path)
+    """Load artifact readiness rules from YAML file using PyYAML."""
+    import yaml
+    with open(rules_path) as f:
+        data = yaml.safe_load(f)
+    return data.get("artifacts", {})
 
 
 def evaluate_artifact(rule: dict, workspace_path: str) -> ArtifactStatus:

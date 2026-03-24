@@ -56,7 +56,8 @@ class TestBuildDeck:
 
         output = tmp_path / "deck.pdf"
 
-        with patch("scripts.deck.render_plantuml", return_value=fake_pdf), \
+        with patch("scripts.deck.render_plantuml", return_value=b"<svg></svg>"), \
+             patch("scripts.deck._svg_to_pdf", return_value=fake_pdf), \
              patch("scripts.deck.ordered_diagrams", return_value=[("a.puml", "@startuml\n@enduml"), ("b.puml", "@startuml\n@enduml")]):
             build_deck(
                 client_name="Test",

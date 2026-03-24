@@ -79,6 +79,29 @@ COVER_HTML = """<!DOCTYPE html>
 </body></html>"""
 
 
+def _svg_to_pdf(svg_bytes: bytes) -> bytes | None:
+    """Convert SVG to PDF via wkhtmltopdf. Returns None if unavailable."""
+    import subprocess
+    html = (
+        '<!DOCTYPE html><html><head><style>'
+        'body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }'
+        'img { max-width: 95%; max-height: 95%; }'
+        '</style></head><body>'
+        f'<img src="data:image/svg+xml;base64,{__import__("base64").b64encode(svg_bytes).decode()}">'
+        '</body></html>'
+    )
+    try:
+        result = subprocess.run(
+            ["wkhtmltopdf", "--page-size", "A4", "--orientation", "Landscape", "-", "-"],
+            input=html.encode(), capture_output=True,
+        )
+        if result.returncode == 0:
+            return result.stdout
+    except FileNotFoundError:
+        pass
+    return None
+
+
 def render_cover_page(client_name: str, subtitle: str = "",
                       accent_color: str = "#D97706") -> bytes | None:
     """Render cover page HTML to PDF via wkhtmltopdf. Returns None if unavailable."""
@@ -128,7 +151,11 @@ def build_deck(client_name: str, diagrams_dir: str, search_paths: list[str],
         os.makedirs(pages_dir, exist_ok=True)
 
     for puml_path, source in ordered_diagrams(diagrams_dir, search_paths):
-        pdf_bytes = render_plantuml(source, fmt="pdf")
+        pdf_bytes = _svg_to_pdf(render_plantuml(source, fmt="svg"))
+        if pdf_bytes is None:
+            print(f"  Warning: could not convert {os.path.basename(puml_path)} to PDF, skipping",
+                  file=sys.stderr)
+            continue
         writer.append(io.BytesIO(pdf_bytes))
         if pages_dir:
             page_name = os.path.splitext(os.path.basename(puml_path))[0] + ".pdf"

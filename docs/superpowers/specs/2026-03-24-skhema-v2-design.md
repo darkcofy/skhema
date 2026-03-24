@@ -52,7 +52,7 @@ Replace HTTP calls to Kroki with `subprocess.run()` calling the PlantUML native 
 PLANTUML_BIN=/usr/local/bin/plantuml
 ```
 
-Also supports `plantuml_bin` in `client.yaml`, taking precedence over env var.
+Configure via environment variable only. No `client.yaml` override (keeps config simple).
 
 ### Error handling
 
@@ -234,10 +234,6 @@ services:
 
 Still supported — Python 3.13 + PlantUML binary + wkhtmltopdf locally, then `uv sync && bin/skhema`.
 
-### Migration note
-
-This release removes Kroki HTTP rendering entirely. Users currently running `skhema render` without Docker need to install the PlantUML native binary and set `PLANTUML_BIN`. Docker is now the primary distribution path.
-
 ---
 
 ## 5. E2E Tests
@@ -412,9 +408,21 @@ All new features are demonstrated in the existing `clients/demo/` (NovaPay) work
 
 ---
 
+## 8. Excalidraw Library Fix
+
+**File affected:** `skhema/scripts/generate_excalidraw_lib.py`
+
+Change shape fill style and stroke width for better text legibility:
+
+- `fillStyle`: `"hachure"` → `"cross-hatch"` — gives visual texture to shapes
+- `strokeWidth`: `2` → `1` — thin cross-hatch keeps pattern subtle so text remains readable
+
+No API changes. Regenerate both light and dark `.excalidrawlib` files in `skhema/lib/`.
+
+---
+
 ## Out of Scope
 
-- `skhema/scripts/generate_excalidraw_lib.py` — no changes needed (reads manifest.yaml which now uses PyYAML, but the module's public API is unchanged)
 - Incremental builds / caching
 - Output safety / HTML sanitization
 - Observability / verbose mode

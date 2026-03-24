@@ -30,33 +30,14 @@ TYPE_LABELS = {
 
 
 def parse_client_yaml(path: str) -> dict:
-    """Parse a client.yaml file. Returns dict with name, subtitle, accent_color, sections."""
+    """Parse client.yaml using PyYAML with defaults."""
+    import yaml
     defaults = {"name": "", "subtitle": "", "accent_color": "#D97706", "sections": []}
     if not os.path.isfile(path):
         return defaults
-    result = dict(defaults)
-    result["sections"] = []
-    in_sections = False
     with open(path) as f:
-        for line in f:
-            stripped = line.strip()
-            if not stripped or stripped.startswith("#"):
-                continue
-            if stripped == "sections:":
-                in_sections = True
-                continue
-            if in_sections:
-                if stripped.startswith("- "):
-                    result["sections"].append(stripped[2:].strip())
-                else:
-                    in_sections = False
-            if not in_sections and ":" in stripped and not stripped.endswith(":"):
-                key, _, val = stripped.partition(":")
-                key = key.strip()
-                val = val.strip().strip('"').strip("'")
-                if key in result:
-                    result[key] = val
-    return result
+        data = yaml.safe_load(f) or {}
+    return {**defaults, **data}
 
 
 def discover_diagrams(rendered_dir: str) -> list[str]:

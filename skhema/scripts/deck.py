@@ -6,6 +6,7 @@ Usage:
     python scripts/deck.py --client acme --pptx         # PowerPoint
 """
 import argparse
+import io
 import os
 import re
 import sys
@@ -13,9 +14,10 @@ import sys
 # Add parent dir to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
+from pypdf import PdfWriter
 from scripts.render import resolve_includes, render_plantuml, INCLUDE_RE
 
-TYPE_ORDER = ["c4", "sequence", "erd", "deployment", "excalidraw"]
+TYPE_ORDER = ["c4", "sequence", "erd", "deployment"]
 
 
 def discover_puml_files(diagrams_dir: str) -> list[str]:
@@ -29,7 +31,8 @@ def discover_puml_files(diagrams_dir: str) -> list[str]:
 
 
 def order_by_type(puml_files: list[str], diagrams_dir: str) -> list[str]:
-    """Order files by type (c4 first, then sequence, etc.), alphabetical within type."""
+    """Order files by type (c4 first, then sequence, etc.), alphabetical within type.
+    Excalidraw diagrams are excluded from output."""
     def sort_key(path):
         rel = os.path.relpath(path, diagrams_dir)
         parts = rel.split(os.sep)
@@ -39,7 +42,13 @@ def order_by_type(puml_files: list[str], diagrams_dir: str) -> list[str]:
         except ValueError:
             type_idx = len(TYPE_ORDER)
         return (type_idx, rel)
-    return sorted(puml_files, key=sort_key)
+
+    def is_excalidraw(path):
+        rel = os.path.relpath(path, diagrams_dir)
+        parts = rel.split(os.sep)
+        return len(parts) > 1 and parts[0] == "excalidraw"
+
+    return sorted([f for f in puml_files if not is_excalidraw(f)], key=sort_key)
 
 
 def diagram_name(puml_path: str) -> str:
@@ -58,62 +67,76 @@ def render_to_png(source: str, scale: int = 2) -> bytes:
     return render_plantuml(source, fmt="png")
 
 
-def generate_pdf_deck(client_name: str, diagrams_dir: str, search_paths: list[str], output_path: str):
-    """Generate a PDF deck by rendering each diagram via Kroki PDF endpoint."""
-    puml_files = order_by_type(discover_puml_files(diagrams_dir), diagrams_dir)
-    if not puml_files:
-        print("No .puml files found", file=sys.stderr)
-        sys.exit(1)
+COVER_HTML = """<!DOCTYPE html>
+<html><head><style>
+  body {{ font-family: sans-serif; display: flex; align-items: center;
+         justify-content: center; height: 100vh; margin: 0;
+         background: {accent}; color: white; text-align: center; }}
+  h1 {{ font-size: 3em; margin: 0; }}
+  p {{ font-size: 1.5em; opacity: 0.8; }}
+</style></head><body>
+  <div><h1>{name}</h1><p>{subtitle}</p></div>
+</body></html>"""
 
-    pdf_pages = []
-    rendered_names = []
-    for puml_path in puml_files:
-        name = diagram_name(puml_path)
-        print(f"  Rendering: {name}")
-        source = open(puml_path).read()
-        base_dir = os.path.dirname(puml_path)
-        try:
-            resolved = resolve_includes(source, base_dir=base_dir, search_paths=search_paths)
-        except (ValueError, FileNotFoundError) as e:
-            print(f"    SKIP: {e}", file=sys.stderr)
-            continue
-        try:
-            pdf_data = render_to_pdf(resolved)
-            pdf_pages.append(pdf_data)
-            rendered_names.append((puml_path, name))
-        except Exception as e:
-            print(f"    SKIP: Kroki error: {e}", file=sys.stderr)
 
-    if not pdf_pages:
-        print("No diagrams rendered successfully", file=sys.stderr)
-        sys.exit(1)
+def render_cover_page(client_name: str, subtitle: str = "",
+                      accent_color: str = "#D97706") -> bytes | None:
+    """Render cover page HTML to PDF via wkhtmltopdf. Returns None if unavailable."""
+    import subprocess
+    html = COVER_HTML.format(name=client_name, subtitle=subtitle, accent=accent_color)
+    try:
+        result = subprocess.run(
+            ["wkhtmltopdf", "--page-size", "A4", "-", "-"],
+            input=html.encode(), capture_output=True,
+        )
+        if result.returncode == 0:
+            return result.stdout
+    except FileNotFoundError:
+        pass
+    return None
 
-    # Write individual PDFs (simple approach — one file per diagram)
-    # A proper PDF merge requires a library; for now, save individual pages
-    if len(pdf_pages) == 1:
-        with open(output_path, "wb") as f:
-            f.write(pdf_pages[0])
-    else:
-        # Save individual PDFs in a subdirectory
-        pdf_dir = os.path.splitext(output_path)[0] + "_pages"
-        os.makedirs(pdf_dir, exist_ok=True)
-        for i, ((_puml_path, _name), pdf_data) in enumerate(zip(rendered_names, pdf_pages)):
-            fname = os.path.splitext(os.path.basename(_puml_path))[0]
-            page_path = os.path.join(pdf_dir, f"{i:02d}_{fname}.pdf")
-            with open(page_path, "wb") as f:
-                f.write(pdf_data)
-        # Also write a simple HTML index for the PDF pages
-        index = f"<html><head><title>{client_name} Deck</title></head><body>"
-        index += f"<h1>{client_name} — Architecture Deck</h1><ol>"
-        for i, (_puml_path, _name) in enumerate(rendered_names):
-            fname = f"{i:02d}_{os.path.splitext(os.path.basename(_puml_path))[0]}.pdf"
-            index += f'<li><a href="{fname}">{_name}</a></li>'
-        index += "</ol></body></html>"
-        with open(os.path.join(pdf_dir, "index.html"), "w") as f:
-            f.write(index)
-        output_path = pdf_dir
 
-    print(f"PDF -> {output_path} ({len(pdf_pages)} diagram(s))")
+def ordered_diagrams(diagrams_dir: str, search_paths: list[str]) -> list[tuple[str, str]]:
+    """Return ordered list of (puml_path, resolved_source) excluding excalidraw."""
+    puml_files = discover_puml_files(diagrams_dir)
+    ordered = order_by_type(puml_files, diagrams_dir)
+    result = []
+    for path in ordered:
+        source = resolve_includes(
+            open(path).read(),
+            os.path.dirname(path),
+            search_paths,
+        )
+        result.append((path, source))
+    return result
+
+
+def build_deck(client_name: str, diagrams_dir: str, search_paths: list[str],
+               output_path: str, include_cover: bool = True,
+               subtitle: str = "", accent_color: str = "#D97706",
+               emit_pages: bool = False):
+    """Build merged PDF deck from PlantUML diagrams."""
+    writer = PdfWriter()
+
+    if include_cover:
+        cover = render_cover_page(client_name, subtitle, accent_color)
+        if cover:
+            writer.append(io.BytesIO(cover))
+
+    pages_dir = output_path.replace(".pdf", "_pages") if emit_pages else None
+    if pages_dir:
+        os.makedirs(pages_dir, exist_ok=True)
+
+    for puml_path, source in ordered_diagrams(diagrams_dir, search_paths):
+        pdf_bytes = render_plantuml(source, fmt="pdf")
+        writer.append(io.BytesIO(pdf_bytes))
+        if pages_dir:
+            page_name = os.path.splitext(os.path.basename(puml_path))[0] + ".pdf"
+            with open(os.path.join(pages_dir, page_name), "wb") as f:
+                f.write(pdf_bytes)
+
+    writer.write(output_path)
+    writer.close()
 
 
 def generate_pptx_deck(client_name: str, diagrams_dir: str, search_paths: list[str], output_path: str):
@@ -188,6 +211,7 @@ def main():
     parser = argparse.ArgumentParser(description="Export client diagrams as deck")
     parser.add_argument("--client", required=True, help="Client name")
     parser.add_argument("--pptx", action="store_true", help="PowerPoint output (needs python-pptx)")
+    parser.add_argument("--pages", action="store_true", help="Also emit individual PDF pages alongside merged deck")
     args = parser.parse_args()
 
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -210,7 +234,8 @@ def main():
         generate_pptx_deck(client_name, diagrams_dir, search_paths, output_path)
     else:
         output_path = os.path.join(client_dir, "deck.pdf")
-        generate_pdf_deck(client_name, diagrams_dir, search_paths, output_path)
+        build_deck(client_name, diagrams_dir, search_paths, output_path, emit_pages=args.pages)
+        print(f"PDF -> {output_path}")
 
 
 if __name__ == "__main__":

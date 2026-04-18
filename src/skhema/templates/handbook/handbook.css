@@ -1,0 +1,102 @@
+:root { --accent: {{ accent_color }}; }
+* { box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, Arial, sans-serif;
+  margin: 0; padding: 0;
+  color: #1a1a1a; background: #fff; line-height: 1.6;
+}
+a { color: var(--accent); }
+
+/* Cover */
+.cover {
+  padding: 80px 40px 60px;
+  border-bottom: 3px solid var(--accent);
+}
+.cover h1 { font-size: 2.6rem; margin: 0 0 8px; color: #111; }
+.cover .subtitle { font-size: 1.2rem; color: #555; margin: 0 0 24px; }
+.cover .meta { font-size: 0.9rem; color: #777; }
+
+/* TOC */
+.toc { padding: 40px 40px 32px; border-bottom: 1px solid #e5e7eb; }
+.toc h2 { font-size: 1.3rem; margin: 0 0 16px; color: #333; }
+.toc ul { list-style: none; padding: 0; margin: 0; }
+.toc ul li { margin-bottom: 6px; }
+.toc ul li a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+.toc ul li a:hover { text-decoration: underline; }
+
+/* Overview */
+.overview { padding: 32px 40px; border-bottom: 1px solid #e5e7eb; }
+
+/* Doc section */
+.doc-section { padding: 40px 40px 32px; border-bottom: 1px solid #e5e7eb; }
+.doc-section h2 {
+  font-size: 1.6rem; margin: 0 0 24px; color: #111;
+  border-bottom: 2px solid var(--accent); padding-bottom: 8px;
+}
+.section-overview { margin-bottom: 32px; color: #444; }
+
+/* Diagram block */
+.diagram-block { margin-bottom: 48px; }
+.diagram-block h3 { font-size: 1.15rem; color: #333; margin: 0 0 12px; }
+.diagram-svg {
+  width: 100%; overflow: auto;
+  border: 1px solid #e5e7eb; border-radius: 6px;
+  padding: 16px; background: #fafafa;
+  margin-bottom: 16px;
+}
+.diagram-svg svg { max-width: 100%; height: auto; display: block; }
+
+.prose { color: #444; font-size: 0.95rem; }
+.prose h1, .prose h2, .prose h3, .prose h4 { color: #222; margin-top: 1.2em; }
+.prose p { margin: 0 0 12px; }
+.prose ul, .prose ol { margin: 0 0 12px; padding-left: 24px; }
+.prose code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-size: 0.88em; }
+.prose pre { background: #f3f4f6; padding: 14px 16px; border-radius: 6px; overflow: auto; }
+.prose pre code { background: none; padding: 0; }
+.prose blockquote {
+  border-left: 4px solid var(--accent);
+  margin: 0 0 12px; padding: 8px 16px;
+  color: #555; background: #fffbeb;
+}
+.prose table { border-collapse: collapse; width: 100%; margin-bottom: 12px; font-size: 0.92rem; }
+.prose th { background: #f3f4f6; border: 1px solid #d1d5db; padding: 8px 12px; text-align: left; }
+.prose td { border: 1px solid #d1d5db; padding: 8px 12px; }
+.prose tr:nth-child(even) td { background: #f9fafb; }
+
+/* ADR section embedded in diagram block */
+.adr-section { margin-top: 20px; padding: 16px; background: #fef3c7; border-left: 3px solid var(--accent); border-radius: 4px; }
+.adr-section h4 { margin: 0 0 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: #92400e; }
+.adr-section .adr-entry { margin-bottom: 16px; }
+.adr-section .adr-entry h5 { margin: 0 0 8px; font-size: 1rem; color: #111; }
+.adr-section .adr-entry:last-child { margin-bottom: 0; }
+
+/* Footer */
+.footer {
+  padding: 24px 40px; margin-top: 40px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.82rem; color: #999;
+}
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .cover { padding: 40px 20px 30px; border-bottom: 2pt solid var(--accent); }
+  .cover h1 { font-size: 2rem; }
+  .toc, .overview, .doc-section, .footer { padding: 20px; }
+  .doc-section { page-break-before: always; }
+  .diagram-block { margin-bottom: 32px; }
+  .diagram-block h3 { break-after: avoid; page-break-after: avoid; }
+  .diagram-svg { break-inside: avoid; page-break-inside: avoid; border: 1pt solid #ccc; background: #fff; }
+  .diagram-svg svg { max-width: 100%; max-height: 480pt; }
+  .prose h1, .prose h2, .prose h3, .prose h4 { break-after: avoid; page-break-after: avoid; }
+  .prose p { orphans: 4; widows: 4; }
+  .prose li { orphans: 3; widows: 3; }
+  .prose table { break-inside: avoid; page-break-inside: avoid; }
+  .prose blockquote { break-inside: avoid; page-break-inside: avoid; }
+  .prose pre { break-inside: avoid; page-break-inside: avoid; }
+  .prose ul, .prose ol { orphans: 3; widows: 3; }
+  .section-overview { break-inside: avoid; page-break-inside: avoid; }
+  .adr-section { break-inside: avoid; page-break-inside: avoid; }
+  h2 { break-after: avoid; page-break-after: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

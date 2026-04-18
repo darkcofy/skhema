@@ -176,6 +176,6 @@ class TestDocsAdrIntegration:
             docs_dir=str(tmp_path / "docs"),
             client_path=str(tmp_path),
         )
-        assert "Architectural Decisions" in html
+        assert "Architecture Decisions" in html
         assert "ADR01" in html
         assert "Test Decision" in html

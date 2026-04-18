@@ -2,140 +2,83 @@
 """Generate a self-contained HTML architecture handbook for a client.
 
 Usage:
-    python scripts/docs.py --client demo
-    python scripts/docs.py --client demo --title "NovaPay"
-    python scripts/docs.py --client demo --output novapay-v2.html
+    python -m skhema.docs --client demo
+    python -m skhema.docs --client demo --title "NovaPay"
+    python -m skhema.docs --client demo --output novapay-v2.html
 """
 import argparse
-import html as html_mod
 import os
 import re
 import sys
 from datetime import datetime
+from pathlib import Path
+
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from skhema.gallery import (
+    TYPE_LABELS,
+    TYPE_ORDER,
+    diagram_name,
     discover_diagrams,
     group_by_type,
-    diagram_name,
     parse_client_yaml,
-    TYPE_ORDER,
-    TYPE_LABELS,
 )
-
-
-DOCS_CSS = """
-:root { --accent: {accent_color}; }
-* { box-sizing: border-box; }
-body {
-  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
-  margin: 0; padding: 0;
-  color: #1a1a1a; background: #fff; line-height: 1.6;
-}
-a { color: var(--accent); }
-
-/* Cover */
-.cover {
-  padding: 80px 40px 60px;
-  border-bottom: 3px solid var(--accent);
-}
-.cover h1 { font-size: 2.6rem; margin: 0 0 8px; color: #111; }
-.cover .subtitle { font-size: 1.2rem; color: #555; margin: 0 0 24px; }
-.cover .meta { font-size: 0.9rem; color: #777; }
-
-/* TOC */
-.toc {
-  padding: 40px 40px 32px;
-  border-bottom: 1px solid #e5e7eb;
-}
-.toc h2 { font-size: 1.3rem; margin: 0 0 16px; color: #333; }
-.toc ul { list-style: none; padding: 0; margin: 0; }
-.toc ul li { margin-bottom: 6px; }
-.toc ul li a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
-.toc ul li a:hover { text-decoration: underline; }
-
-/* Overview */
-.overview {
-  padding: 32px 40px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-/* Doc section */
-.doc-section {
-  padding: 40px 40px 32px;
-  border-bottom: 1px solid #e5e7eb;
-}
-.doc-section h2 {
-  font-size: 1.6rem; margin: 0 0 24px;
-  color: #111;
-  border-bottom: 2px solid var(--accent);
-  padding-bottom: 8px;
-}
-.section-overview { margin-bottom: 32px; color: #444; }
-
-/* Diagram block */
-.diagram-block { margin-bottom: 48px; }
-.diagram-block h3 { font-size: 1.15rem; color: #333; margin: 0 0 12px; }
-.diagram-svg {
-  width: 100%; overflow: auto;
-  border: 1px solid #e5e7eb; border-radius: 6px;
-  padding: 16px; background: #fafafa;
-  margin-bottom: 16px;
-}
-.diagram-svg svg { max-width: 100%; height: auto; display: block; }
-.prose { color: #444; font-size: 0.95rem; }
-.prose h1, .prose h2, .prose h3, .prose h4 { color: #222; margin-top: 1.2em; }
-.prose p { margin: 0 0 12px; }
-.prose ul, .prose ol { margin: 0 0 12px; padding-left: 24px; }
-.prose code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-size: 0.88em; }
-.prose pre { background: #f3f4f6; padding: 14px 16px; border-radius: 6px; overflow: auto; }
-.prose pre code { background: none; padding: 0; }
-.prose blockquote {
-  border-left: 4px solid var(--accent);
-  margin: 0 0 12px; padding: 8px 16px;
-  color: #555; background: #fffbeb;
-}
-.prose table { border-collapse: collapse; width: 100%; margin-bottom: 12px; font-size: 0.92rem; }
-.prose th { background: #f3f4f6; border: 1px solid #d1d5db; padding: 8px 12px; text-align: left; }
-.prose td { border: 1px solid #d1d5db; padding: 8px 12px; }
-.prose tr:nth-child(even) td { background: #f9fafb; }
-
-/* Footer */
-.footer {
-  padding: 24px 40px;
-  margin-top: 40px;
-  border-top: 1px solid #e5e7eb;
-  font-size: 0.82rem; color: #999;
-}
-
-/* Print */
-@media print {
-  body { font-size: 11pt; }
-  .cover { padding: 40px 20px 30px; border-bottom: 2pt solid var(--accent); }
-  .cover h1 { font-size: 2rem; }
-  .toc, .overview, .doc-section, .footer { padding: 20px; }
-  .doc-section { page-break-before: always; }
-  .diagram-block { margin-bottom: 32px; }
-  .diagram-block h3 { break-after: avoid; page-break-after: avoid; }
-  .diagram-svg { break-inside: avoid; page-break-inside: avoid; border: 1pt solid #ccc; background: #fff; }
-  .diagram-svg svg { max-width: 100%; max-height: 480pt; }
-  .prose h1, .prose h2, .prose h3, .prose h4 { break-after: avoid; page-break-after: avoid; }
-  .prose p { orphans: 4; widows: 4; }
-  .prose li { orphans: 3; widows: 3; }
-  .prose table { break-inside: avoid; page-break-inside: avoid; }
-  .prose blockquote { break-inside: avoid; page-break-inside: avoid; }
-  .prose pre { break-inside: avoid; page-break-inside: avoid; }
-  .prose ul, .prose ol { orphans: 3; widows: 3; }
-  .section-overview { break-inside: avoid; page-break-inside: avoid; }
-  h2 { break-after: avoid; page-break-after: avoid; }
-  a { color: inherit; text-decoration: none; }
-}
-"""
 
 
 def parse_markdown(md: str) -> str:
     """Convert markdown to HTML using mistune."""
     import mistune
     return mistune.html(md)
+
+
+def _clean_svg(svg_content: str) -> str:
+    return re.sub(r"<\?xml[^?]*\?>", "", svg_content).strip()
+
+
+def _templates_dir() -> Path:
+    return Path(__file__).parent / "templates" / "handbook"
+
+
+def _read_md(path: str) -> str | None:
+    if not os.path.isfile(path):
+        return None
+    return open(path).read()
+
+
+def _build_diagram_block(
+    svg_path: str,
+    dtype: str,
+    docs_dir: str,
+    adr_map: dict,
+) -> dict:
+    name = diagram_name(svg_path)
+    svg_inline = _clean_svg(open(svg_path).read())
+
+    prose_html = None
+    if os.path.isdir(docs_dir):
+        stem = os.path.splitext(os.path.basename(svg_path))[0]
+        companion_md = _read_md(os.path.join(docs_dir, dtype, f"{stem}.md"))
+        if companion_md:
+            prose_html = parse_markdown(companion_md)
+
+    stem = os.path.splitext(os.path.basename(svg_path))[0]
+    related = adr_map.get(stem, [])
+    adrs = []
+    for adr in related:
+        adr_body = open(adr.path).read() if adr.path else ""
+        adrs.append({
+            "number": adr.number,
+            "title": adr.title,
+            "status": adr.status,
+            "body_html": parse_markdown(adr_body),
+        })
+
+    return {
+        "name": name,
+        "svg_inline": svg_inline,
+        "prose_html": prose_html,
+        "adrs": adrs,
+    }
 
 
 def generate_docs_html(
@@ -153,141 +96,63 @@ def generate_docs_html(
     total = len(svg_files)
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    element_adr_map: dict = {}
+    adr_map: dict = {}
     if client_path:
         from skhema.adr import discover_adrs
-        adrs = discover_adrs(client_path)
-        for adr in adrs:
+        for adr in discover_adrs(client_path):
             for elem_id in adr.elements:
-                element_adr_map.setdefault(elem_id, []).append(adr)
+                adr_map.setdefault(elem_id, []).append(adr)
 
     effective_order = section_order or [t for t in TYPE_ORDER if t in groups]
 
-    # Build cover
-    subtitle_html = f'<p class="subtitle">{html_mod.escape(subtitle)}</p>' if subtitle else ""
-    cover_html = (
-        f'<section class="cover">'
-        f'<h1>{html_mod.escape(client_name)}</h1>'
-        f'{subtitle_html}'
-        f'<p class="meta">Generated {now} &mdash; {total} diagram(s)</p>'
-        f'</section>'
-    )
-
-    # Build TOC
-    toc_items = ""
-    for dtype in effective_order:
-        if dtype not in groups:
-            continue
-        label = TYPE_LABELS.get(dtype, dtype.title())
-        toc_items += f'<li><a href="#section-{dtype}">{html_mod.escape(label)}</a></li>'
-    toc_html = (
-        f'<nav class="toc" id="toc">'
-        f'<h2>Table of Contents</h2>'
-        f'<ul>{toc_items}</ul>'
-        f'</nav>'
-    )
-
-    # Client overview
-    overview_html = ""
+    overview_html = None
     if os.path.isdir(docs_dir):
-        overview_path = os.path.join(docs_dir, "overview.md")
-        if os.path.isfile(overview_path):
-            with open(overview_path) as f:
-                md_content = f.read()
-            overview_html = f'<section class="overview"><div class="prose">{parse_markdown(md_content)}</div></section>'
+        overview_md = _read_md(os.path.join(docs_dir, "overview.md"))
+        if overview_md:
+            overview_html = parse_markdown(overview_md)
 
-    # Build sections
-    sections_html = []
+    sections = []
     for dtype in effective_order:
         if dtype not in groups:
             continue
-        label = TYPE_LABELS.get(dtype, dtype.title())
 
-        # Section _overview.md
-        section_overview_html = ""
+        section_overview_html = None
         if os.path.isdir(docs_dir):
-            sec_overview_path = os.path.join(docs_dir, dtype, "_overview.md")
-            if os.path.isfile(sec_overview_path):
-                with open(sec_overview_path) as f:
-                    sec_md = f.read()
-                section_overview_html = (
-                    f'<div class="section-overview prose">{parse_markdown(sec_md)}</div>'
-                )
+            sec_overview_md = _read_md(os.path.join(docs_dir, dtype, "_overview.md"))
+            if sec_overview_md:
+                section_overview_html = parse_markdown(sec_overview_md)
 
-        # Individual diagrams
-        diagrams_html = ""
-        for svg_path in groups[dtype]:
-            name = diagram_name(svg_path)
-            with open(svg_path) as f:
-                svg_content = f.read()
-            svg_inline = re.sub(r"<\?xml[^?]*\?>", "", svg_content).strip()
+        diagrams = [
+            _build_diagram_block(svg, dtype, docs_dir, adr_map)
+            for svg in groups[dtype]
+        ]
 
-            # Companion prose
-            prose_html = ""
-            if os.path.isdir(docs_dir):
-                stem = os.path.splitext(os.path.basename(svg_path))[0]
-                companion_path = os.path.join(docs_dir, dtype, f"{stem}.md")
-                if os.path.isfile(companion_path):
-                    with open(companion_path) as f:
-                        companion_md = f.read()
-                    prose_html = f'<div class="prose">{parse_markdown(companion_md)}</div>'
+        sections.append({
+            "dtype": dtype,
+            "label": TYPE_LABELS.get(dtype, dtype.title()),
+            "overview_html": section_overview_html,
+            "diagrams": diagrams,
+        })
 
-            adr_section_html = ""
-            if element_adr_map:
-                stem = os.path.splitext(os.path.basename(svg_path))[0]
-                related_adrs = element_adr_map.get(stem, [])
-                if related_adrs:
-                    import mistune
-                    adr_section_html = '<div class="adr-section"><h4>Architectural Decisions</h4>'
-                    for adr in related_adrs:
-                        adr_text = open(adr.path).read()
-                        adr_section_html += (
-                            f'<div class="adr-entry">'
-                            f'<h5>ADR{adr.number:02d}: {html_mod.escape(adr.title)} ({html_mod.escape(adr.status)})</h5>'
-                            f'{mistune.html(adr_text)}'
-                            f'</div>'
-                        )
-                    adr_section_html += '</div>'
-
-            diagrams_html += (
-                f'<div class="diagram-block">'
-                f'<h3>{html_mod.escape(name)}</h3>'
-                f'<div class="diagram-svg">{svg_inline}</div>'
-                f'{prose_html}'
-                f'{adr_section_html}'
-                f'</div>'
-            )
-
-        sections_html.append(
-            f'<section class="doc-section" id="section-{dtype}">'
-            f'<h2>{html_mod.escape(label)}</h2>'
-            f'{section_overview_html}'
-            f'{diagrams_html}'
-            f'</section>'
-        )
-
-    footer_html = (
-        f'<footer class="footer">Generated by skhema on {now}</footer>'
+    tpl_dir = _templates_dir()
+    env = Environment(
+        loader=FileSystemLoader(str(tpl_dir)),
+        autoescape=select_autoescape(["html", "xml", "j2"]),
     )
 
-    css = DOCS_CSS.replace("{accent_color}", accent_color)
+    css_tpl = env.get_template("handbook.css")
+    handbook_css = css_tpl.render(accent_color=accent_color)
 
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{html_mod.escape(client_name)} — Architecture Handbook</title>
-<style>{css}</style>
-</head>
-<body>
-{cover_html}
-{toc_html}
-{overview_html}
-{"".join(sections_html)}
-{footer_html}
-</body>
-</html>"""
+    page_tpl = env.get_template("handbook.html.j2")
+    return page_tpl.render(
+        client_name=client_name,
+        subtitle=subtitle,
+        sections=sections,
+        total_diagrams=total,
+        generated_at=now,
+        overview_html=overview_html,
+        handbook_css=handbook_css,
+    )
 
 
 def main():
@@ -306,7 +171,7 @@ def main():
     rendered_dir = os.path.join(client_dir, "rendered")
     docs_dir = os.path.join(client_dir, "docs")
     if not os.path.isdir(rendered_dir) or not discover_diagrams(rendered_dir):
-        print(f"No rendered diagrams found. Run: python scripts/render.py --client {args.client} --all", file=sys.stderr)
+        print(f"No rendered diagrams found. Run: skhema render --client {args.client} --all", file=sys.stderr)
         sys.exit(1)
 
     config = parse_client_yaml(os.path.join(client_dir, "client.yaml"))
@@ -322,6 +187,7 @@ def main():
         docs_dir=docs_dir,
         accent_color=accent_color,
         section_order=section_order,
+        client_path=client_dir,
     )
 
     out_name = args.output or f"{args.client}-architecture.html"

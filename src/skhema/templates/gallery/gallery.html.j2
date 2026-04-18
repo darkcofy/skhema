@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ client_name }} — Architecture Diagrams</title>
+  <style>{{ gallery_css | safe }}</style>
+</head>
+<body>
+
+  <div class="header">
+    <div>
+      <h1>{{ client_name }}</h1>
+      <p class="meta">Generated {{ generated_at }} — {{ total_diagrams }} diagram{{ 's' if total_diagrams != 1 else '' }}</p>
+    </div>
+    <div>
+      <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">&#9790; Dark</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="search">
+        <input type="text" id="search" placeholder="Filter diagrams..." oninput="filterCards()">
+        <div class="match-count" id="matchCount">{{ total_diagrams }} diagrams</div>
+      </div>
+      <nav>
+        {% for section in sections %}
+        <div class="nav-section">
+          <a href="#section-{{ section.dtype }}">{{ section.label }} <span class="badge">{{ section.diagrams|length }}</span></a>
+        </div>
+        {% endfor %}
+      </nav>
+    </aside>
+
+    <main class="content">
+      {% for section in sections %}
+      <div class="section" id="section-{{ section.dtype }}">
+        <h2>{{ section.label }} ({{ section.diagrams|length }})</h2>
+        <div class="grid">
+          {% for diagram in section.diagrams %}
+          <div class="card" data-name="{{ diagram.search_text }}" data-href="{{ diagram.href }}" onclick="openModal(this)">
+            <div class="thumb">{{ diagram.svg_inline | safe }}</div>
+            <div class="info">
+              <span class="name">{{ diagram.name }}</span>
+              {% if diagram.animated %}<span class="badge">animated</span>{% endif %}
+              <div class="type-label">{{ section.label }}</div>
+            </div>
+            {% if diagram.history %}
+            <details class="history">
+              <summary>{{ diagram.history|length }} previous version{{ 's' if diagram.history|length != 1 else '' }}</summary>
+              {% for v in diagram.history %}
+              <div class="version"><span class="date">{{ v.date_short }}</span> — {{ v.message }}</div>
+              {% endfor %}
+            </details>
+            {% endif %}
+            {% if diagram.adrs %}
+            <div class="adr-panel">
+              <h4>Architecture Decisions</h4>
+              <ul>
+                {% for adr in diagram.adrs %}
+                <li>ADR{{ "%02d"|format(adr.number) }}: {{ adr.title }}<span class="adr-status adr-status-{{ adr.status|lower }}">{{ adr.status }}</span></li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
+      <h3 id="modalTitle"></h3>
+      <a class="modal-link" id="modalLink" target="_blank">Open in new tab</a>
+      <div id="modalSvg"></div>
+    </div>
+  </div>
+
+  <script>{{ gallery_js | safe }}</script>
+
+</body>
+</html>

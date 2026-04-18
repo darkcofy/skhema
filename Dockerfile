@@ -9,14 +9,17 @@ RUN uv sync --no-dev --frozen --no-install-project
 COPY . .
 RUN uv sync --no-dev --frozen --no-editable
 
-# Stage 2: PlantUML + Structurizr CLI extraction
+# Stage 2: PlantUML JAR + Structurizr CLI extraction.
+# We use the JAR rather than the GraalVM-native binary because the native
+# build has a known Brotli-decompression bug that breaks stdlib includes
+# (`!include <C4/C4_Context>` and similar) — critical for Structurizr-
+# exported diagrams. The JAR is slower to cold-start but fully functional.
 FROM python:3.13-slim-bookworm AS tools
 RUN apt-get update && apt-get install -y --no-install-recommends unzip curl \
     && rm -rf /var/lib/apt/lists/*
-ADD https://github.com/plantuml/plantuml/releases/download/v1.2025.4-native/plantuml-headless-linux-amd64-1.2025.4.zip \
-    /tmp/plantuml.zip
-RUN unzip /tmp/plantuml.zip -d /opt/plantuml && \
-    chmod +x /opt/plantuml/plantuml-headless
+ARG PLANTUML_VERSION=1.2025.4
+ADD https://github.com/plantuml/plantuml/releases/download/v${PLANTUML_VERSION}/plantuml-${PLANTUML_VERSION}.jar \
+    /opt/plantuml/plantuml.jar
 
 ARG STRUCTURIZR_CLI_VERSION=2025.11.09
 ADD https://github.com/structurizr/cli/releases/download/v${STRUCTURIZR_CLI_VERSION}/structurizr-cli.zip \
@@ -35,7 +38,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=tools /opt/plantuml /opt/plantuml
 COPY --from=tools /opt/structurizr-cli /opt/structurizr-cli
-RUN ln -s /opt/plantuml/plantuml-headless /usr/local/bin/plantuml && \
+RUN printf '#!/bin/sh\nexec java -jar /opt/plantuml/plantuml.jar "$@"\n' > /usr/local/bin/plantuml && \
+    chmod +x /usr/local/bin/plantuml && \
     ln -s /opt/structurizr-cli/structurizr.sh /usr/local/bin/structurizr-cli
 
 COPY --from=builder /opt/skhema /opt/skhema

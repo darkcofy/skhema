@@ -198,7 +198,8 @@ def main():
     if args.animate and args.png:
         print("Warning: --animate is ignored with --png (SVG only)", file=sys.stderr)
 
-    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from skhema._paths import find_repo_root
+    root = find_repo_root()
     fmt = "png" if args.png else "svg"
 
     # Determine directories based on --client flag

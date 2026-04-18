@@ -86,14 +86,38 @@ workspace "MeshCo Retail Data Platform" "Federated data platform supporting Mesh
             element "Container" {
                 color #ffffff
             }
-            element "Ingestion"  { background #D97706 }
-            element "Lakehouse"  { background #0369A1 }
-            element "Processing" { background #059669 }
-            element "Semantic"   { background #7C3AED }
-            element "Contracts"  { background #BE185D }
-            element "Catalog"    { background #DC2626 }
-            element "MLPlatform" { background #DB2777 }
-            element "Serving"    { background #4338CA }
+            element "Ingestion" {
+                background #D97706
+                color #ffffff
+            }
+            element "Lakehouse" {
+                background #0369A1
+                color #ffffff
+            }
+            element "Processing" {
+                background #059669
+                color #ffffff
+            }
+            element "Semantic" {
+                background #7C3AED
+                color #ffffff
+            }
+            element "Contracts" {
+                background #BE185D
+                color #ffffff
+            }
+            element "Catalog" {
+                background #DC2626
+                color #ffffff
+            }
+            element "MLPlatform" {
+                background #DB2777
+                color #ffffff
+            }
+            element "Serving" {
+                background #4338CA
+                color #ffffff
+            }
         }
     }
 }

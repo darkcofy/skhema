@@ -7,11 +7,14 @@ services:
       - ./skills:/workspace/skills:ro
 
   structurizr-lite:
-    image: structurizr/lite
+    # The legacy `structurizr/lite` image is deprecated (exits with a banner
+    # pointing here). `structurizr/structurizr` with the `local` command is
+    # the current equivalent — same semantics, same workspace.dsl convention.
+    image: structurizr/structurizr
+    command: local
     ports:
       - "8080:8080"
     volumes:
       - ./clients/${CLIENT:-meshco}:/usr/local/structurizr
     environment:
-      # Structurizr Lite watches workspace.dsl in the mounted path
       - STRUCTURIZR_WORKSPACE_FILENAME=workspace

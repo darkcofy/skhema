@@ -11,12 +11,15 @@ def find_repo_root() -> str:
 
     Looks for the 'clients' directory as the marker.
     """
-    path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    # Walk up until we find clients/
-    while path != os.path.dirname(path):
-        if os.path.isdir(os.path.join(path, "clients")):
-            return path
-        path = os.path.dirname(path)
+    # Walk up from both __file__ (src install) AND CWD (package install).
+    import itertools
+    from pathlib import Path as _P
+    starts = [_P(__file__).resolve(), _P.cwd().resolve()]
+    for parent in itertools.chain.from_iterable(
+        [[s, *s.parents] for s in starts]
+    ):
+        if (parent / "clients").is_dir():
+            return str(parent)
     print("Error: could not find repository root (no clients/ directory found)", file=sys.stderr)
     sys.exit(1)
 

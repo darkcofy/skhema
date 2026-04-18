@@ -216,7 +216,8 @@ def main():
     parser.add_argument("--title", help="Override client display name")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from skhema._paths import find_repo_root
+    root = find_repo_root()
     client_dir = os.path.join(root, "clients", args.client)
     if not os.path.isdir(client_dir):
         print(f"Client '{args.client}' not found in clients/", file=sys.stderr)

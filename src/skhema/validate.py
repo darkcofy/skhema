@@ -92,7 +92,8 @@ def main():
     parser.add_argument("path", nargs="?", default=".", help="Path to check")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from skhema._paths import find_repo_root
+    root = find_repo_root()
     check_path = os.path.abspath(args.path)
 
     all_errors = []

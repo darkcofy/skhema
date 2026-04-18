@@ -131,7 +131,8 @@ def main():
     parser.add_argument("--coverage", action="store_true", help="Show coverage gaps")
     args = parser.parse_args()
 
-    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from skhema._paths import find_repo_root
+    root = find_repo_root()
     client_path = os.path.join(root, "clients", args.client)
 
     if not os.path.isdir(client_path):

@@ -174,7 +174,8 @@ def main():
         gen_light = True
         gen_dark = True
 
-    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from skhema._paths import find_repo_root
+    root = find_repo_root()
     manifest_path = os.path.join(root, "manifest.yaml")
     manifest = parse_manifest(manifest_path)
 

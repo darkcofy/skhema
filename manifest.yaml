@@ -1,26 +1,52 @@
-version: "1.0"
+version: "2.0"
+
+# skhema manifest — reference catalogue of common data-architecture elements.
+#
+# Role in v3: this is a *reference library* for consultant-architects, not a
+# canonical model. The source of truth for any given client's C4 model lives
+# in clients/<name>/workspace.dsl (Structurizr DSL). This manifest lists
+# elements a consultant might reach for when authoring that DSL, grouped by
+# modern data-architecture domain.
+#
+# Vocabulary is kept deliberately 2026-current: data contracts, data products,
+# lakehouses (Iceberg/Delta), semantic layer, dbt, catalogs (DataHub/Unity/
+# OpenLineage), observability (Monte Carlo, Datadog), GenAI building blocks.
+#
+# Skills in skills/skhema/ describe HOW to use these elements in client models.
 
 domains:
+
   consumers:
+    description: "Humans and external systems that consume data"
     file: models/consumers.puml
     elements:
       data_analyst:
         type: Person
-        description: "Queries data via BI/SQL tools"
-      data_engineer:
-        type: Person
-        description: "Builds and maintains pipelines"
+        description: "Queries data via BI/SQL; curates reports"
       data_scientist:
         type: Person
-        description: "Builds models, explores data"
+        description: "Builds models, explores data, runs experiments"
+      data_engineer:
+        type: Person
+        description: "Builds and maintains pipelines, contracts, and infrastructure"
+      ml_engineer:
+        type: Person
+        description: "Deploys and monitors ML models in production"
+      product_analyst:
+        type: Person
+        description: "Uses metrics and product telemetry to drive decisions"
       business_user:
         type: Person
-        description: "Consumes reports and dashboards"
+        description: "Consumes dashboards, reports, and embedded analytics"
+      ai_agent:
+        type: Person
+        description: "Automated agent querying data via structured APIs or MCP"
       external_system:
         type: System_Ext
-        description: "System outside the boundary"
+        description: "System outside the data-platform boundary"
 
   ingestion:
+    description: "Surfaces that bring data into the platform"
     file: models/ingestion.puml
     elements:
       api_gateway:
@@ -28,102 +54,276 @@ domains:
         description: "Entry point for API-based ingestion"
       event_stream:
         type: Container
-        description: "Real-time event ingestion"
-      batch_etl:
-        type: Container
-        description: "Scheduled batch data extraction"
+        description: "Real-time event ingestion (Kafka, Kinesis, PubSub)"
       cdc_pipeline:
         type: Container
-        description: "Change data capture from source DBs"
+        description: "Change data capture from source DBs (Debezium, RisingWave, Fivetran)"
+      batch_etl:
+        type: Container
+        description: "Scheduled batch extraction"
       file_drop:
         type: Container
         description: "SFTP/S3/blob file-based ingestion"
+      reverse_etl:
+        type: Container
+        description: "Pushes curated data back into operational systems (Hightouch, Census)"
+      clickstream_sdk:
+        type: Container
+        description: "Product-telemetry SDKs (Segment, Snowplow)"
 
-  storage:
-    file: models/storage.puml
+  lakehouse:
+    description: "Open table formats over object storage"
+    file: models/lakehouse.puml
     elements:
-      data_lake:
+      iceberg_table:
         type: ContainerDb
-        description: "Raw + curated zones"
-      data_warehouse:
+        description: "Apache Iceberg table — ACID, time travel, hidden partitioning"
+      delta_table:
         type: ContainerDb
-        description: "Dimensional models, governed data"
-      operational_db:
+        description: "Delta Lake table — ACID, transactional log"
+      hudi_table:
         type: ContainerDb
-        description: "Transactional/operational database"
+        description: "Apache Hudi table — upserts, incremental queries"
       object_store:
         type: ContainerDb
-        description: "Unstructured blob/file storage"
-      cache_layer:
+        description: "Underlying blob storage (S3, GCS, ADLS)"
+      metastore:
         type: Container
-        description: "Low-latency cache"
+        description: "Table metadata catalogue (AWS Glue, Hive Metastore, Polaris, Unity)"
+      query_engine:
+        type: Container
+        description: "Distributed SQL over the lakehouse (Trino, Athena, DuckDB, StarRocks)"
+
+  warehouse:
+    description: "Managed cloud warehouses and dimensional models"
+    file: models/warehouse.puml
+    elements:
+      cloud_warehouse:
+        type: ContainerDb
+        description: "Managed cloud warehouse (Snowflake, BigQuery, Redshift, Databricks SQL)"
+      dimensional_model:
+        type: ContainerDb
+        description: "Star/snowflake schema of curated business facts and dimensions"
+      materialized_view:
+        type: ContainerDb
+        description: "Pre-computed aggregate for low-latency serving"
+      operational_db:
+        type: ContainerDb
+        description: "Transactional/operational database (Postgres, MySQL, DynamoDB)"
 
   processing:
+    description: "Transformation, orchestration, and modelling"
     file: models/processing.puml
     elements:
-      elt_pipeline:
+      dbt_project:
         type: Container
-        description: "Extract-load-transform pipeline"
-      stream_processor:
+        description: "dbt project — SQL transformations, tests, documentation"
+      sqlmesh_project:
         type: Container
-        description: "Real-time stream processing"
-      orchestrator:
-        type: Container
-        description: "Workflow orchestration"
-      dbt_transform:
-        type: Container
-        description: "SQL transformations"
+        description: "SQLMesh project — SQL+Python transformations with virtual envs"
       spark_job:
         type: Container
-        description: "Distributed compute processing"
+        description: "Distributed compute processing (Spark, Flink batch)"
+      stream_processor:
+        type: Container
+        description: "Real-time stream processing (Flink, Kafka Streams, Spark Streaming)"
+      orchestrator:
+        type: Container
+        description: "Workflow orchestration (Airflow, Dagster, Prefect, Argo Workflows)"
+
+  data_contracts:
+    description: "Producer-consumer agreements about schema, semantics, and SLAs"
+    file: models/data-contracts.puml
+    elements:
+      contract_registry:
+        type: Container
+        description: "Storage and versioning for data-contract definitions"
+      contract_validator:
+        type: Container
+        description: "Runtime validation of data against published contracts"
+      schema_registry:
+        type: Container
+        description: "Schema storage for streams (Confluent Schema Registry, Apicurio)"
+      contract_ci_gate:
+        type: Container
+        description: "PR-time contract diff + breaking-change detection"
+
+  data_products:
+    description: "First-class, owned, discoverable data assets"
+    file: models/data-products.puml
+    elements:
+      data_product:
+        type: Container
+        description: "A curated, owned, SLO-backed dataset exposed to consumers"
+      product_consumer:
+        type: Container
+        description: "A downstream system or team consuming a data product"
+      product_api:
+        type: Container
+        description: "The read interface of a data product (table, endpoint, topic)"
+      product_marketplace:
+        type: Container
+        description: "Discovery surface listing all available data products"
+
+  semantic_layer:
+    description: "Single source of truth for business metrics and dimensions"
+    file: models/semantic-layer.puml
+    elements:
+      metric_store:
+        type: ContainerDb
+        description: "Versioned, queryable metric definitions"
+      semantic_model:
+        type: Container
+        description: "Entity + relationship model exposing business concepts to BI/LLMs"
+      cube_definition:
+        type: Container
+        description: "Measure/dimension definitions (Cube, dbt Semantic Layer, LookML)"
+      metric_api:
+        type: Container
+        description: "SQL/GraphQL/REST surface over the semantic layer"
+
+  catalog_and_observability:
+    description: "Discovery, lineage, and data observability"
+    file: models/catalog.puml
+    elements:
+      data_catalog:
+        type: Container
+        description: "Searchable metadata catalogue (DataHub, Atlan, Collibra, Unity Catalog)"
+      lineage_tracker:
+        type: Container
+        description: "End-to-end column-level lineage (OpenLineage, Marquez)"
+      observability_platform:
+        type: Container
+        description: "Data-quality and freshness monitoring (Monte Carlo, Anomalo, Datadog)"
+      quality_engine:
+        type: Container
+        description: "Assertions and tests on data quality (Great Expectations, Soda)"
+
+  governance:
+    description: "Access control, policy, PII handling, audit"
+    file: models/governance.puml
+    elements:
+      policy_engine:
+        type: Container
+        description: "Row/column-level policy enforcement (OPA, Immuta, Lake Formation)"
+      access_control:
+        type: Container
+        description: "RBAC/ABAC surface over data assets"
+      pii_scanner:
+        type: Container
+        description: "Detects and tags sensitive data fields"
+      classification_service:
+        type: Container
+        description: "Applies data classification tags (public/internal/confidential/PII)"
+      audit_log:
+        type: ContainerDb
+        description: "Immutable audit trail of data access and modifications"
+      consent_store:
+        type: ContainerDb
+        description: "User consent and purpose-of-use tracking for regulatory compliance"
+
+  mesh:
+    description: "Data-mesh federation: domains, producers, consumers"
+    file: models/mesh.puml
+    elements:
+      domain_boundary:
+        type: System
+        description: "An owned business domain emitting data products"
+      federation_gateway:
+        type: Container
+        description: "Cross-domain query and discovery federation"
+      domain_team:
+        type: Person
+        description: "Team accountable for a domain's data products"
+      platform_team:
+        type: Person
+        description: "Team providing self-serve infrastructure to domain teams"
 
   serving:
+    description: "Downstream consumption surfaces"
     file: models/serving.puml
     elements:
       bi_platform:
         type: Container
-        description: "Dashboards and reports"
-      api_service:
-        type: Container
-        description: "Data API for downstream consumers"
+        description: "Dashboards and embedded analytics (Tableau, PowerBI, Superset, Looker)"
       ml_endpoint:
         type: Container
-        description: "Deployed ML model serving predictions"
-      data_catalog:
+        description: "Deployed ML model serving predictions (SageMaker, Vertex, KServe)"
+      operational_api:
         type: Container
-        description: "Searchable metadata catalog"
+        description: "Low-latency API exposing curated data to applications"
       report_dashboard:
         type: Container
-        description: "Scheduled/static reports"
+        description: "Scheduled reports and alerting"
+      notebook_env:
+        type: Container
+        description: "Managed notebook environment for exploration (Databricks, Hex, Deepnote)"
 
-  governance:
-    file: models/governance.puml
+  ml_platform:
+    description: "MLOps infrastructure: features, training, serving, monitoring"
+    file: models/ml-platform.puml
     elements:
-      quality_engine:
+      feature_store:
+        type: ContainerDb
+        description: "Managed feature storage, online + offline (Feast, Tecton, SageMaker FS)"
+      model_registry:
+        type: ContainerDb
+        description: "Versioned model artifacts and metadata (MLflow, Vertex, SageMaker)"
+      training_infra:
         type: Container
-        description: "Data quality checks and monitoring"
-      access_control:
+        description: "Distributed training compute (SageMaker, Vertex, Ray, Kubernetes)"
+      experiment_tracker:
         type: Container
-        description: "RBAC/ABAC policy enforcement"
-      lineage_tracker:
+        description: "Experiment logging and comparison (MLflow, Weights & Biases)"
+      ml_pipeline:
         type: Container
-        description: "End-to-end data lineage"
-      master_data_svc:
+        description: "End-to-end ML pipeline orchestration (Kubeflow, SageMaker Pipelines)"
+      model_monitor:
         type: Container
-        description: "Master data management"
-      policy_engine:
+        description: "Drift, skew, and performance monitoring of live models"
+
+  genai:
+    description: "LLM/GenAI building blocks"
+    file: models/genai.puml
+    elements:
+      llm_gateway:
         type: Container
-        description: "Data classification and policy rules"
+        description: "Unified proxy over multiple LLM providers (LiteLLM, Bedrock proxies)"
+      prompt_registry:
+        type: ContainerDb
+        description: "Versioned prompt templates and system prompts"
+      rag_pipeline:
+        type: Container
+        description: "Retrieval-augmented generation orchestration"
+      vector_store:
+        type: ContainerDb
+        description: "Embedding storage and similarity search (pgvector, Pinecone, Weaviate)"
+      eval_framework:
+        type: Container
+        description: "Automated evaluation and benchmarking (Braintrust, LangSmith)"
+      redteam_harness:
+        type: Container
+        description: "Adversarial testing and safety probing"
+      guardrails_engine:
+        type: Container
+        description: "Input/output filtering, PII detection, prompt injection defense"
+      agent_runtime:
+        type: Container
+        description: "Agent orchestration, tool execution, multi-step planning"
+      feedback_collector:
+        type: Container
+        description: "Human feedback capture (thumbs, edits, corrections)"
+      mcp_server:
+        type: Container
+        description: "Model Context Protocol server exposing tools/resources to agents"
 
   integration:
+    description: "Cross-system messaging and APIs"
     file: models/integration.puml
     elements:
-      esb:
+      event_bus:
         type: Container
-        description: "Enterprise service bus"
-      message_broker:
-        type: Container
-        description: "Async message routing"
+        description: "Async messaging (Kafka, EventBridge, PubSub, RabbitMQ)"
       webhook_handler:
         type: Container
         description: "Inbound webhook receiver"
@@ -133,100 +333,34 @@ domains:
       graphql_endpoint:
         type: Container
         description: "GraphQL integration endpoint"
+      grpc_service:
+        type: Container
+        description: "gRPC service for low-latency service-to-service calls"
 
   security:
+    description: "Identity, secrets, network perimeter"
     file: models/security.puml
     elements:
       identity_provider:
         type: Container_Ext
-        description: "OAuth/SAML/OIDC provider"
+        description: "OAuth/SAML/OIDC provider (Okta, Entra, Auth0)"
       auth_gateway:
         type: Container
-        description: "API auth enforcement"
+        description: "API auth enforcement and session management"
       secrets_vault:
         type: Container
-        description: "Secrets/key management"
-      firewall:
+        description: "Secrets and key management (Vault, AWS Secrets Manager, KMS)"
+      waf:
         type: Container_Ext
-        description: "Network perimeter / WAF"
+        description: "Web application firewall / network perimeter"
       certificate_mgr:
         type: Container
         description: "TLS cert provisioning and rotation"
-      audit_log:
-        type: ContainerDb
-        description: "Security audit trail"
-
-  iot:
-    file: models/iot.puml
-    elements:
-      edge_device:
-        type: Container_Ext
-        description: "Sensor / edge compute device"
-      edge_gateway:
-        type: Container
-        description: "Local aggregation and protocol translation"
-      telemetry_collector:
-        type: Container
-        description: "Ingests device telemetry at scale"
-      device_registry:
-        type: ContainerDb
-        description: "Device identity and configuration store"
-      command_dispatcher:
-        type: Container
-        description: "Cloud-to-device command routing"
-
-  ml_platform:
-    file: models/ml-platform.puml
-    elements:
-      feature_store:
-        type: ContainerDb
-        description: "Managed feature storage (online + offline)"
-      model_registry:
-        type: ContainerDb
-        description: "Versioned model artifacts and metadata"
-      training_infra:
-        type: Container
-        description: "Model training compute"
-      experiment_tracker:
-        type: Container
-        description: "Experiment logging and comparison"
-      ml_pipeline:
-        type: Container
-        description: "End-to-end ML pipeline orchestration"
-
-  genai:
-    file: models/genai.puml
-    elements:
-      llm_gateway:
-        type: Container
-        description: "Unified LLM API proxy"
-      prompt_registry:
-        type: ContainerDb
-        description: "Versioned prompt templates and system prompts"
-      rag_pipeline:
-        type: Container
-        description: "Retrieval-augmented generation orchestration"
-      vector_store:
-        type: ContainerDb
-        description: "Embedding storage and similarity search"
-      eval_framework:
-        type: Container
-        description: "Automated evaluation and benchmarking"
-      redteam_harness:
-        type: Container
-        description: "Adversarial testing and safety probing"
-      guardrails_engine:
-        type: Container
-        description: "Input/output filtering, PII detection"
-      agent_runtime:
-        type: Container
-        description: "Agent orchestration and tool execution"
-      feedback_collector:
-        type: Container
-        description: "Human feedback capture"
 
 diagrams:
-  - path: diagrams/c4/data-platform-container.puml
-    title: "Data Platform — Container View"
+  # Sample views demonstrating how manifest elements compose into a client model.
+  # Real client models live in clients/<name>/workspace.dsl (Structurizr DSL).
+  - path: diagrams/c4/data-platform-reference.puml
+    title: "Reference Data Platform — Container View"
     type: c4_container
-    includes_domains: [consumers, ingestion, storage, processing, serving]
+    includes_domains: [consumers, ingestion, lakehouse, processing, catalog_and_observability, serving]

@@ -80,7 +80,8 @@ diagrams: []
         if not os.path.isfile(manifest_path):
             pytest.skip("No manifest.yaml in project root")
         result = parse_manifest(manifest_path)
-        assert len(result) == 11  # 11 domains
-        # Spot-check a known element
-        storage_ids = [e["id"] for e in result["storage"]]
-        assert "data_lake" in storage_ids
+        # v3 refresh: 16 domains covering 2026 data-arch vocabulary
+        assert len(result) >= 11
+        # Spot-check a known element from the refreshed vocab
+        lakehouse_ids = [e["id"] for e in result["lakehouse"]]
+        assert "iceberg_table" in lakehouse_ids

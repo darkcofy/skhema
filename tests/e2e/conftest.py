@@ -1,8 +1,8 @@
-import io
 import os
 import shutil
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 
 @pytest.fixture
@@ -29,26 +29,12 @@ def fake_svg():
 
 
 @pytest.fixture
-def fake_pdf():
-    from pypdf import PdfWriter
-    writer = PdfWriter()
-    writer.add_blank_page(width=612, height=792)
-    buf = io.BytesIO()
-    writer.write(buf)
-    return buf.getvalue()
-
-
-@pytest.fixture
-def mock_plantuml(fake_svg, fake_pdf):
+def mock_plantuml(fake_svg):
+    """Mock the PlantUML subprocess call — returns fake_svg for all formats."""
     def side_effect(cmd, *args, **kwargs):
         result = MagicMock()
         result.returncode = 0
-        if isinstance(cmd, list) and any("-tpdf" in c for c in cmd):
-            result.stdout = fake_pdf
-        elif isinstance(cmd, list) and any("-tpng" in c for c in cmd):
-            result.stdout = fake_svg
-        else:
-            result.stdout = fake_svg
+        result.stdout = fake_svg
         result.stderr = b""
         return result
 

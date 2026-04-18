@@ -12,9 +12,6 @@ dependencies = [
     "typer>=0.12",
     "jinja2>=3.1",
     "rich>=13",
-    # TODO Phase 2: remove pypdf + weasyprint after deck.py is rewritten
-    "pypdf",
-    "weasyprint",
 ]
 
 [project.optional-dependencies]

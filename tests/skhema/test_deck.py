@@ -1,9 +1,18 @@
-"""Tests for the deck export script."""
+"""Tests for the deck export script (Reveal.js HTML deck)."""
 import os
+from unittest.mock import patch
+
 import pytest
+
 from skhema.deck import (
+    Diagram,
+    Section,
+    clean_svg_for_embed,
+    diagram_title,
+    diagram_type,
     discover_puml_files,
     order_by_type,
+    render_deck_html,
 )
 
 
@@ -34,55 +43,96 @@ class TestOrderByType:
         ]
         ordered = order_by_type(files, "/d")
         types = [os.path.relpath(f, "/d").split(os.sep)[0] for f in ordered]
-        # c4 first, then sequence, then erd (matches TYPE_ORDER)
         assert types == ["c4", "c4", "sequence", "erd"]
 
-
-from unittest.mock import patch, MagicMock
-import io
-
-
-class TestBuildDeck:
-    def test_produces_merged_pdf(self, tmp_path):
-        from skhema.deck import build_deck
-
-        # Create a minimal valid PDF bytes (1-page)
-        from pypdf import PdfWriter
-        single_page = PdfWriter()
-        single_page.add_blank_page(width=612, height=792)
-        buf = io.BytesIO()
-        single_page.write(buf)
-        fake_pdf = buf.getvalue()
-
-        output = tmp_path / "deck.pdf"
-
-        with patch("skhema.deck.render_plantuml", return_value=b"<svg></svg>"), \
-             patch("skhema.deck._svg_to_pdf", return_value=fake_pdf), \
-             patch("skhema.deck.ordered_diagrams", return_value=[("a.puml", "@startuml\n@enduml"), ("b.puml", "@startuml\n@enduml")]):
-            build_deck(
-                client_name="Test",
-                diagrams_dir=str(tmp_path),
-                search_paths=[],
-                output_path=str(output),
-                include_cover=False,
-            )
-
-        assert output.exists()
-        from pypdf import PdfReader
-        reader = PdfReader(str(output))
-        assert len(reader.pages) == 2
-
     def test_excludes_excalidraw(self, tmp_path):
-        from skhema.deck import order_by_type
         files = [
             str(tmp_path / "c4" / "main.puml"),
             str(tmp_path / "excalidraw" / "sketch.puml"),
             str(tmp_path / "sequence" / "flow.puml"),
         ]
         for f in files:
-            import os
             os.makedirs(os.path.dirname(f), exist_ok=True)
             open(f, "w").close()
         ordered = order_by_type(files, str(tmp_path))
         types = [os.path.basename(os.path.dirname(f)) for f in ordered]
         assert "excalidraw" not in types
+
+
+class TestHelpers:
+    def test_diagram_title_converts_filename(self):
+        assert diagram_title("/d/c4/data-platform-container.puml") == "Data Platform Container"
+
+    def test_diagram_type_returns_top_dir(self, tmp_path):
+        path = tmp_path / "diagrams" / "c4" / "context.puml"
+        path.parent.mkdir(parents=True)
+        path.touch()
+        assert diagram_type(str(path), str(tmp_path / "diagrams")) == "c4"
+
+    def test_clean_svg_strips_xml_decl(self):
+        raw = b'<?xml version="1.0"?>\n<!DOCTYPE svg PUBLIC "..">\n<svg><rect/></svg>'
+        cleaned = clean_svg_for_embed(raw)
+        assert "<?xml" not in cleaned
+        assert "<!DOCTYPE" not in cleaned
+        assert cleaned.startswith("<svg>")
+
+
+class TestRenderDeckHtml:
+    def test_produces_reveal_html(self):
+        sections = [
+            Section(
+                label="C4 Diagrams",
+                diagrams=[
+                    Diagram(title="Context", svg_inline="<svg><rect/></svg>", notes=None),
+                ],
+            ),
+        ]
+        html = render_deck_html(
+            client={"name": "Test Co", "subtitle": "v1", "accent_color": "#D97706"},
+            sections=sections,
+            adrs=[],
+            total_diagrams=1,
+        )
+        assert "<!DOCTYPE html>" in html
+        assert 'class="reveal"' in html
+        assert "Test Co" in html
+        assert "Context" in html
+        assert "<svg><rect/></svg>" in html
+        # Reveal.js is inlined (no CDN references)
+        assert "Reveal.initialize" in html
+
+    def test_cover_uses_accent_color(self):
+        html = render_deck_html(
+            client={"name": "Foo", "subtitle": "", "accent_color": "#123456"},
+            sections=[],
+            adrs=[],
+            total_diagrams=0,
+        )
+        assert "#123456" in html
+
+    def test_adrs_render_when_present(self):
+        html = render_deck_html(
+            client={"name": "Foo", "subtitle": "", "accent_color": "#D97706"},
+            sections=[],
+            adrs=[
+                {"number": 1, "title": "Pick Postgres", "status": "Accepted", "body_html": "<p>Because.</p>"},
+            ],
+            total_diagrams=0,
+        )
+        assert "ADR01: Pick Postgres" in html
+        assert "status-accepted" in html
+        assert "<p>Because.</p>" in html
+
+    def test_self_contained_no_external_script_or_link_tags(self):
+        html = render_deck_html(
+            client={"name": "X", "subtitle": "", "accent_color": "#D97706"},
+            sections=[],
+            adrs=[],
+            total_diagrams=0,
+        )
+        # No external <script src="..."> or <link href="..."> — everything inlined.
+        # Reveal.js source may contain https:// references in comments and CSS url()
+        # calls, which is fine as long as no runtime external fetch happens.
+        assert "<script src=" not in html
+        assert '<link rel="stylesheet"' not in html
+        assert '<link href=' not in html

@@ -21,12 +21,9 @@ RUN unzip /tmp/plantuml.zip -d /opt/plantuml && \
 # Stage 3: runtime
 FROM python:3.13-slim-bookworm
 
-# weasyprint needs pango + gdk-pixbuf for HTML→PDF; graphviz for PlantUML diagrams
+# graphviz: PlantUML layout. default-jre-headless: will be used by Structurizr CLI in Phase 4.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     graphviz \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 \
     && apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY --from=plantuml /opt/plantuml /opt/plantuml
@@ -35,10 +32,10 @@ RUN ln -s /opt/plantuml/plantuml-headless /usr/local/bin/plantuml
 COPY --from=builder /opt/skhema /opt/skhema
 COPY --from=builder /opt/skhema/.venv /opt/skhema/.venv
 
-# Symlinks so relative includes from diagrams (e.g. ../../../../lib/theme.puml) resolve
-RUN ln -s /opt/skhema/skhema/lib /opt/skhema/lib && \
-    ln -s /opt/skhema/skhema/models /opt/skhema/models
+# Symlinks so relative PlantUML !include paths in client diagrams resolve to src/skhema/{lib,models}
+RUN ln -s /opt/skhema/src/skhema/lib /opt/skhema/lib && \
+    ln -s /opt/skhema/src/skhema/models /opt/skhema/models
 
-ENV PATH="/opt/skhema/.venv/bin:/opt/skhema/bin:$PATH"
+ENV PATH="/opt/skhema/.venv/bin:$PATH"
 ENV PLANTUML_BIN=/usr/local/bin/plantuml
 WORKDIR /workspace

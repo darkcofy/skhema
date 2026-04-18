@@ -1,0 +1,129 @@
+/* skhema deck theme — EY-orange accent, clean typography, responsive. */
+
+:root {
+  --skhema-accent: {{ client.accent_color }};
+  --skhema-accent-dim: rgba(217, 119, 6, 0.15);
+  --skhema-heading: #111827;
+  --skhema-text: #1f2937;
+  --skhema-muted: #6b7280;
+  --skhema-bg: #ffffff;
+  --skhema-surface: #f9fafb;
+  --skhema-border: #e5e7eb;
+  --skhema-code-bg: #1f2937;
+  --skhema-code-text: #e5e7eb;
+}
+
+[data-theme="dark"] {
+  --skhema-heading: #f9fafb;
+  --skhema-text: #e5e7eb;
+  --skhema-muted: #9ca3af;
+  --skhema-bg: #0f172a;
+  --skhema-surface: #1e293b;
+  --skhema-border: #334155;
+}
+
+.reveal {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--skhema-text);
+  background: var(--skhema-bg);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  color: var(--skhema-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  margin-bottom: 0.6em;
+  line-height: 1.15;
+}
+
+.reveal h1 { font-size: 2.4em; }
+.reveal h2 { font-size: 1.7em; border-bottom: 3px solid var(--skhema-accent); padding-bottom: 0.3em; display: inline-block; }
+.reveal h3 { font-size: 1.3em; color: var(--skhema-accent); }
+
+.reveal a { color: var(--skhema-accent); text-decoration: none; border-bottom: 1px solid var(--skhema-accent-dim); }
+.reveal a:hover { border-bottom-color: var(--skhema-accent); }
+
+.reveal p { line-height: 1.5; }
+.reveal ul, .reveal ol { line-height: 1.6; }
+
+.reveal .progress { color: var(--skhema-accent); }
+.reveal .controls { color: var(--skhema-accent); }
+.reveal .slide-number { color: var(--skhema-muted); background: transparent; font-size: 14px; }
+
+/* ────────── cover ────────── */
+.reveal section.cover {
+  text-align: center;
+  background: linear-gradient(135deg, var(--skhema-accent) 0%, #b45309 100%);
+  color: white;
+  padding: 3em;
+}
+.reveal section.cover h1 { color: white; font-size: 3em; border: none; }
+.reveal section.cover .subtitle { font-size: 1.3em; opacity: 0.9; font-weight: 300; }
+.reveal section.cover .meta { font-size: 0.8em; opacity: 0.75; margin-top: 2em; }
+
+/* ────────── section dividers ────────── */
+.reveal section.divider {
+  text-align: center;
+  background: var(--skhema-surface);
+}
+.reveal section.divider h2 { font-size: 2.5em; border: none; color: var(--skhema-accent); }
+
+/* ────────── diagram slides ────────── */
+.reveal .diagram {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 70vh;
+  overflow: hidden;
+}
+.reveal .diagram svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+
+/* ────────── ADR slides ────────── */
+.reveal .adr-body { font-size: 0.75em; line-height: 1.5; }
+.reveal .status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.6em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1em;
+}
+.reveal .status-accepted { background: #d1fae5; color: #065f46; }
+.reveal .status-proposed { background: #fef3c7; color: #92400e; }
+.reveal .status-deprecated { background: #fee2e2; color: #991b1b; }
+.reveal .status-superseded { background: #e5e7eb; color: #374151; }
+
+/* ────────── tables ────────── */
+.reveal table { margin: 1em 0; border-collapse: collapse; font-size: 0.75em; }
+.reveal table th { background: var(--skhema-surface); color: var(--skhema-heading); font-weight: 600; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--skhema-accent); }
+.reveal table td { padding: 10px 14px; border-bottom: 1px solid var(--skhema-border); }
+
+/* ────────── code ────────── */
+.reveal code { background: var(--skhema-code-bg); color: var(--skhema-code-text); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+.reveal pre { box-shadow: none; border: 1px solid var(--skhema-border); }
+.reveal pre code { background: var(--skhema-code-bg); padding: 16px; border-radius: 6px; font-size: 0.6em; line-height: 1.4; }
+
+/* ────────── print (PDF) ────────── */
+@media print {
+  .reveal section.cover { background: var(--skhema-accent) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .reveal .progress, .reveal .controls { display: none !important; }
+}

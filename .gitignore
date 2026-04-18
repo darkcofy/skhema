@@ -9,12 +9,22 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Client rendered output and generated galleries
+# Client folders (only demo is committed)
+clients/*
+!clients/demo/
+
+# Client rendered output and generated galleries (for demo)
 clients/*/rendered/
 clients/*/*.html
 clients/*/*.pdf
 clients/*/*.pptx
 clients/*/deck_pages/
+
+# Working docs — plans, specs, design notes (local-only, not part of deliverable)
+docs/
+
+# Superpowers plugin local state
+.superpowers/
 
 # Worktrees
 .worktrees/

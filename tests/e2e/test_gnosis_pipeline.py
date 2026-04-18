@@ -1,16 +1,16 @@
 import os
 import sys
 import pytest
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "gnosis"))
+
 
 
 class TestGnosisPipeline:
     def test_init_creates_workspace(self, tmp_path):
         """scaffold_workspace creates the expected ontology structure."""
-        from scripts.init import scaffold_workspace
+        from gnosis.init import scaffold_workspace
 
         # Create minimal gnosis templates required by scaffold_workspace
-        gnosis_templates = tmp_path / "gnosis" / "templates"
+        gnosis_templates = tmp_path / "src" / "gnosis" / "templates"
         gnosis_templates.mkdir(parents=True)
         (gnosis_templates / "workspace.yaml").write_text(
             'domain: "{{DOMAIN}}"\ninitialized: "{{DATE}}"\n'
@@ -30,12 +30,12 @@ class TestGnosisPipeline:
 
     def test_status_on_fresh_workspace(self, tmp_path):
         """compute_status returns stages and artifacts for a fresh workspace."""
-        from scripts.init import scaffold_workspace
-        from scripts.readiness import load_rules
-        from scripts.status import compute_status
+        from gnosis.init import scaffold_workspace
+        from gnosis.readiness import load_rules
+        from gnosis.status import compute_status
 
         # Create minimal gnosis templates
-        gnosis_templates = tmp_path / "gnosis" / "templates"
+        gnosis_templates = tmp_path / "src" / "gnosis" / "templates"
         gnosis_templates.mkdir(parents=True)
         (gnosis_templates / "workspace.yaml").write_text(
             'domain: "{{DOMAIN}}"\ninitialized: "{{DATE}}"\n'
@@ -52,7 +52,7 @@ class TestGnosisPipeline:
         # Load actual rules from gnosis/rules/artifacts.yaml
         rules_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-            "gnosis", "rules", "artifacts.yaml"
+            "src", "gnosis", "rules", "artifacts.yaml"
         )
         rules = load_rules(rules_path)
 

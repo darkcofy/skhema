@@ -52,5 +52,5 @@ def mock_plantuml(fake_svg, fake_pdf):
         result.stderr = b""
         return result
 
-    with patch("scripts.render.subprocess.run", side_effect=side_effect) as mock:
+    with patch("skhema.render.subprocess.run", side_effect=side_effect) as mock:
         yield mock

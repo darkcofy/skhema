@@ -1,15 +1,15 @@
 import os
 import sys
 from unittest.mock import patch
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "skhema"))
+
 
 
 class TestDeckPipeline:
     def test_produces_merged_pdf(self, mock_workspace, mock_plantuml, fake_pdf, tmp_path):
-        from scripts.deck import build_deck
+        from skhema.deck import build_deck
         output = str(tmp_path / "deck.pdf")
         diagrams_dir = os.path.join(str(mock_workspace), "diagrams")
-        with patch("scripts.deck._svg_to_pdf", return_value=fake_pdf):
+        with patch("skhema.deck._svg_to_pdf", return_value=fake_pdf):
             build_deck(client_name="Test", diagrams_dir=diagrams_dir,
                       search_paths=[], output_path=output, include_cover=False)
         assert os.path.exists(output)
@@ -18,10 +18,10 @@ class TestDeckPipeline:
         assert len(reader.pages) >= 2
 
     def test_pages_flag_emits_individual_files(self, mock_workspace, mock_plantuml, fake_pdf, tmp_path):
-        from scripts.deck import build_deck
+        from skhema.deck import build_deck
         output = str(tmp_path / "deck.pdf")
         diagrams_dir = os.path.join(str(mock_workspace), "diagrams")
-        with patch("scripts.deck._svg_to_pdf", return_value=fake_pdf):
+        with patch("skhema.deck._svg_to_pdf", return_value=fake_pdf):
             build_deck(client_name="Test", diagrams_dir=diagrams_dir,
                       search_paths=[], output_path=output,
                       include_cover=False, emit_pages=True)

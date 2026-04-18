@@ -4,25 +4,47 @@ build-backend = "hatchling.build"
 
 [project]
 name = "skhema"
-version = "0.1.0"
-requires-python = ">=3.13"
+version = "0.3.0"
+requires-python = ">=3.11"
 dependencies = [
     "PyYAML",
     "mistune",
+    "typer>=0.12",
+    "jinja2>=3.1",
+    "rich>=13",
+    # TODO Phase 2: remove pypdf + weasyprint after deck.py is rewritten
     "pypdf",
-    "python-pptx",
     "weasyprint",
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest",
-]
+pptx = ["python-pptx"]
+
+[project.scripts]
+skhema = "skhema.cli:app"
+gnosis = "gnosis.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/skhema", "src/gnosis"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/skhema/lib" = "skhema/lib"
+"src/skhema/models" = "skhema/models"
+"src/skhema/puml_templates" = "skhema/puml_templates"
+"src/gnosis/templates" = "gnosis/templates"
+"src/gnosis/rules" = "gnosis/rules"
 
 [tool.pytest.ini_options]
-pythonpath = ["skhema", "gnosis"]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = [
+    "local_only: tests that must not run in CI (real client data)",
+]
 
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
+    "syrupy>=4.6",
+    "ruff>=0.5",
+    "mypy>=1.8",
 ]

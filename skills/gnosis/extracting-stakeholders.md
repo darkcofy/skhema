@@ -1,0 +1,145 @@
+---
+name: Extracting stakeholders from kick-off notes and org material
+description: Reads kick-off meeting notes, org charts, engagement briefs, or introduction emails and extracts the stakeholder list with roles, interests, and decision rights. Produces entries for gnosis `00_scope/stakeholders.yaml`. Use at gnosis stage 0 (setup) or when a new stakeholder surfaces mid-engagement.
+---
+
+## When to use this skill
+
+- Immediately after a kick-off meeting, when you have unstructured notes and need a clean stakeholder list.
+- When an organisation's structure is introduced via a document or email.
+- When a new person is brought into an in-flight engagement and you need to capture them.
+
+This skill produces a working stakeholder roster. It is not a political map, though `interests` and `influence` fields hint at one — that's deliberate; consulting engagements live or die on stakeholder dynamics.
+
+## Inputs
+
+1. **Source material** — meeting notes, introduction emails, org charts, RACI tables, Confluence people pages.
+2. **(Optional)** Existing `stakeholders.yaml` — avoid duplicates.
+
+## Output format
+
+YAML list matching `00_scope/stakeholders.yaml`:
+
+```yaml
+- name: Alice Chen
+  role: Payments Lead
+  team: Engineering · Payments
+  email: alice.chen@meshco.example
+  interests:
+    - Transaction reliability
+    - Reducing auth failures
+  decision_rights:
+    - Payments architecture
+    - Vendor selection for card processing
+  influence: high        # high | medium | low
+  engagement_cadence: weekly  # optional
+  notes: Strong preference for incrementalism; wary of big-bang migrations.
+
+- name: Bob Murphy
+  role: Operations Manager
+  team: Operations
+  interests:
+    - Chargeback reduction
+    - Ops tooling ergonomics
+  decision_rights:
+    - Ops tool choices
+  influence: medium
+```
+
+Required: `name`, `role`. Optional but recommended: `team`, `interests`, `decision_rights`, `influence`, `notes`.
+
+## Step-by-step
+
+1. **List every person mentioned** in the source material. Include names that appear in passing — they might be load-bearing and you can cull later.
+2. **For each person, capture what the source says.**
+   - `role` — their job title or function, verbatim from the material.
+   - `team` — organisational unit. Format `<Function> · <Team>` (e.g. "Engineering · Payments").
+   - `interests` — what they care about, in their own words or inferred from concerns they raised.
+   - `decision_rights` — what they have authority over. This is often implicit ("as Alice is the Payments Lead, she owns...") — capture the inference explicitly.
+   - `influence` — how much sway they have in decisions. `high` for people with veto power or budget; `medium` for subject-matter experts; `low` for individual contributors.
+3. **Mark ambiguity in `notes`.** If the material is unclear on a person's decision rights, say so: "Notes: unclear whether Alice or her manager signs off on vendor contracts — confirm in next session".
+4. **Do not fabricate.** If no interest is stated, leave the field blank. A stakeholder roster with fake interests is worse than a sparse one.
+5. **Check for missing roles.** If the engagement mentions "the compliance team" but no compliance stakeholder appears by name, add an entry with `name: TBD` and a `notes:` pointer: "Notes: compliance owner not yet named — ask for introduction".
+
+## Quality checks
+
+- [ ] Every stakeholder has `name` and `role`
+- [ ] No fabricated `interests` or `decision_rights` — each must be traceable to the source
+- [ ] `influence` ratings reflect the source's tone and evidence, not your assumption
+- [ ] Team names use consistent separator format across entries
+- [ ] Missing roles flagged with `name: TBD` rather than omitted
+- [ ] Email addresses use the domain from the engagement context (if mentioned)
+- [ ] No personal opinions in `notes` — only observed or reported behaviour
+
+## Examples
+
+### Input (kick-off notes excerpt)
+
+```
+Kick-off meeting, MeshCo engagement, 2026-04-10
+
+Present:
+- Alice Chen — Payments Lead. Has worked on payments for 8 years.
+  She wants transaction reliability to improve; auth failure rates
+  are her top KPI. She signs off on payment architecture decisions
+  and vendor contracts up to £500k.
+- Bob Murphy — Ops Manager. Cares about chargeback reduction and
+  making ops tooling easier. Bob picks ops tools but doesn't set
+  architecture.
+- Dave (surname unknown) — joined halfway through, product role.
+  Didn't speak much.
+
+Also mentioned:
+- "The compliance team" will need to be consulted on data residency.
+  We don't yet have a named compliance stakeholder.
+```
+
+### Output
+
+```yaml
+- name: Alice Chen
+  role: Payments Lead
+  team: Engineering · Payments
+  interests:
+    - Transaction reliability
+    - Reducing auth failure rates
+  decision_rights:
+    - Payments architecture sign-off
+    - Vendor contracts up to £500k
+  influence: high
+  notes: 8 years of payments experience; stated auth failure rates as her top KPI.
+
+- name: Bob Murphy
+  role: Operations Manager
+  team: Operations
+  interests:
+    - Chargeback reduction
+    - Ops tooling ergonomics
+  decision_rights:
+    - Ops tool selection
+  influence: medium
+  notes: Explicitly does not set architecture.
+
+- name: Dave
+  role: Product (surname unknown)
+  team: Product
+  influence: low
+  notes: Joined kick-off halfway; minimal participation. Confirm full name and scope.
+
+- name: TBD
+  role: Compliance owner
+  team: Compliance
+  interests:
+    - Data residency
+  influence: unknown
+  notes: Named compliance stakeholder not yet introduced. Ask Alice or Bob for an introduction — compliance sign-off is required for data residency decisions.
+```
+
+## Anti-patterns
+
+- **Guessing at interests.** If Alice didn't say she cares about X, don't write "interested in X" just because a Payments Lead typically would.
+- **Omitting unclear stakeholders.** "Dave" with a missing surname is still worth capturing — if he becomes important, you have a placeholder. If he doesn't, delete him later.
+- **Elevating yourself or your team.** This is the *client's* stakeholder list. Your delivery team isn't a stakeholder for scope/decisions (though you may track them separately).
+- **Overestimating influence.** A stakeholder who speaks a lot isn't necessarily influential. A stakeholder who has budget authority or veto power is. Use evidence.
+- **Writing novel-length `notes`.** Keep notes factual and short. Opinions and political gossip don't belong in an ontology artefact.
+- **Merging people.** "Marketing and Design" is not a stakeholder — it's two teams. Split into separate entries even if you only have a placeholder name.

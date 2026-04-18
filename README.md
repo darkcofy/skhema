@@ -1,291 +1,181 @@
 # skhema
 
-*Architecture deliverables as code.*
+*Consulting deliverables as code.*
 
-Skhema is a Git-friendly toolkit for consultants and technical architects who need to turn diagram source into client-ready architecture outputs — and a guided workflow for capturing domain knowledge into structured, reviewable models.
+A dual-product toolkit for consultant architects who need to turn messy client engagements into reproducible, shareable, reviewable artifacts — and a skills library that makes the methodology itself the force multiplier.
 
-Two products, one workspace:
+Two products, one workspace, one skills library:
 
-- **skhema** — turns PlantUML/C4 source into a self-contained HTML gallery, living architecture handbook, and presentation deck
-- **gnosis** — guides you through a structured domain discovery workflow, from stakeholder interviews to a formal domain model
+- **gnosis** *(headliner)* — guided domain-discovery workflow with readiness gates. Captures stakeholder interviews, canonical terminology, and domain ontology through six staged worksheets. Deterministic plumbing (scaffold, status, generate); extraction handled by [skills](skills/) executed against whichever LLM you have access to.
+- **skhema** *(supporting)* — deliverable packager. Consumes PlantUML (hand-written *or* exported from [Structurizr DSL](https://structurizr.com)) and produces a polished self-contained HTML gallery, living architecture handbook, and Reveal.js presentation deck for client hand-off.
+- **skills** *(force multiplier)* — a [dual-use library](skills/README.md) of SKILL.md playbooks covering gnosis extraction (transcripts → structured worksheets) and skhema authoring (Structurizr DSL, C4 best practices, Reveal decks, ADRs, living docs). Read as a human playbook, or apply with any LLM (Claude, ChatGPT, Gemini, Cursor, Ollama) — the methodology is the product.
 
-Both tools share a `clients/` directory, so a single engagement workspace holds diagrams, domain knowledge, and generated deliverables side by side.
+Both tools share a `clients/` directory, so a single engagement workspace holds the Structurizr model, domain knowledge, skills, and generated deliverables side by side.
 
-## Why skhema?
+## Why this exists
 
-Architecture work ends up fragmented across diagram files, slide decks, notes, and hand-written docs.
+Architecture consulting ends up fragmented across diagram tools, slide decks, interview notes, and hand-written docs. Each engagement re-invents structure. Reviews are unrepeatable. Methodology walks out the door when people change roles.
 
-Skhema keeps those outputs connected:
+skhema keeps it connected and repeatable:
 
-- Write and version diagrams as code
-- Reuse shared architecture models across engagements
-- Isolate each client's work in its own workspace
-- Regenerate docs and presentations as the architecture evolves
-- Capture domain knowledge through a guided, staged workflow
+- Structurizr DSL as the source of truth for C4 models (mature, cross-engine, battle-tested)
+- Gnosis's readiness-gated staged worksheets for domain discovery (the missing piece in every consulting toolkit)
+- Jinja2-templated outputs that look professional without custom design work
+- A **skills library** that captures the methodology in a form both humans and LLMs can execute
+- Clean separation: Python for deterministic plumbing, Markdown SKILL.md files for the judgement-heavy work
 
-Instead of maintaining separate files, docs, and decks, skhema keeps them connected. Instead of blank-page domain modeling, gnosis gives you structured worksheets and readiness-aware artifact generation.
+## Positioning
+
+| | Does C4 modelling | Domain discovery | Client-ready HTML/PDF hand-off | Dual-use methodology library |
+|---|---|---|---|---|
+| **Structurizr** | ✅ (best in class — owned here) | ❌ | ⚠️ functional, not pretty | ❌ |
+| **arc42** | — (template only) | ❌ | ⚠️ template | ❌ |
+| **Backstage** | ❌ (internal portal, not client) | ❌ | ❌ | ❌ |
+| **skhema + gnosis** | — (delegates to Structurizr) | ✅ | ✅ | ✅ |
+
+Use Structurizr for modelling. Use gnosis for discovery. Use skhema to package the output for client hand-off. Use skills as the methodology playbook.
 
 ## Who this is for
 
-Skhema is designed for:
+- Big-4 and independent architecture consultants running data / platform / enterprise engagements
+- Solutions architects producing client-facing deliverables
+- Anyone who has ever emailed a ZIP of diagrams to a partner and felt embarrassed
 
-- Architecture consultants
-- Solutions architects
-- Platform and enterprise architecture teams
-- Technical teams that prefer reviewable, text-first workflows
+It is **not**:
 
-It is not a drag-and-drop diagram editor, a collaborative whiteboard, or a hosted documentation platform.
+- A drag-and-drop diagram editor
+- A collaborative whiteboard
+- A hosted SaaS documentation platform
+- An AI product (there's no LLM code in this repo — skills work with whichever LLM you bring)
 
 ## Quick start
-
-### Diagrams (skhema)
-
-```bash
-skhema init acme
-skhema demo acme
-```
-
-This scaffolds a client workspace and generates:
-
-- `clients/acme/index.html` — interactive diagram gallery
-- `clients/acme/acme-architecture.html` — living architecture handbook
-- `clients/acme/deck.pdf` — stakeholder presentation
-
-### Domain knowledge (gnosis)
-
-```bash
-gnosis init acme --domain "Order Management"
-gnosis status --client acme
-gnosis generate available --client acme
-```
-
-This scaffolds a guided ontology workspace and generates:
-
-- `clients/acme/ontology/00_scope/` through `05_formalization/` — guided worksheets
-- `clients/acme/ontology/generated/` — glossary, conflict reports, concept maps
-
-## Installation
 
 ### Docker (recommended)
 
 ```bash
 docker compose build
-docker compose run skhema skhema help
-docker compose run skhema gnosis help
+
+# Live model review in your browser
+CLIENT=meshco docker compose up structurizr-lite
+# → open http://localhost:8080
+
+# One-shot generate all deliverables
+docker compose run skhema skhema structurizr export --client meshco
+docker compose run skhema skhema render --client meshco --all --animate
+docker compose run skhema skhema gallery --client meshco
+docker compose run skhema skhema docs --client meshco
+docker compose run skhema skhema deck --client meshco
 ```
 
-All dependencies (PlantUML, graphviz, weasyprint) are bundled. Mount your `clients/` directory and go.
+Outputs land in `clients/meshco/`:
 
-```bash
-docker compose run skhema skhema demo acme
-```
+- `index.html` — diagram gallery with search, filter, and ADR cross-references
+- `meshco-architecture.html` — living architecture handbook
+- `deck.html` — self-contained Reveal.js presentation (responsive, keyboard-nav, speaker notes)
+- `ontology/generated/` — engagement brief, glossary, terminology conflicts, concept map
+
+For a PDF of the deck: open `deck.html?print-pdf` in any browser, Cmd+P, Save as PDF.
 
 ### Local
 
-**Requirements:** Python 3.13+, Git, uv, PlantUML binary, graphviz.
-
 ```bash
-git clone <repo-url> ~/skhema
-cd ~/skhema
+git clone <repo-url> ~/skhema && cd ~/skhema
 uv sync
-echo 'export PATH="$HOME/skhema/bin:$PATH"' >> ~/.bashrc  # or ~/.zshrc
-source ~/.bashrc
+
+# skhema / gnosis are now on PATH as proper entry points
+skhema --help
+gnosis --help
 ```
 
-Set `PLANTUML_BIN` if PlantUML is not on your PATH.
+Requires Python 3.11+, PlantUML binary on PATH (or `PLANTUML_BIN` env var), and graphviz. For Structurizr export you also need `structurizr-cli` (or use the Docker image).
 
-Verify:
+## Gnosis workflow
 
 ```bash
-skhema help
-gnosis help
+gnosis init meshco --domain "Retail Data Mesh"
+# Fill in the six stages — either by hand, or by applying skills to transcripts
+# with your LLM of choice:
+#   • skills/gnosis/extracting-concepts-from-transcripts.md
+#   • skills/gnosis/extracting-glossary-terms.md
+#   • skills/gnosis/detecting-terminology-synonyms.md
+#   • skills/gnosis/extracting-stakeholders.md
+#   • skills/gnosis/extracting-events-and-lifecycles.md
+
+gnosis status --client meshco       # See stage completion + artifact readiness
+gnosis generate available --client meshco   # Produce all READY artifacts
 ```
 
-## skhema CLI reference
-
-### `skhema init` — Scaffold a new client
+## Skhema workflow
 
 ```bash
-skhema init acme
-skhema init acme-corp   # "acme-corp" → "Acme Corp"
+skhema structurizr export --client meshco    # Structurizr DSL → PlantUML
+skhema render --client meshco --all --animate  # PlantUML → SVG
+skhema gallery --client meshco                # SVGs → gallery.html
+skhema docs --client meshco                    # SVGs + prose → handbook.html
+skhema deck --client meshco                    # SVGs → Reveal.js deck.html
+skhema adr --client meshco                     # List ADRs + coverage
+skhema validate                                # Lint conventions
 ```
 
-Creates `clients/<name>/` with `client.yaml`, `docs/overview.md`, and empty diagram directories.
-
-### `skhema render` — Render diagrams
-
-```bash
-skhema render --client acme --all --animate    # All client diagrams with animation
-skhema render --client acme --all --png        # PNG instead of SVG
-skhema render diagrams/c4/example.puml         # Single file
-skhema render file.puml --output out.svg       # Explicit output path
-skhema render file.puml --dry-run              # Print resolved source only
-```
-
-### `skhema gallery` — Generate HTML gallery
-
-```bash
-skhema gallery --client acme
-skhema gallery --client acme --title "Acme Corp" --history 5
-```
-
-Output: `clients/acme/index.html` — self-contained HTML with dark mode, sidebar nav, modal preview, search/filter.
-
-### `skhema docs` — Generate living docs handbook
-
-```bash
-skhema docs --client acme
-skhema docs --client acme --title "Acme Corp" --output acme-v2.html
-```
-
-Output: `clients/acme/acme-architecture.html` — self-contained HTML with cover page, table of contents, companion prose, inlined SVG diagrams. Print-friendly.
-
-### `skhema deck` — Export PDF or PowerPoint
-
-```bash
-skhema deck --client acme              # Merged PDF deck
-skhema deck --client acme --pptx       # PowerPoint
-skhema deck --client acme --pages      # PDF + individual pages
-```
-
-### `skhema adr` — Architecture Decision Records
-
-```bash
-skhema adr --client acme              # List all ADRs with linked elements and concepts
-skhema adr --client acme --coverage   # Show elements without ADR coverage
-```
-
-ADRs live in `clients/<name>/adrs/` as standard markdown files (e.g. `ADR01-event-driven-ingestion.md`). Link them to diagram elements and gnosis concepts with HTML comment tags:
-
-```markdown
-<!-- skhema:elements payment_events, kafka_cluster -->
-<!-- gnosis:concepts Event, PaymentReceived -->
-```
-
-Linked ADRs appear automatically in gallery diagram panels and living docs sections.
-
-### `skhema validate` — Lint diagrams
-
-```bash
-skhema validate
-```
-
-Checks for: inline element definitions, hardcoded colours, duplicate element IDs.
-
-### `skhema demo` — Regenerate all outputs
-
-```bash
-skhema demo         # Demo client
-skhema demo acme    # Specific client
-```
-
-Runs render + gallery + docs + deck in sequence.
-
-## gnosis CLI reference
-
-### `gnosis init` — Scaffold a domain workspace
-
-```bash
-gnosis init acme --domain "Order Management"
-```
-
-Creates `clients/acme/ontology/` with guided worksheets for 6 stages of domain discovery. Each file includes facilitator instructions, session guides, capture formats, examples, and completion criteria.
-
-### `gnosis status` — Show progress and readiness
-
-```bash
-gnosis status --client acme
-gnosis status --client acme --validate
-```
-
-Shows stage completion percentages, artifact readiness (READY / PARTIAL / BLOCKED), and suggested next steps. The `--validate` flag adds structural checks.
-
-### `gnosis generate` — Generate artifacts
-
-```bash
-gnosis generate available --client acme       # All ready artifacts
-gnosis generate engagement_brief --client acme # Specific artifact
-```
-
-Generates artifacts that current evidence supports:
-
-| Artifact | Stage | Output |
-|----------|-------|--------|
-| Engagement brief | 0 | `generated/reports/engagement-brief.md` |
-| Draft glossary | 1 | `generated/glossary/draft-glossary.md` |
-| Terminology conflict report | 1 | `generated/reports/terminology-conflicts.md` |
-| Concept map | 2 | `generated/diagrams/concept-map.puml` + SVG |
-
-## The gnosis workflow
-
-Gnosis guides you through a fixed sequence of domain discovery stages:
-
-| Stage | Goal | Key files |
-|-------|------|-----------|
-| 0. Setup | Define scope, stakeholders, systems | engagement.md, stakeholders.yaml |
-| 1. Language | Capture terminology from stakeholders | glossary-seeds.csv, synonym-conflicts.md |
-| 2. Concepts | Identify canonical concepts and relationships | candidate-concepts.yaml, concept-definitions.md |
-| 3. Mappings | Map concepts to source systems | source-to-canonical.csv, authority-notes.md |
-| 4. Behavior | Capture lifecycles, events, rules | lifecycle-states.yaml, business-rules.md |
-| 5. Formalization | Produce a structured domain model | ontology.yaml, properties.yaml, enums.yaml |
-
-Each file is a guided worksheet — not an empty blob, but a facilitator guide with session instructions, capture formats, examples, and completion checkboxes. Artifacts unlock as readiness improves.
-
-Run `gnosis status` to see where you are and what to do next.
-
-## Repository structure
+## Repository layout
 
 ```
-skhema/                     # repo root
-├── bin/
-│   ├── skhema              # diagramming CLI
-│   └── gnosis              # domain knowledge CLI
-├── clients/                # shared client directory
-│   └── <client>/
-│       ├── client.yaml     # shared metadata
-│       ├── diagrams/       # skhema: diagram source
-│       ├── adrs/           # skhema: architecture decision records
-│       ├── ontology/       # gnosis: domain worksheets + generated artifacts
-│       ├── models/         # skhema: client-specific model overrides
-│       ├── docs/           # skhema: companion prose
-│       └── rendered/       # skhema: rendered SVGs (gitignored)
-├── skhema/                 # diagramming product
-│   ├── scripts/            # Python modules
-│   ├── lib/                # theme, macros
-│   ├── models/             # shared C4 element definitions
-│   └── templates/          # diagram scaffolds
-├── gnosis/                 # domain knowledge product
-│   ├── scripts/            # Python modules
-│   ├── templates/          # worksheet templates
-│   └── rules/              # readiness rules (YAML)
-├── manifest.yaml           # skhema element registry
-└── README.md
+skhema/
+├── src/
+│   ├── skhema/            # Packaging: render, gallery, docs, deck, adr, structurizr
+│   └── gnosis/            # Discovery: init, status, generate, readiness
+├── skills/                # Dual-use methodology playbooks
+│   ├── gnosis/            # 5 extraction skills
+│   ├── skhema/            # 5 authoring skills
+│   └── README.md          # Dual-use explanation + portability table
+├── clients/
+│   └── meshco/            # Public demo client (MeshCo Retail Data Mesh)
+│       ├── workspace.dsl  # Structurizr DSL — source of truth
+│       ├── ontology/      # Gnosis workspace
+│       ├── adrs/          # Architecture decision records
+│       ├── docs/          # Companion prose for the handbook
+│       └── diagrams/      # Hand-written .puml (sequence, ERD, deployment)
+├── manifest.yaml          # Reference catalogue — 2026 data-arch vocabulary
+├── Dockerfile             # Python + PlantUML + Structurizr CLI + graphviz
+├── docker-compose.yml     # skhema + structurizr-lite services
+└── pyproject.toml         # Python package config
 ```
 
-### Include resolution (skhema)
+Private client workspaces (real EY / previous-employer data) live locally under `clients/<name>/` and are gitignored. Only `clients/meshco/` is committed.
 
-When rendering with `--client`, includes are resolved in order:
-1. Relative to the source file
-2. `clients/<name>/models/`
-3. `skhema/models/` (shared)
-4. `skhema/lib/` (shared)
+## Skills library
 
-## Living docs
+The skills are the differentiator. Each file in [`skills/`](skills/) is two things at once:
 
-The docs handbook is a living document — rerun `skhema docs` after any diagram or prose change and the output reflects current state.
+- **A human-readable best-practices playbook** — methodology for a consultant to apply by hand.
+- **An LLM-executable instruction file** — point any LLM at it plus your raw material, get structured output.
 
-Companion markdown files are optional. If present, their content appears above the corresponding diagram. If absent, the diagram appears with an auto-generated title.
+Skills follow the [Anthropic SKILL.md format](https://github.com/obra/superpowers/blob/main/skills/writing-skills/anthropic-best-practices.md). Works natively in Claude Code; adapter-compatible with Cursor, Windsurf, Cline, ChatGPT Custom GPTs, and Gemini Gems. See [`skills/README.md`](skills/README.md) for the portability table.
 
 ## Conventions
 
 - Element IDs: `snake_case`
-- File names: `kebab-case`
-- Theme variables set BEFORE C4 include
-- Elements defined ONCE in model layer, never in view files
-- AI agents: read `manifest.yaml` first, then load relevant model files
+- Filenames: `kebab-case`
+- Client workspaces: `clients/<kebab-case-client>/`
+- ADRs: `ADR<NN>-<kebab-title>.md` with `<!-- skhema:elements -->` and `<!-- gnosis:concepts -->` tags
+- Structurizr DSL: `clients/<name>/workspace.dsl` (Lite convention)
 
-## Current limitations
+## Development
 
-- Rendering requires a local PlantUML binary (bundled in Docker image)
-- PDF deck export uses weasyprint for SVG-to-PDF conversion
-- Gnosis artifact generation is deterministic template-based — no LLM inference
+```bash
+uv sync                         # install everything
+uv run pytest tests/            # 217 unit + e2e tests (local_only skipped)
+uv run pytest tests/ -m local_only   # run real-client tests (Herdwatch)
+uv run ruff check src/ tests/
+uv run mypy src/
+```
+
+Tests are designed to run without PlantUML installed — the e2e suite mocks the binary. Full pipeline end-to-end runs against the `meshco` client in CI via the Dockerfile.
+
+## Status
+
+v3 — gnosis-led pivot. Previous v1/v2 positioning as "architecture diagrams as code" has been retired; Structurizr owns that space. See the design spec in your local `docs/superpowers/specs/` (gitignored) for the full v3 rationale.
+
+## License
+
+Apache 2.0 — see [LICENSE](LICENSE).

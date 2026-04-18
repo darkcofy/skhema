@@ -18,8 +18,8 @@ ADD https://github.com/plantuml/plantuml/releases/download/v1.2025.4-native/plan
 RUN unzip /tmp/plantuml.zip -d /opt/plantuml && \
     chmod +x /opt/plantuml/plantuml-headless
 
-ARG STRUCTURIZR_CLI_VERSION=2025.03.30
-ADD https://github.com/structurizr/cli/releases/download/v${STRUCTURIZR_CLI_VERSION}/structurizr-cli-${STRUCTURIZR_CLI_VERSION}.zip \
+ARG STRUCTURIZR_CLI_VERSION=2025.11.09
+ADD https://github.com/structurizr/cli/releases/download/v${STRUCTURIZR_CLI_VERSION}/structurizr-cli.zip \
     /tmp/structurizr-cli.zip
 RUN unzip /tmp/structurizr-cli.zip -d /opt/structurizr-cli && \
     chmod +x /opt/structurizr-cli/structurizr.sh

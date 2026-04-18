@@ -1,8 +1,6 @@
 """Tests for the deck export script (Reveal.js HTML deck)."""
 import os
-from unittest.mock import patch
 
-import pytest
 
 from skhema.deck import (
     Diagram,

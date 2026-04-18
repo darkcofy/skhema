@@ -1,6 +1,4 @@
 """Tests for the render script's include resolution logic."""
-import os
-import tempfile
 import pytest
 from unittest.mock import patch, MagicMock
 
@@ -23,7 +21,7 @@ class TestResolveIncludes:
     def test_local_include_inlined(self, tmp_path):
         inc_file = tmp_path / "inc.puml"
         inc_file.write_text("' included content\n!define FOO bar")
-        source = f"!include inc.puml\nPerson(a, 'A', 'desc')"
+        source = "!include inc.puml\nPerson(a, 'A', 'desc')"
         result = resolve_includes(source, base_dir=str(tmp_path))
         assert "' included content" in result
         assert "!define FOO bar" in result

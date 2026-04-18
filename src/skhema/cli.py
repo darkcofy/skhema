@@ -1,6 +1,4 @@
 """skhema CLI — Typer entry point."""
-import os
-import subprocess
 import sys
 from pathlib import Path
 

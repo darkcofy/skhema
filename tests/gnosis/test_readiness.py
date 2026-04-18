@@ -7,7 +7,6 @@ from gnosis.readiness import (
     evaluate_artifact,
     evaluate_all,
     compute_stage_completion,
-    ArtifactStatus,
 )
 
 

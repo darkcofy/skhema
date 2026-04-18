@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+      - name: Install dependencies
+        run: uv sync --all-extras
+
+      - name: Lint (ruff)
+        run: uv run ruff check src/ tests/
+        continue-on-error: false
+
+      - name: Type check (mypy, non-blocking)
+        run: uv run mypy src/ || true
+
+      - name: Unit + e2e tests (excluding local_only)
+        run: uv run pytest tests/ -v
+
+      - name: MeshCo readiness check
+        run: uv run gnosis status --client meshco
+
+  docker-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: lint-and-test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build skhema image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: skhema:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test CLI in container
+        run: |
+          docker run --rm skhema:ci skhema --help
+          docker run --rm skhema:ci gnosis --help
+          docker run --rm skhema:ci plantuml -version
+          docker run --rm skhema:ci structurizr-cli version
+
+      - name: MeshCo end-to-end pipeline in container
+        run: |
+          # Validate the committed workspace.dsl parses
+          docker run --rm \
+            -v "${{ github.workspace }}/clients:/workspace/clients" \
+            skhema:ci skhema structurizr validate --client meshco
+
+          # Export → render → gallery/docs/deck
+          docker run --rm \
+            -v "${{ github.workspace }}/clients:/workspace/clients" \
+            -v "${{ github.workspace }}/src:/workspace/src:ro" \
+            skhema:ci bash -c "skhema structurizr export --client meshco && \
+                                skhema render --client meshco --all && \
+                                skhema gallery --client meshco && \
+                                skhema docs --client meshco && \
+                                skhema deck --client meshco"
+
+          # Verify outputs exist and contain expected content
+          test -f clients/meshco/index.html
+          test -f clients/meshco/meshco-architecture.html
+          test -f clients/meshco/deck.html
+          grep -q "MeshCo Retail" clients/meshco/deck.html
+          grep -q "Reveal.initialize" clients/meshco/deck.html

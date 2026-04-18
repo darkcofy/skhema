@@ -1,5 +1,4 @@
 """Tests for the validation script."""
-import pytest
 from skhema.validate import (
     check_inline_definitions,
     check_hardcoded_colours,

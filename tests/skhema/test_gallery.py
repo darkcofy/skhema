@@ -1,6 +1,4 @@
 """Tests for the gallery generator."""
-import os
-import pytest
 from skhema.gallery import (
     discover_diagrams,
     group_by_type,

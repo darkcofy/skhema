@@ -2,7 +2,7 @@
 import os
 import pytest
 
-from gnosis.client import detect_client, resolve_workspace, find_repo_root
+from gnosis.client import detect_client, resolve_workspace
 
 
 @pytest.fixture

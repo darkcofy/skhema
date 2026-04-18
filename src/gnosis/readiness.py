@@ -4,7 +4,6 @@ Loads rules from artifacts.yaml, checks file existence and content thresholds,
 returns status (READY/PARTIAL/BLOCKED) per artifact.
 """
 import os
-import re
 from dataclasses import dataclass, field
 
 from gnosis.parsers import (

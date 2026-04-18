@@ -5,7 +5,6 @@ and which artifacts are ready to be generated.
 """
 import argparse
 import os
-import sys
 
 from gnosis.client import find_repo_root, detect_client, resolve_workspace
 from gnosis.readiness import (
@@ -14,7 +13,6 @@ from gnosis.readiness import (
     compute_stage_completion,
     STAGE_NAMES,
     STAGE_FILES,
-    ArtifactStatus,
 )
 
 

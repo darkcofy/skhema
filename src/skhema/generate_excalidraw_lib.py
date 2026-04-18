@@ -9,7 +9,6 @@ Usage:
 import argparse
 import json
 import os
-import sys
 import time
 
 from skhema.manifest import parse_manifest

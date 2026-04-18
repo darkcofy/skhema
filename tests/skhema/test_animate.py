@@ -1,8 +1,7 @@
 """Tests for the SVG arrow animation post-processor."""
 import os
 import xml.etree.ElementTree as ET
-import pytest
-from skhema.animate import animate_svg, MARCHING_ANT_CSS
+from skhema.animate import animate_svg
 
 FIXTURE_PATH = os.path.join(
     os.path.dirname(__file__), "fixtures", "sample-link-groups.svg"

@@ -14,7 +14,6 @@ import sys
 
 from gnosis.client import find_repo_root, detect_client, resolve_workspace
 from gnosis.readiness import load_rules, evaluate_all
-from gnosis.parsers import count_yaml_entries
 
 
 # ---------------------------------------------------------------------------

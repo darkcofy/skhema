@@ -1,6 +1,4 @@
 """Tests for the living docs generator."""
-import os
-import pytest
 from skhema.docs import generate_docs_html, parse_markdown
 
 

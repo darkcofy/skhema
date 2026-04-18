@@ -223,7 +223,6 @@ def generate_pptx_deck(client_name: str, sections: list[Section], output_path: s
         )
         sys.exit(1)
 
-    import tempfile
 
     prs = Presentation()
     prs.slide_width = Inches(13.333)
@@ -242,7 +241,6 @@ def generate_pptx_deck(client_name: str, sections: list[Section], output_path: s
     p2.font.size = Pt(24)
 
     # PPTX needs PNG, not SVG — re-render each diagram
-    from skhema.render import render_plantuml
     from skhema.render import resolve_includes  # noqa: F401 — already imported above
 
     for section in sections:
@@ -328,7 +326,7 @@ def main():
     with open(out_html, "w") as f:
         f.write(html)
     print(f"Deck -> {out_html}")
-    print(f"       Open in any browser to present; append ?print-pdf and Save-as-PDF for a PDF copy.")
+    print("       Open in any browser to present; append ?print-pdf and Save-as-PDF for a PDF copy.")
 
     if args.pptx:
         out_pptx = os.path.join(client_dir, "deck.pptx")

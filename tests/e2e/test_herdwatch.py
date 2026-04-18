@@ -7,7 +7,6 @@ This test assumes the user has rebuilt `clients/herdwatch/` using the v3
 stack (workspace.dsl + gnosis ontology). If the client doesn't exist,
 the test is skipped with a message.
 """
-import os
 from pathlib import Path
 
 import pytest

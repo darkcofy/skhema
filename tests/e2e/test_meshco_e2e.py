@@ -11,11 +11,7 @@ binary present. Tests assert output *shape* (HTML structure, required
 sections) rather than byte-for-byte snapshots — snapshots would force-
 regenerate on every wording tweak.
 """
-import os
-import subprocess
-import sys
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 

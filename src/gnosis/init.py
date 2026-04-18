@@ -5,7 +5,6 @@ with variable substitution.
 """
 import argparse
 import os
-import shutil
 import sys
 from datetime import date
 

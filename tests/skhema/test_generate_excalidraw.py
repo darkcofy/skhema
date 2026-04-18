@@ -1,7 +1,5 @@
 """Tests for the Excalidraw library generator."""
 import json
-import os
-import pytest
 from skhema.generate_excalidraw_lib import (
     build_library_item,
     build_library,

@@ -13,7 +13,6 @@ import os
 import re
 import subprocess
 import sys
-from pathlib import Path
 
 DIAGRAMS_DIR = "diagrams"
 RENDERED_DIR = "rendered"

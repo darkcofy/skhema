@@ -1,7 +1,4 @@
 """Tests for file parsers — entry counting for YAML, CSV, and Markdown."""
-import os
-import tempfile
-import pytest
 
 from gnosis.parsers import (
     count_yaml_entries,

@@ -94,7 +94,7 @@ def view(client: str) -> None:
     Expects the structurizr-lite docker-compose service to be running:
         CLIENT=<client> docker compose up structurizr-lite
     """
-    url = f"http://localhost:8080"
+    url = "http://localhost:8080"
     print(f"Opening Structurizr Lite at {url}")
     print(f"(Make sure `CLIENT={client} docker compose up structurizr-lite` is running.)")
     try:

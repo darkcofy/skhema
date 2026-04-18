@@ -73,6 +73,14 @@ def adr(ctx: typer.Context) -> None:
     _run_module("skhema.adr", list(ctx.args))
 
 
+@app.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
+def structurizr(ctx: typer.Context) -> None:
+    """Export/validate/view Structurizr DSL workspaces."""
+    _run_module("skhema.structurizr", list(ctx.args))
+
+
 @app.command()
 def init(name: str) -> None:
     """Scaffold a new client directory structure."""

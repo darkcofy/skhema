@@ -4,3 +4,14 @@ services:
     volumes:
       - ./clients:/workspace/clients
       - ./manifest.yaml:/workspace/manifest.yaml:ro
+      - ./skills:/workspace/skills:ro
+
+  structurizr-lite:
+    image: structurizr/lite
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./clients/${CLIENT:-meshco}:/usr/local/structurizr
+    environment:
+      # Structurizr Lite watches workspace.dsl in the mounted path
+      - STRUCTURIZR_WORKSPACE_FILENAME=workspace

@@ -39,30 +39,20 @@ def generate_engagement_brief(workspace_path: str, rules: dict) -> str:
         with open(engagement_path, "r") as f:
             engagement_content = f.read()
 
-    # Read stakeholders.yaml
+    # Read stakeholders.yaml using PyYAML.
+    # Accepts either a top-level list or a top-level mapping with a 'stakeholders' key.
+    import yaml
     stakeholders_path = os.path.join(workspace_path, "00_scope", "stakeholders.yaml")
-    stakeholders = []
+    stakeholders: list[dict] = []
     if os.path.isfile(stakeholders_path):
         with open(stakeholders_path, "r") as f:
-            current = {}
-            for line in f:
-                stripped = line.strip()
-                if not stripped or stripped.startswith("#"):
-                    continue
-                if stripped.startswith("- "):
-                    if current:
-                        stakeholders.append(current)
-                    current = {}
-                    # Parse inline key-value after "- "
-                    rest = stripped[2:]
-                    if ":" in rest:
-                        key, val = rest.split(":", 1)
-                        current[key.strip()] = val.strip()
-                elif ":" in stripped:
-                    key, val = stripped.split(":", 1)
-                    current[key.strip()] = val.strip()
-            if current:
-                stakeholders.append(current)
+            data = yaml.safe_load(f)
+        if isinstance(data, list):
+            stakeholders = [d for d in data if isinstance(d, dict)]
+        elif isinstance(data, dict):
+            raw = data.get("stakeholders", [])
+            if isinstance(raw, list):
+                stakeholders = [d for d in raw if isinstance(d, dict)]
 
     # Read success-criteria.md (optional)
     criteria_path = os.path.join(workspace_path, "00_scope", "success-criteria.md")
@@ -214,28 +204,17 @@ def generate_concept_map(workspace_path: str, rules: dict) -> str:
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     concepts_path = os.path.join(workspace_path, "02_concepts", "candidate-concepts.yaml")
-    concepts = []
+    concepts: list[dict] = []
     if os.path.isfile(concepts_path):
-        # Parse YAML list entries
+        import yaml
         with open(concepts_path, "r") as f:
-            current = {}
-            for line in f:
-                stripped = line.strip()
-                if not stripped or stripped.startswith("#"):
-                    continue
-                if stripped.startswith("- "):
-                    if current:
-                        concepts.append(current)
-                    current = {}
-                    rest = stripped[2:]
-                    if ":" in rest:
-                        key, val = rest.split(":", 1)
-                        current[key.strip()] = val.strip().strip('"')
-                elif ":" in stripped:
-                    key, val = stripped.split(":", 1)
-                    current[key.strip()] = val.strip().strip('"')
-            if current:
-                concepts.append(current)
+            data = yaml.safe_load(f)
+        if isinstance(data, list):
+            concepts = [d for d in data if isinstance(d, dict)]
+        elif isinstance(data, dict):
+            raw = data.get("concepts", [])
+            if isinstance(raw, list):
+                concepts = [d for d in raw if isinstance(d, dict)]
 
     # Group concepts by domain
     domains = {}
@@ -265,17 +244,24 @@ def generate_concept_map(workspace_path: str, rules: dict) -> str:
         lines.append("}")
         lines.append("")
 
-    # Add relationships if concepts reference each other
+    # Add relationships. `related_to` is preferably a YAML list, but a
+    # comma-separated string is accepted for hand-written legacy files.
     for c in concepts:
         name = c.get("name", "Unknown")
         safe_name = name.replace(" ", "_").replace("-", "_")
-        related = c.get("related_to", "")
-        if related:
-            for rel in related.split(","):
-                rel = rel.strip().strip('"')
-                if rel:
-                    safe_rel = rel.replace(" ", "_").replace("-", "_")
-                    lines.append(f"{safe_name} -- {safe_rel}")
+        related = c.get("related_to")
+        if not related:
+            continue
+        if isinstance(related, str):
+            rels = [r.strip().strip('"') for r in related.split(",")]
+        elif isinstance(related, list):
+            rels = [str(r).strip() for r in related]
+        else:
+            rels = []
+        for rel in rels:
+            if rel:
+                safe_rel = rel.replace(" ", "_").replace("-", "_")
+                lines.append(f"{safe_name} -- {safe_rel}")
 
     lines.append("")
     lines.append("@enduml")

@@ -135,7 +135,30 @@ def evaluate_all(rules: dict, workspace_path: str) -> dict[str, ArtifactStatus]:
     return results
 
 
-def _file_completeness(file_path: str, rules: dict) -> float:
+def _build_path_to_rule_index(rules: dict) -> dict[str, tuple[str, int]]:
+    """Precompute a {relative_path: (kind, threshold)} map from the rules.
+
+    Replaces the previous O(n*m) nested scan in `_file_completeness` where every
+    single file lookup walked every rule and every file_req. With this index the
+    lookup is O(1) per file.
+    """
+    index: dict[str, tuple[str, int]] = {}
+    for artifact in rules.values():
+        for file_req in artifact.get("requires", {}).get("files", []):
+            path = file_req.get("path")
+            if not path:
+                continue
+            if "min_entries" in file_req:
+                index[path] = ("entries", file_req["min_entries"])
+            elif "min_rows" in file_req:
+                index[path] = ("rows", file_req["min_rows"])
+            else:
+                # Rule exists but no numeric threshold; mark for "exists-only" scoring
+                index.setdefault(path, ("exists", 0))
+    return index
+
+
+def _file_completeness(file_path: str, rules: dict, _index: dict | None = None) -> float:
     """Compute completeness score for a single file (0.0 to 1.0).
 
     - Markdown: checked_criteria / total_criteria
@@ -145,19 +168,17 @@ def _file_completeness(file_path: str, rules: dict) -> float:
     if not os.path.isfile(file_path):
         return 0.0
 
-    rel_path = None
-    # Find this file's rule (if any)
-    expected = None
-    for artifact in rules.values():
-        for file_req in artifact.get("requires", {}).get("files", []):
-            # Match by filename
-            if file_path.endswith(file_req["path"]):
-                rel_path = file_req["path"]
-                if "min_entries" in file_req:
-                    expected = ("entries", file_req["min_entries"])
-                elif "min_rows" in file_req:
-                    expected = ("rows", file_req["min_rows"])
-                break
+    index = _index if _index is not None else _build_path_to_rule_index(rules)
+
+    # Match this file to a rule path by suffix (rules store relative paths,
+    # file_path is absolute). Longest suffix wins, so `01_language/glossary-seeds.csv`
+    # beats a less-specific shorter match.
+    best_match_len = -1
+    expected: tuple[str, int] | None = None
+    for rule_path, kind_threshold in index.items():
+        if file_path.endswith(rule_path) and len(rule_path) > best_match_len:
+            best_match_len = len(rule_path)
+            expected = kind_threshold
 
     ext = os.path.splitext(file_path)[1]
 
@@ -180,14 +201,14 @@ def _file_completeness(file_path: str, rules: dict) -> float:
 
     if ext == ".yaml":
         actual = count_yaml_entries(file_path)
-        if expected and expected[0] == "entries":
-            return min(actual / expected[1], 1.0) if expected[1] > 0 else (1.0 if actual > 0 else 0.0)
+        if expected and expected[0] == "entries" and expected[1] > 0:
+            return min(actual / expected[1], 1.0)
         return 1.0 if actual > 0 else 0.0
 
     if ext == ".csv":
         actual = count_csv_rows(file_path)
-        if expected and expected[0] == "rows":
-            return min(actual / expected[1], 1.0) if expected[1] > 0 else (1.0 if actual > 0 else 0.0)
+        if expected and expected[0] == "rows" and expected[1] > 0:
+            return min(actual / expected[1], 1.0)
         return 1.0 if actual > 0 else 0.0
 
     return 0.0
@@ -202,10 +223,11 @@ def compute_stage_completion(stage: int, rules: dict, workspace_path: str) -> in
     if not files:
         return 0
 
-    scores = []
-    for rel_path in files:
-        full_path = os.path.join(workspace_path, rel_path)
-        scores.append(_file_completeness(full_path, rules))
+    index = _build_path_to_rule_index(rules)
+    scores = [
+        _file_completeness(os.path.join(workspace_path, rel_path), rules, index)
+        for rel_path in files
+    ]
 
     if not scores:
         return 0

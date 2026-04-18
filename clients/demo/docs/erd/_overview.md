@@ -1,1 +1,0 @@
-Entity relationship diagrams document the core data models. These map directly to PostgreSQL schemas in the operational database. All tables use UUIDs as primary keys and `timestamptz` for temporal columns.

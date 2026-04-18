@@ -1,8 +1,0 @@
-name: "NovaPay"
-subtitle: "Digital Payments Platform — Architecture Documentation"
-accent_color: "#D97706"
-sections:
-  - c4
-  - sequence
-  - erd
-  - deployment

@@ -1,1 +1,0 @@
-Sequence diagrams trace key transaction flows through the system, showing the exact order of service interactions. These are particularly useful for understanding latency-critical paths and error handling branches.

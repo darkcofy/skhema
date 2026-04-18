@@ -1,1 +1,0 @@
-C4 diagrams model the NovaPay platform at multiple levels of abstraction. Start with the system context for the big picture, then drill into container and component views for implementation detail. Animated arrows (marked with `~` in PlantUML) indicate data flows that are particularly important for understanding system behavior.

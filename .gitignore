@@ -9,16 +9,18 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Client folders (only demo is committed)
+# Client folders — only public demo (meshco) is committed.
+# All other client workspaces (real EY / Herdwatch content) live locally.
 clients/*
-!clients/demo/
+!clients/meshco/
 
-# Client rendered output and generated galleries (for demo)
+# Rendered + generated artefacts are always local (reproducible from source)
 clients/*/rendered/
 clients/*/*.html
 clients/*/*.pdf
 clients/*/*.pptx
 clients/*/deck_pages/
+clients/*/diagrams/exported/
 
 # Working docs — plans, specs, design notes (local-only, not part of deliverable)
 docs/

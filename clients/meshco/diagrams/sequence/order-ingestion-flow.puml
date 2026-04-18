@@ -1,0 +1,60 @@
+@startuml order-ingestion-flow
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam sequence {
+    ArrowColor #374151
+    ActorBackgroundColor #1168bd
+    ActorBorderColor #0F52BA
+    LifeLineBorderColor #9CA3AF
+    ParticipantBackgroundColor #F3F4F6
+    ParticipantBorderColor #9CA3AF
+    ParticipantFontColor #111827
+}
+
+title MeshCo — End-to-end order ingestion, bronze → silver → gold
+
+actor "POS / Commerce" as Source
+participant "Ingestion\n(Debezium + Kafka)" as Ingest
+participant "Bronze\n(raw Iceberg)" as Bronze
+participant "Silver\n(dbt joined)" as Silver
+participant "Gold\n(orders.transactional_orders)" as Gold
+participant "Contract Registry" as Contracts
+participant "Catalog\n(Unity)" as Catalog
+actor "Finance / Analyst" as Consumer
+
+Source -> Ingest : Order event (CDC or webhook)
+activate Ingest
+Ingest -> Bronze : Append raw row (type-safe)
+deactivate Ingest
+
+Bronze -> Silver : dbt silver model runs (15m)
+activate Silver
+Silver -> Silver : Identity resolution\n+ deduplication
+Silver -> Gold : dbt gold model runs (hourly)
+deactivate Silver
+
+activate Gold
+Gold -> Contracts : Validate schema vs contract
+alt Contract valid
+    Contracts --> Gold : OK
+    Gold -> Catalog : Emit column-level lineage
+    Gold --> Consumer : Available via marketplace
+else Contract break
+    Contracts --> Gold : Breaking change detected
+    Gold -> Catalog : Surface violation to consumers
+    note right of Contracts
+        Deployment blocked at PR time;
+        this branch only fires if a
+        runtime drift occurs (rare).
+    end note
+end
+deactivate Gold
+
+Consumer -> Catalog : Discovers orders product
+Consumer -> Gold : Queries via semantic layer
+activate Gold
+Gold --> Consumer : Returns metric
+deactivate Gold
+
+@enduml

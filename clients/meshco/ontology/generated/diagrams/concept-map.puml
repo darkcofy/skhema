@@ -1,0 +1,89 @@
+@startuml concept-map
+!theme plain
+hide empty members
+
+package "customer" as customer {
+  class "Customer" as Customer {
+    A person or organisation that transacts with MeshCo; identity resolved across POS, commerce, CRM via the golden-record process.
+  }
+}
+
+package "fulfilment" as fulfilment {
+  class "Shipment" as Shipment {
+    A physical movement of one or more order lines from a fulfilment point (store or 3PL warehouse) to a customer address.
+  }
+}
+
+package "inventory" as inventory {
+  class "Inventory" as Inventory {
+    The current count of a product at a specific location (store, warehouse, 3PL). Updated by sales, receipts, and transfers.
+  }
+}
+
+package "orders" as orders {
+  class "Order" as Order {
+    A customer's purchase intent — one basket at one time, across POS or commerce. Distinct from ERP's PurchaseOrder concept.
+  }
+}
+
+package "payments" as payments {
+  class "Payment" as Payment {
+    The financial settlement of an order, tracked from authorisation through capture. Out of primary engagement scope but referenced by orders and finance.
+  }
+}
+
+package "platform" as platform {
+  class "DataProduct" as DataProduct {
+    A curated, owned, SLO-backed dataset exposed to consumers through a versioned contract. The unit of ownership and consumption in the mesh.
+  }
+  class "DataContract" as DataContract {
+    A producer-consumer agreement capturing a data product's schema, semantics, freshness, and quality guarantees; validated at deployment time.
+  }
+  class "Domain" as Domain {
+    A business-owned area that publishes one or more data products. MeshCo has five domains in scope for the initial mesh rollout.
+  }
+  class "SLO" as SLO {
+    A service level objective — a quantified promise (freshness, quality, availability) a data product makes to its consumers.
+  }
+  class "LineageEdge" as LineageEdge {
+    A column-level link between an upstream dataset and a downstream dataset, capturing derivation (how the downstream column was computed).
+  }
+  class "ContractBreak" as ContractBreak {
+    A change to a data product that violates its published contract (schema change, SLO miss, semantic shift). Detected at PR time and blocks the deployment.
+  }
+}
+
+package "product" as product {
+  class "Product" as Product {
+    An item in the MeshCo catalogue at SKU level, with its marketing attributes (name, imagery, taxonomy) and current pricing.
+  }
+}
+
+Customer -- Order
+Customer -- Shipment
+Customer -- Account
+Order -- Customer
+Order -- Product
+Order -- Shipment
+Order -- Payment
+Product -- Order
+Product -- Inventory
+Shipment -- Order
+Shipment -- Customer
+DataProduct -- DataContract
+DataProduct -- Domain
+DataProduct -- SLO
+DataContract -- DataProduct
+DataContract -- ContractBreak
+Domain -- DataProduct
+Domain -- Producer
+SLO -- DataProduct
+SLO -- DataContract
+LineageEdge -- DataProduct
+ContractBreak -- DataContract
+ContractBreak -- DataProduct
+Payment -- Order
+Inventory -- Product
+Inventory -- Shipment
+
+@enduml

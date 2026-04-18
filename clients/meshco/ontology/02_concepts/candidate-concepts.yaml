@@ -1,0 +1,153 @@
+- name: Customer
+  domain: customer
+  description: A person or organisation that transacts with MeshCo; identity resolved across POS, commerce, CRM via the golden-record process.
+  related_to:
+    - Order
+    - Shipment
+    - Account
+  source_quotes:
+    - quote: "Every order has one customer"
+      source: Carol Singh (Customer Domain Lead)
+      date: 2026-04-16
+  confidence: high
+  open_questions:
+    - B2B corporate case — is the paying Account a separate concept from the Customer who places the order?
+
+- name: Order
+  domain: orders
+  description: A customer's purchase intent — one basket at one time, across POS or commerce. Distinct from ERP's PurchaseOrder concept.
+  related_to:
+    - Customer
+    - Product
+    - Shipment
+    - Payment
+  source_quotes:
+    - quote: "An order at the till and an order on the web are the same thing conceptually — both are customer orders"
+      source: Carol Singh
+      date: 2026-04-16
+  confidence: high
+  open_questions:
+    - Do we namespace as CustomerOrder to avoid collision with ERP PurchaseOrder?
+
+- name: Product
+  domain: product
+  description: An item in the MeshCo catalogue at SKU level, with its marketing attributes (name, imagery, taxonomy) and current pricing.
+  related_to:
+    - Order
+    - Inventory
+  source_quotes:
+    - quote: "Product means SKU, not the marketing hierarchy — the hierarchy is a separate thing"
+      source: Carol Singh
+      date: 2026-04-16
+  confidence: high
+  open_questions:
+    - Should marketing-level Product (the parent) be modelled separately as ProductFamily?
+
+- name: Shipment
+  domain: fulfilment
+  description: A physical movement of one or more order lines from a fulfilment point (store or 3PL warehouse) to a customer address.
+  related_to:
+    - Order
+    - Customer
+  source_quotes:
+    - quote: "Shipments are the physical journey; a delivery is when it actually lands"
+      source: Supply Chain
+      date: 2026-04-16
+  confidence: high
+
+- name: DataProduct
+  domain: platform
+  description: A curated, owned, SLO-backed dataset exposed to consumers through a versioned contract. The unit of ownership and consumption in the mesh.
+  related_to:
+    - DataContract
+    - Domain
+    - SLO
+  source_quotes:
+    - quote: "A data product is a first-class citizen — it has an owner, a contract, an SLO, and a bill"
+      source: Alice Chen
+      date: 2026-04-16
+  confidence: high
+
+- name: DataContract
+  domain: platform
+  description: A producer-consumer agreement capturing a data product's schema, semantics, freshness, and quality guarantees; validated at deployment time.
+  related_to:
+    - DataProduct
+    - ContractBreak
+  source_quotes:
+    - quote: "Contracts are the firewall — you can't break downstream consumers silently any more"
+      source: Alice Chen
+      date: 2026-04-16
+  confidence: high
+
+- name: Domain
+  domain: platform
+  description: A business-owned area that publishes one or more data products. MeshCo has five domains in scope for the initial mesh rollout.
+  related_to:
+    - DataProduct
+    - Producer
+  source_quotes:
+    - quote: "Our five domains are customer, product, orders, inventory, fulfilment"
+      source: Alice Chen
+      date: 2026-04-16
+  confidence: high
+
+- name: SLO
+  domain: platform
+  description: A service level objective — a quantified promise (freshness, quality, availability) a data product makes to its consumers.
+  related_to:
+    - DataProduct
+    - DataContract
+  source_quotes:
+    - quote: "Every lighthouse data product ships with three SLOs minimum: freshness, completeness, accuracy"
+      source: Bob Murphy
+      date: 2026-04-17
+  confidence: high
+
+- name: LineageEdge
+  domain: platform
+  description: A column-level link between an upstream dataset and a downstream dataset, capturing derivation (how the downstream column was computed).
+  related_to:
+    - DataProduct
+  source_quotes:
+    - quote: "We need column-level lineage — table-level is useless for impact analysis"
+      source: Bob Murphy
+      date: 2026-04-17
+  confidence: high
+
+- name: ContractBreak
+  domain: platform
+  description: A change to a data product that violates its published contract (schema change, SLO miss, semantic shift). Detected at PR time and blocks the deployment.
+  related_to:
+    - DataContract
+    - DataProduct
+  source_quotes:
+    - quote: "If CI goes red on a contract break, the PR can't merge — no exceptions"
+      source: Bob Murphy
+      date: 2026-04-17
+  confidence: high
+
+- name: Payment
+  domain: payments
+  description: The financial settlement of an order, tracked from authorisation through capture. Out of primary engagement scope but referenced by orders and finance.
+  related_to:
+    - Order
+  source_quotes:
+    - quote: "We don't own payments in this engagement but orders depend on them"
+      source: Carol Singh
+      date: 2026-04-16
+  confidence: medium
+  open_questions:
+    - Is there a future engagement planned for payments as its own domain?
+
+- name: Inventory
+  domain: inventory
+  description: The current count of a product at a specific location (store, warehouse, 3PL). Updated by sales, receipts, and transfers.
+  related_to:
+    - Product
+    - Shipment
+  source_quotes:
+    - quote: "Inventory is the hardest domain because it changes constantly and every channel wants real-time"
+      source: Supply Chain
+      date: 2026-04-16
+  confidence: medium

@@ -1,0 +1,21 @@
+term,definition,source,domain,aliases,notes
+Data Product,"A curated, owned, SLO-backed dataset exposed to consumers with a published contract","2026-04-16 Data Council kickoff",platform,"DP",
+Data Contract,"A producer-consumer agreement about a data product's schema, semantics, freshness, and quality","2026-04-16 Data Council kickoff",platform,"contract",Enforced at PR time via CI
+Domain,"A business-owned area that publishes one or more data products; MeshCo has five: customer, product, orders, inventory, fulfilment","2026-04-16 Data Council kickoff",platform,,
+Producer,"A team that publishes a data product","2026-04-16 Data Council kickoff",platform,"domain team",
+Consumer,"A team or service that reads a data product through its contract","2026-04-16 Data Council kickoff",platform,,
+SLO,"Service level objective — quantified promise about freshness, quality, or availability of a data product","2026-04-16 Data Council kickoff",platform,"service level objective","Distinct from SLA: SLOs are internal targets"
+Lineage,"The end-to-end path data takes from source systems through transforms to consumers; column-level when possible","2026-04-17 Bob Murphy",platform,,Captured via OpenLineage
+Bronze,"The rawest reliable layer in the lakehouse — type-safe but un-enriched CDC output","2026-04-17 Bob Murphy",lakehouse,"raw layer","Part of medallion architecture"
+Silver,"Cleaned, deduplicated, joined lakehouse layer — the basis for gold models","2026-04-17 Bob Murphy",lakehouse,,
+Gold,"Business-facing, SLO-backed lakehouse layer — data products are served from gold","2026-04-17 Bob Murphy",lakehouse,,
+Close,"Monthly close — the finance process of finalising the month's financial results and reporting","2026-04-18 Emma Ward",finance,"month-end close",Finance pain point
+Order,"A customer's purchase intent, typically one basket of products at one time","2026-04-16 Carol Singh",orders,,"Commerce and POS have different order IDs; identity resolution needed"
+Customer,"A person or organisation that transacts with MeshCo","2026-04-16 Carol Singh",customer,"account holder, buyer","Conflicts: Carol uses 'customer'; Sales Ops uses 'account holder'"
+Shipment,"A physical delivery of one or more order lines to a customer address","2026-04-16 Supply Chain",fulfilment,"delivery",,
+Product,"An item in the MeshCo catalogue — SKU-level","2026-04-16 Carol Singh",product,"SKU, item",
+Auth Failure,"A POS or commerce transaction that fails authorisation at the card network","2026-04-17 Bob Murphy",payments,"decline","Not in current engagement scope but frequently referenced"
+EOD,"End of day — daily batch cut-off for captures, reconciliation, and ERP handoff","2026-04-17 Bob Murphy",platform,"end of day",Typically midnight UTC
+CDC,"Change data capture — streaming source database mutations into the lakehouse","2026-04-17 Bob Murphy",ingestion,"change data capture",Debezium + Kafka stack
+Medallion,"The bronze/silver/gold layering convention in the lakehouse","2026-04-17 Bob Murphy",lakehouse,,"Databricks-era term; we use it but don't use Delta"
+Contract Break,"A change to a producer's data product that violates its published contract","2026-04-18 Platform Team",platform,"breaking change",Detected at PR time in CI

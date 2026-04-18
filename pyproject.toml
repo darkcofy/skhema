@@ -34,6 +34,8 @@ packages = ["src/skhema", "src/gnosis"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+# Skip local_only tests by default; opt-in via `pytest -m local_only`.
+addopts = "-m 'not local_only'"
 markers = [
     "local_only: tests that must not run in CI (real client data)",
 ]

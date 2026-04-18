@@ -1,0 +1,34 @@
+- name: POS
+  type: Point-of-sale
+  vendor: MeshCo in-house
+  integration: CDC via Debezium on MySQL replicas
+  owner: POS Engineering
+  notes: 820 store locations across 4 regions; replica lag averages 2s, 99p at 12s.
+
+- name: Commerce
+  type: E-commerce platform
+  vendor: Shopify Plus
+  integration: Webhook + Shopify Storefront API + GraphQL Admin API
+  owner: Digital team
+  notes: Handles ~18% of revenue; growing year-on-year. Clickstream via Snowplow.
+
+- name: ERP
+  type: ERP
+  vendor: SAP ECC
+  integration: Daily batch extract (SAP BW) + CDC on core tables
+  owner: Finance Systems (Emma Ward)
+  notes: Source of truth for finance; any mirrored data must align to month-end close.
+
+- name: CRM
+  type: CRM
+  vendor: Salesforce
+  integration: Nightly extract via Fivetran
+  owner: Sales & Marketing Ops
+  notes: Customer master; conflicts with Commerce customer IDs — identity resolution needed.
+
+- name: Fulfilment
+  type: WMS + 3PL
+  vendor: Manhattan WMS + third-party last-mile providers
+  integration: Webhook callbacks + daily reconciliation file
+  owner: Supply Chain Engineering
+  notes: Multiple 3PL vendors; shipment status events are the canonical fulfilment stream.

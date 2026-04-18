@@ -1,0 +1,63 @@
+- name: Alice Chen
+  role: Head of Data Platform
+  team: Engineering · Platform
+  interests:
+    - Successful mesh migration without production incidents
+    - Consistent contracts and SLOs across domains
+  decision_rights:
+    - Platform architecture sign-off
+    - Vendor selection for platform-layer tooling
+  influence: high
+  notes: Sponsor for the engagement; sits on the Data Council.
+
+- name: Bob Murphy
+  role: Principal Data Engineer
+  team: Engineering · Platform
+  interests:
+    - Lakehouse table-format consistency
+    - dbt and Airflow operational hygiene
+  decision_rights:
+    - Tooling choices below platform-architecture level
+  influence: high
+  notes: Technical lead for the platform team.
+
+- name: Carol Singh
+  role: Customer Domain Lead
+  team: Data · Customer
+  interests:
+    - Customer identity resolution across POS, commerce, CRM
+    - GDPR-aware data product boundaries
+  decision_rights:
+    - Customer-domain data products and schemas
+  influence: medium
+  notes: Reports into Marketing; historically under-resourced compared to other domains.
+
+- name: Dave Kim
+  role: Analytics Engineering Lead
+  team: Analytics Engineering
+  interests:
+    - dbt model quality and semantic layer adoption
+    - Metric consistency between BI and ML
+  decision_rights:
+    - dbt conventions, semantic model definitions
+  influence: medium
+  notes: Strong advocate for Cube over looker-only semantics.
+
+- name: Emma Ward
+  role: Head of Finance Systems
+  team: Finance
+  interests:
+    - Monthly close automation
+    - Reverse-ETL of cohort and ARR figures back into SAP
+  decision_rights:
+    - Finance-side reporting SLA expectations
+  influence: high
+  notes: Key sponsor on the consumer side; close is the most visible early use case.
+
+- name: TBD
+  role: ML Platform Lead
+  team: Engineering · ML
+  interests:
+    - Feature store choice, model monitoring
+  influence: unknown
+  notes: Role unfilled at time of engagement start; recruitment underway. Revisit before stage 4.

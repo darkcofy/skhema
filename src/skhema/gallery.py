@@ -91,10 +91,29 @@ def svg_to_source_path(svg_path: str, rendered_dir: str, diagrams_dir: str) -> s
     return os.path.join(diagrams_dir, puml_rel)
 
 
+_TITLE_ACRONYMS = {
+    "Ai": "AI", "Aws": "AWS", "Bi": "BI", "Ci": "CI", "Cd": "CD",
+    "Ml": "ML", "Sql": "SQL", "Api": "API", "Http": "HTTP", "Https": "HTTPS",
+    "Mcp": "MCP", "Crm": "CRM", "Erp": "ERP", "Pos": "POS", "Etl": "ETL",
+    "Genai": "GenAI", "Llm": "LLM", "Rag": "RAG", "Svg": "SVG", "Pdf": "PDF",
+    "Html": "HTML", "Yaml": "YAML", "Dsl": "DSL", "Cdc": "CDC", "Slo": "SLO",
+    "Sla": "SLA", "Pii": "PII", "Ui": "UI", "Wms": "WMS",
+}
+
+
 def diagram_name(svg_path: str) -> str:
-    """Convert filename to display name: kebab-case -> Title Case."""
+    """Convert filename to client-facing display name: kebab-case -> Title Case.
+
+    Strips the `structurizr-` prefix and restores canonical casing for
+    common acronyms (AI, AWS, SQL, …).
+    """
     name = os.path.splitext(os.path.basename(svg_path))[0]
-    return name.replace("-", " ").replace("_", " ").title()
+    if name.startswith("structurizr-"):
+        name = name[len("structurizr-"):]
+    title = name.replace("-", " ").replace("_", " ").title()
+    for bad, good in _TITLE_ACRONYMS.items():
+        title = re.sub(rf"\b{re.escape(bad)}\b", good, title)
+    return title
 
 
 def _clean_svg(svg_content: str) -> str:

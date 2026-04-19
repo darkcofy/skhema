@@ -68,10 +68,34 @@ def order_by_type(puml_files: list[str], diagrams_dir: str) -> list[str]:
     return sorted([f for f in puml_files if not is_excalidraw(f)], key=sort_key)
 
 
+_TITLE_ACRONYMS = {
+    "Ai": "AI", "Aws": "AWS", "Bi": "BI", "Ci": "CI", "Cd": "CD",
+    "Ml": "ML", "Sql": "SQL", "Api": "API", "Http": "HTTP", "Https": "HTTPS",
+    "Mcp": "MCP", "Crm": "CRM", "Erp": "ERP", "Pos": "POS", "Etl": "ETL",
+    "Genai": "GenAI", "Llm": "LLM", "Rag": "RAG", "Svg": "SVG", "Pdf": "PDF",
+    "Html": "HTML", "Yaml": "YAML", "Dsl": "DSL", "Cdc": "CDC", "Slo": "SLO",
+    "Sla": "SLA", "Pii": "PII", "Ui": "UI", "Wms": "WMS",
+}
+
+
+def _fix_acronyms(text: str) -> str:
+    """Restore canonical acronym casing after `.title()` lower-cases them."""
+    for bad, good in _TITLE_ACRONYMS.items():
+        text = re.sub(rf"\b{re.escape(bad)}\b", good, text)
+    return text
+
+
 def diagram_title(puml_path: str) -> str:
-    """Convert filename to display title."""
+    """Convert filename to a client-facing display title.
+
+    Strips the `structurizr-` prefix that Structurizr's CLI auto-adds to
+    every exported .puml — clients don't care which tool produced a diagram.
+    Restores canonical casing for common acronyms (AI, AWS, SQL, …).
+    """
     name = os.path.splitext(os.path.basename(puml_path))[0]
-    return name.replace("-", " ").replace("_", " ").title()
+    if name.startswith("structurizr-"):
+        name = name[len("structurizr-"):]
+    return _fix_acronyms(name.replace("-", " ").replace("_", " ").title())
 
 
 def diagram_type(puml_path: str, diagrams_dir: str) -> str:
@@ -82,10 +106,41 @@ def diagram_type(puml_path: str, diagrams_dir: str) -> str:
 
 
 def clean_svg_for_embed(svg_bytes: bytes) -> str:
-    """Strip XML declarations and DOCTYPE so the SVG can be safely inlined into HTML."""
+    """Strip XML declarations, DOCTYPE, and any hardcoded sizing on the
+    root <svg> tag so the SVG can be safely inlined into HTML and scaled by
+    CSS via its viewBox.
+
+    PlantUML embeds dimensions in THREE places on the root tag:
+      1. width="..." and height="..." attributes
+      2. style="width:...;height:...;..." declarations
+      3. <svg> inner style tags (rare)
+
+    We strip (1) and the size-only declarations in (2). The viewBox is
+    preserved so the SVG scales proportionally inside whatever CSS box
+    contains it.
+    """
     svg = svg_bytes.decode("utf-8")
     svg = re.sub(r"<\?xml[^?]*\?>\s*", "", svg)
     svg = re.sub(r"<!DOCTYPE[^>]*>\s*", "", svg)
+
+    def _strip_root_size(match: re.Match) -> str:
+        tag = match.group(0)
+        # Remove width="..." and height="..." attrs
+        tag = re.sub(r'\s+width="[^"]*"', "", tag)
+        tag = re.sub(r'\s+height="[^"]*"', "", tag)
+        # Remove width:...; and height:...; declarations inside style="..."
+        def _clean_style(m: re.Match) -> str:
+            value = m.group(1)
+            value = re.sub(r"(?:^|;)\s*width\s*:\s*[^;\"]+;?", ";", value)
+            value = re.sub(r"(?:^|;)\s*height\s*:\s*[^;\"]+;?", ";", value)
+            value = re.sub(r";{2,}", ";", value).strip(";").strip()
+            if not value:
+                return ""
+            return f' style="{value}"'
+        tag = re.sub(r'\s+style="([^"]*)"', _clean_style, tag, count=1)
+        return tag
+
+    svg = re.sub(r"<svg\b[^>]*>", _strip_root_size, svg, count=1)
     return svg.strip()
 
 
@@ -116,44 +171,77 @@ def _markdown_to_html(md: str) -> str:
     return mistune.html(md)
 
 
+def _render_one(
+    puml_path: str,
+    diagrams_dir: str,
+    search_paths: list[str],
+    docs_dir: str | None,
+    include_notes: bool,
+) -> Diagram | None:
+    source = open(puml_path).read()
+    try:
+        resolved = resolve_includes(
+            source, os.path.dirname(puml_path), search_paths
+        )
+    except (ValueError, FileNotFoundError) as e:
+        print(f"  SKIP: {os.path.basename(puml_path)}: {e}", file=sys.stderr)
+        return None
+
+    try:
+        svg_bytes = render_plantuml(resolved, fmt="svg")
+    except Exception as e:
+        print(f"  SKIP: {os.path.basename(puml_path)}: {e}", file=sys.stderr)
+        return None
+
+    dtype = diagram_type(puml_path, diagrams_dir)
+    notes_md = (
+        read_companion_notes(puml_path, dtype, docs_dir) if include_notes else None
+    )
+    prose_html = _markdown_to_html(notes_md) if notes_md else None
+    return Diagram(
+        title=diagram_title(puml_path),
+        svg_inline=clean_svg_for_embed(svg_bytes),
+        notes=notes_md,
+        prose_html=prose_html,
+    )
+
+
 def build_sections(
     diagrams_dir: str,
     search_paths: list[str],
     docs_dir: str | None = None,
     include_notes: bool = True,
+    narrative: list[dict] | None = None,
 ) -> tuple[list[Section], int]:
-    """Build the per-type sections for the deck, rendering each .puml to inline SVG."""
-    puml_files = order_by_type(discover_puml_files(diagrams_dir), diagrams_dir)
+    """Build deck sections.
 
+    If `narrative` is provided (from client.yaml), it's a list of
+    `{label, diagrams: [path, ...]}` dicts that drives section order,
+    section labels, and per-section diagram order explicitly. Diagrams
+    are referenced by their path relative to `diagrams_dir` (without the
+    `.puml` extension — both forms accepted).
+
+    When `narrative` is absent, we fall back to the type-based grouping
+    with a within-type "story" ordering for C4 (landscape → context →
+    containers → components → dynamic).
+    """
+    all_puml = discover_puml_files(diagrams_dir)
+
+    if narrative:
+        return _build_from_narrative(
+            narrative, all_puml, diagrams_dir, search_paths, docs_dir, include_notes
+        )
+
+    # Default: group by type, with improved within-type ordering for C4.
+    puml_files = order_by_type(all_puml, diagrams_dir)
     grouped: dict[str, list[Diagram]] = {}
-    for puml_path in puml_files:
-        source = open(puml_path).read()
-        try:
-            resolved = resolve_includes(
-                source, os.path.dirname(puml_path), search_paths
-            )
-        except (ValueError, FileNotFoundError) as e:
-            print(f"  SKIP: {os.path.basename(puml_path)}: {e}", file=sys.stderr)
-            continue
-
-        try:
-            svg_bytes = render_plantuml(resolved, fmt="svg")
-        except Exception as e:
-            print(f"  SKIP: {os.path.basename(puml_path)}: {e}", file=sys.stderr)
-            continue
-
-        dtype = diagram_type(puml_path, diagrams_dir)
-        notes_md = (
-            read_companion_notes(puml_path, dtype, docs_dir) if include_notes else None
+    for puml_path in _reorder_c4_story(puml_files, diagrams_dir):
+        diagram = _render_one(
+            puml_path, diagrams_dir, search_paths, docs_dir, include_notes
         )
-        prose_html = _markdown_to_html(notes_md) if notes_md else None
-        diagram = Diagram(
-            title=diagram_title(puml_path),
-            svg_inline=clean_svg_for_embed(svg_bytes),
-            notes=notes_md,
-            prose_html=prose_html,
-        )
-        grouped.setdefault(dtype, []).append(diagram)
+        if diagram is None:
+            continue
+        grouped.setdefault(diagram_type(puml_path, diagrams_dir), []).append(diagram)
 
     sections: list[Section] = []
     total = 0
@@ -162,6 +250,102 @@ def build_sections(
             label = TYPE_LABELS.get(dtype, dtype.title())
             sections.append(Section(label=label, diagrams=grouped[dtype]))
             total += len(grouped[dtype])
+    return sections, total
+
+
+# Within the C4 section we tell the story from the outside in:
+# landscape → context → containers → L3 components → dynamic views.
+_C4_STORY_ORDER = [
+    "landscape",
+    "context",
+    "containers",
+    "components",   # any L3 view ending in -components
+]
+
+
+def _reorder_c4_story(puml_files: list[str], diagrams_dir: str) -> list[str]:
+    """Reorder the C4 section so L0→L1→L2→L3→dynamic reads as a story."""
+    c4_files: list[str] = []
+    other_files: list[str] = []
+    for path in puml_files:
+        if diagram_type(path, diagrams_dir) == "c4":
+            c4_files.append(path)
+        else:
+            other_files.append(path)
+
+    def c4_key(path: str) -> tuple[int, str]:
+        stem = os.path.splitext(os.path.basename(path))[0]
+        normalised = stem.replace("structurizr-", "")
+        for idx, anchor in enumerate(_C4_STORY_ORDER):
+            if anchor in normalised:
+                return (idx, normalised)
+        # Dynamic views and anything else go after components
+        return (len(_C4_STORY_ORDER), normalised)
+
+    c4_files.sort(key=c4_key)
+    return c4_files + other_files
+
+
+def _build_from_narrative(
+    narrative: list[dict],
+    all_puml: list[str],
+    diagrams_dir: str,
+    search_paths: list[str],
+    docs_dir: str | None,
+    include_notes: bool,
+) -> tuple[list[Section], int]:
+    """Build sections from an explicit narrative config.
+
+    `narrative` is a list of {label, diagrams: [...]} dicts. Each diagram
+    reference is a path relative to `diagrams_dir`, with or without the
+    `.puml` extension. Unknown references are warned about but don't
+    abort the build.
+    """
+    # Index every .puml by path-relative-to-diagrams_dir, with and without .puml
+    by_rel: dict[str, str] = {}
+    for full in all_puml:
+        rel = os.path.relpath(full, diagrams_dir)
+        by_rel[rel] = full
+        by_rel[os.path.splitext(rel)[0]] = full
+
+    sections: list[Section] = []
+    total = 0
+    consumed: set[str] = set()
+    for block in narrative:
+        label = block.get("label") or block.get("section") or "Section"
+        diagrams_spec = block.get("diagrams", [])
+        diagrams: list[Diagram] = []
+        for ref in diagrams_spec:
+            full = by_rel.get(ref.strip())
+            if not full:
+                print(f"  NARRATIVE: unknown diagram '{ref}' — skipping", file=sys.stderr)
+                continue
+            diagram = _render_one(
+                full, diagrams_dir, search_paths, docs_dir, include_notes
+            )
+            if diagram is None:
+                continue
+            diagrams.append(diagram)
+            consumed.add(full)
+        if diagrams:
+            sections.append(Section(label=label, diagrams=diagrams))
+            total += len(diagrams)
+
+    # Any .puml not referenced by the narrative gets appended under
+    # "More diagrams" so nothing silently vanishes.
+    leftovers = [p for p in all_puml if p not in consumed]
+    if leftovers:
+        extras: list[Diagram] = []
+        for puml_path in _reorder_c4_story(leftovers, diagrams_dir):
+            diagram = _render_one(
+                puml_path, diagrams_dir, search_paths, docs_dir, include_notes
+            )
+            if diagram:
+                extras.append(diagram)
+        if extras:
+            sections.append(Section(label="More diagrams", diagrams=extras))
+            total += len(extras)
+
     return sections, total
 
 
@@ -330,6 +514,7 @@ def main():
         search_paths=search_paths,
         docs_dir=docs_dir,
         include_notes=not args.no_notes,
+        narrative=client_config.get("narrative"),
     )
     if not sections:
         print(f"No diagrams found in {diagrams_dir}", file=sys.stderr)

@@ -1,8 +1,51 @@
 name: "MeshCo Retail"
 subtitle: "Data Platform Architecture — Mesh Migration"
 accent_color: "#FFE600"
+
+# Fall-back section ordering when `narrative` is not set.
 sections:
   - c4
   - sequence
   - erd
   - deployment
+
+# Narrative — explicit story arc for the deck. Diagrams appear in this order;
+# section labels drive divider slides; unreferenced diagrams land under
+# "More diagrams" at the end so nothing silently drops.
+# Diagram paths are relative to clients/meshco/diagrams/ (no .puml needed).
+narrative:
+  - label: "Setting the stage — who's involved and what's inside"
+    diagrams:
+      - c4/exported/structurizr-landscape
+      - c4/exported/structurizr-context
+      - c4/exported/structurizr-containers
+
+  - label: "The happy path — an order end-to-end"
+    diagrams:
+      - c4/exported/structurizr-order-ingestion
+      - sequence/order-ingestion-flow
+
+  - label: "Governance — contracts and lineage"
+    diagrams:
+      - c4/exported/structurizr-contract-registry-components
+      - sequence/contract-break-detection-flow
+
+  - label: "Discovery — the data catalog"
+    diagrams:
+      - c4/exported/structurizr-catalog-components
+
+  - label: "The data itself"
+    diagrams:
+      - erd/orders-core-schema
+      - erd/customer-master-schema
+
+  - label: "GenAI on top"
+    diagrams:
+      - c4/exported/structurizr-genai-components
+      - c4/exported/structurizr-ai-assistant-query
+
+  - label: "Operations — reverse flow and deployment"
+    diagrams:
+      - sequence/reverse-etl-to-erp
+      - deployment/production-aws
+      - deployment/local-dev-sandbox

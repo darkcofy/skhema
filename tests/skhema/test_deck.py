@@ -74,6 +74,28 @@ class TestHelpers:
         assert "<!DOCTYPE" not in cleaned
         assert cleaned.startswith("<svg>")
 
+    def test_clean_svg_strips_root_width_height_attrs(self):
+        raw = b'<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect/></svg>'
+        cleaned = clean_svg_for_embed(raw)
+        assert 'width="1200"' not in cleaned
+        assert 'height="800"' not in cleaned
+        assert 'viewBox="0 0 1200 800"' in cleaned
+
+    def test_clean_svg_strips_size_from_style_attr(self):
+        # PlantUML embeds dimensions in style="" — they override CSS sizing.
+        raw = (
+            b'<svg xmlns="http://www.w3.org/2000/svg" '
+            b'style="width:1452px;height:754px;background:#FFFFFF;" '
+            b'viewBox="0 0 1452 754"><rect/></svg>'
+        )
+        cleaned = clean_svg_for_embed(raw)
+        assert "width:1452px" not in cleaned
+        assert "height:754px" not in cleaned
+        # Non-size style declarations (background) are preserved
+        assert "background:#FFFFFF" in cleaned
+        # viewBox is preserved — it's what CSS scaling depends on
+        assert 'viewBox="0 0 1452 754"' in cleaned
+
 
 class TestRenderDeckHtml:
     def test_produces_reveal_html(self):

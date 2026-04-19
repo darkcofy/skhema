@@ -19,9 +19,11 @@
         {% if client.subtitle %}<p class="subtitle">{{ client.subtitle }}</p>{% endif %}
         <p class="meta">{{ generated_at.strftime('%B %Y') }}{% if total_diagrams %} · {{ total_diagrams }} diagram{{ 's' if total_diagrams != 1 else '' }}{% endif %}</p>
         <p class="presenter-hint">
-          Navigate: <kbd>→</kbd> next · <kbd>↓</kbd> diagram notes ·
-          <kbd>S</kbd> presenter view · <kbd>ESC</kbd> overview ·
-          <kbd>F</kbd> fullscreen
+          <kbd>→</kbd> next · <kbd>↓</kbd> diagram notes ·
+          <kbd>Click</kbd> a diagram to zoom · <kbd>ESC</kbd> overview · <kbd>F</kbd> fullscreen<br>
+          <br>
+          Presenter view with clock + next-slide + notes requires HTTP, not <code>file://</code>.<br>
+          Run <code>skhema serve --client {{ client.slug | default(client.name|lower|replace(' ','-')) }}</code>, then press <kbd>S</kbd>.
         </p>
       </section>
 
@@ -34,10 +36,12 @@
 
         <section class="diagram-slide">
           <h3>{{ diagram.title }}</h3>
-          <div class="diagram">{{ diagram.svg_inline | safe }}</div>
-          {% if diagram.prose_html %}
-          <p class="sub-hint">↓ notes below · <kbd>S</kbd> for presenter view</p>
-          {% endif %}
+          <div class="diagram" onclick="skhemaZoom(this)" title="Click to zoom">{{ diagram.svg_inline | safe }}</div>
+          <p class="sub-hint">
+            click diagram to zoom
+            {% if diagram.prose_html %} · <kbd>↓</kbd> notes{% endif %}
+            · <kbd>S</kbd> speaker view (HTTP only)
+          </p>
           {% if diagram.notes %}
           <aside class="notes">{{ diagram.notes | safe }}</aside>
           {% endif %}
@@ -73,17 +77,18 @@
         <h1>Thank you</h1>
         <p class="subtitle">Questions?</p>
         <p class="presenter-hint">
-          For the popup speaker view (clock + notes + next-slide preview):<br>
-          <code>cd clients/&lt;name&gt;/ &amp;&amp; python -m http.server 8000</code><br>
-          then open <code>http://localhost:8000/deck.html</code><br>
-          and press <kbd>S</kbd>.<br>
-          <br>
-          The default <code>/</code> URL serves <code>index.html</code> (the
-          gallery), not the deck — the full path matters.
+          Gallery: <code>index.html</code> · Handbook: <code>{{ client.name|lower|replace(' ','-') }}-architecture.html</code><br>
+          All outputs in this directory. Safe to email the whole folder.
         </p>
       </section>
 
     </div>
+  </div>
+
+  <!-- Zoom overlay: click any diagram to open it fullscreen; click to close. -->
+  <div id="skhema-zoom" class="skhema-zoom" onclick="skhemaZoomClose()">
+    <button class="skhema-zoom-close" aria-label="Close">&times;</button>
+    <div class="skhema-zoom-inner"></div>
   </div>
 
   <script>{{ reveal_js }}</script>
@@ -98,12 +103,33 @@
       backgroundTransition: 'fade',
       pdfSeparateFragments: false,
       pdfMaxPagesPerSlide: 1,
-      width: 1280,
-      height: 720,
-      margin: 0.04,
+      // Bigger slide canvas so detailed C4 and deployment diagrams have room
+      // before Reveal's viewport-fit scaling kicks in.
+      width: 1600,
+      height: 1000,
+      margin: 0.03,
       minScale: 0.2,
       maxScale: 2.0,
       view: (location.search.match(/print-pdf/gi) ? 'print' : undefined),
+    });
+
+    // Click-to-zoom: open any diagram in a full-viewport overlay so the
+    // user can read dense C4 / deployment diagrams without being stuck in
+    // the slide's fixed aspect ratio.
+    function skhemaZoom(el) {
+      var overlay = document.getElementById('skhema-zoom');
+      var inner = overlay.querySelector('.skhema-zoom-inner');
+      inner.innerHTML = el.innerHTML;
+      overlay.classList.add('active');
+      document.body.classList.add('skhema-zoom-open');
+    }
+    function skhemaZoomClose(e) {
+      if (e && e.target && e.target.closest('.skhema-zoom-inner svg')) return;
+      document.getElementById('skhema-zoom').classList.remove('active');
+      document.body.classList.remove('skhema-zoom-open');
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') skhemaZoomClose();
     });
   </script>
 

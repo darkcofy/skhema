@@ -93,9 +93,13 @@
   text-align: left;
 }
 
+/* Grid layout: title (auto), diagram (1fr — all remaining), hint (auto).
+   `min-height: 0` on the diagram row is essential so CSS can shrink the SVG
+   below its intrinsic dimensions. */
 .reveal .diagram-slide {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  row-gap: 8px;
   height: 100%;
   padding: 0;
   text-align: left;
@@ -104,21 +108,32 @@
 .reveal .diagram {
   background: white;
   border-radius: 8px;
-  padding: 12px;
+  padding: 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 auto;
-  min-height: 0;          /* required so the SVG can shrink to fit */
-  overflow: hidden;
-}
-.reveal .diagram svg {
+  min-width: 0;
+  min-height: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: box-shadow 0.15s ease-out;
+}
+.reveal .diagram:hover {
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.2);
+}
+
+/* SVG uses its viewBox to preserve aspect ratio. width/height attributes on
+   the root <svg> are stripped by clean_svg_for_embed() so CSS actually wins. */
+.reveal .diagram svg {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain;    /* scale SVG proportionally inside the tile */
+  width: auto;
+  height: auto;
+  display: block;
+  margin: auto;
 }
 
 .reveal .sub-hint {
@@ -141,6 +156,61 @@
   font-size: 0.5em;
   margin-top: 2em;
   opacity: 0.85;
+}
+
+/* ────────── click-to-zoom overlay ────────── */
+.skhema-zoom {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.94);
+  z-index: 9999;
+  padding: 3vh 3vw;
+  cursor: zoom-out;
+}
+.skhema-zoom.active { display: block; }
+body.skhema-zoom-open { overflow: hidden; }
+
+.skhema-zoom-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+.skhema-zoom-inner svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  background: white;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+.skhema-zoom-close {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  background: var(--skhema-accent);
+  color: var(--skhema-heading);
+  border: 0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+}
+.skhema-zoom-close:hover {
+  transform: scale(1.08);
 }
 
 /* ────────── prose / notes / ADR sub-slides ────────── */

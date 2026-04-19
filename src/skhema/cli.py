@@ -1,4 +1,5 @@
 """skhema CLI — Typer entry point."""
+import os
 import sys
 from pathlib import Path
 
@@ -110,6 +111,46 @@ def init(name: str) -> None:
         f"*Add a brief description of the client and the scope of this architecture documentation.*\n"
     )
     typer.echo(f"Client '{name}' created at {client_dir}")
+
+
+@app.command()
+def serve(
+    client: str = typer.Option(..., help="Client name"),
+    port: int = typer.Option(8000, help="Port to serve on"),
+    open_deck: bool = typer.Option(
+        True, "--open-deck/--no-open-deck",
+        help="Try to open the deck in your browser",
+    ),
+) -> None:
+    """Serve a client's outputs over HTTP so Reveal.js presenter view works."""
+    import http.server
+    import socketserver
+    import webbrowser
+
+    root = _find_repo_root()
+    client_dir = root / "clients" / client
+    if not client_dir.is_dir():
+        typer.echo(f"Client '{client}' not found at {client_dir}", err=True)
+        raise typer.Exit(1)
+
+    os.chdir(client_dir)
+    handler = http.server.SimpleHTTPRequestHandler
+    with socketserver.TCPServer(("", port), handler) as httpd:
+        url = f"http://localhost:{port}/deck.html"
+        typer.echo(f"Serving {client_dir} on port {port}")
+        typer.echo(f"  Deck:     {url}")
+        typer.echo(f"  Gallery:  http://localhost:{port}/index.html")
+        typer.echo(f"  Handbook: http://localhost:{port}/{client}-architecture.html")
+        typer.echo("\n  Press Ctrl+C to stop.\n")
+        if open_deck:
+            try:
+                webbrowser.open(url)
+            except Exception:
+                pass
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            typer.echo("\nStopped.")
 
 
 @app.command()

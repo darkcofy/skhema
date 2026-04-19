@@ -73,10 +73,13 @@
         <h1>Thank you</h1>
         <p class="subtitle">Questions?</p>
         <p class="presenter-hint">
-          For the speaker-view popup: serve the deck via
-          <code>python -m http.server</code> and open over
-          <code>http://</code> — then press <kbd>S</kbd>. File://
-          URLs can't open popups in some browsers.
+          For the popup speaker view (clock + notes + next-slide preview):<br>
+          <code>cd clients/&lt;name&gt;/ &amp;&amp; python -m http.server 8000</code><br>
+          then open <code>http://localhost:8000/deck.html</code><br>
+          and press <kbd>S</kbd>.<br>
+          <br>
+          The default <code>/</code> URL serves <code>index.html</code> (the
+          gallery), not the deck — the full path matters.
         </p>
       </section>
 

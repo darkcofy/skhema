@@ -194,65 +194,77 @@ workspace "MeshCo Retail Data Platform" "Federated data platform supporting Mesh
         }
 
         styles {
+            // EY brand palette:
+            //   yellow  #FFE600 — primary accent (Person, focused System)
+            //   black   #2E2E38 — EY black (Software System background)
+            //   grey    #747480 — EY neutral grey (External systems)
+            // Container-tag colours keep differentiation but lean toward a
+            // warmer, EY-adjacent palette rather than the default rainbow.
             element "Person" {
                 shape person
-                background #1168bd
-                color #ffffff
+                background #FFE600
+                color #2E2E38
                 fontSize 22
+                strokeWidth 2
             }
             element "Software System" {
-                background #1168bd
-                color #ffffff
+                background #2E2E38
+                color #FFE600
+                strokeWidth 2
             }
             element "External" {
-                background #8B8B8B
+                background #747480
                 color #ffffff
             }
             element "Container" {
-                color #ffffff
+                color #2E2E38
+                strokeWidth 2
             }
             element "Component" {
-                background #facc15
-                color #111111
+                background #FFE600
+                color #2E2E38
+                strokeWidth 2
             }
+            // Container layers — each uses a distinct hue but tuned warm
+            // so the whole deck reads as "EY-adjacent" rather than rainbow.
             element "Ingestion" {
-                background #D97706
-                color #ffffff
+                background #FFE600
+                color #2E2E38
             }
             element "Lakehouse" {
-                background #0369A1
-                color #ffffff
+                background #2E2E38
+                color #FFE600
             }
             element "Processing" {
-                background #059669
-                color #ffffff
+                background #C99A1C
+                color #2E2E38
             }
             element "Semantic" {
-                background #7C3AED
+                background #6E6FA7
                 color #ffffff
             }
             element "Contracts" {
-                background #BE185D
+                background #B01B5A
                 color #ffffff
             }
             element "Catalog" {
-                background #DC2626
+                background #C0392B
                 color #ffffff
             }
             element "Observability" {
-                background #0891B2
+                background #0E7490
                 color #ffffff
             }
             element "MLPlatform" {
-                background #DB2777
+                background #8E44AD
                 color #ffffff
             }
             element "GenAI" {
-                background #16A34A
+                background #117A43
                 color #ffffff
             }
             element "Serving" {
-                background #4338CA
+                background #4B3F8A
                 color #ffffff
             }
         }

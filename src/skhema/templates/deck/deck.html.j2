@@ -28,7 +28,12 @@
         {% for diagram in section.diagrams %}
         <section>
           <h3>{{ diagram.title }}</h3>
-          <div class="diagram">{{ diagram.svg_inline | safe }}</div>
+          <div class="diagram-row{% if not diagram.prose_html %} diagram-row--solo{% endif %}">
+            <div class="diagram">{{ diagram.svg_inline | safe }}</div>
+            {% if diagram.prose_html %}
+            <div class="diagram-prose">{{ diagram.prose_html | safe }}</div>
+            {% endif %}
+          </div>
           {% if diagram.notes %}
           <aside class="notes">{{ diagram.notes | safe }}</aside>
           {% endif %}

@@ -44,10 +44,14 @@ def workspace_path(client_dir: str) -> str:
     return os.path.join(client_dir, "workspace.dsl")
 
 
-def export_plantuml(client_dir: str, output_subdir: str = "diagrams/exported") -> str:
+def export_plantuml(client_dir: str, output_subdir: str = "diagrams/c4/exported") -> str:
     """Export workspace.dsl to PlantUML files.
 
-    Output lands in `<client_dir>/<output_subdir>/` (default diagrams/exported/).
+    Output lands in `<client_dir>/<output_subdir>/` (default diagrams/c4/exported/).
+    The `c4/` parent directory matters: skhema's gallery/handbook/deck group
+    diagrams by the first subdirectory under `diagrams/`, so exports must live
+    under `c4/` to show up in the C4 Diagrams section.
+
     Returns the output directory path.
     """
     dsl = workspace_path(client_dir)

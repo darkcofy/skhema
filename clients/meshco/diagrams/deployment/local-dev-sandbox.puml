@@ -1,0 +1,51 @@
+@startuml local-dev-sandbox
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor<<host>> #E0F2FE
+  BackgroundColor<<container>> #F3F4F6
+}
+
+title MeshCo — Local developer sandbox (per engineer laptop)
+
+rectangle "Developer laptop" <<host>> {
+
+  rectangle "docker compose: meshco-dev" {
+    rectangle "MinIO\n(S3-compatible, single node)" <<container>> as MinIO
+    rectangle "Apache Polaris\n(metastore, single node)" <<container>> as Polaris
+    rectangle "DuckDB (CLI)\nfor ad-hoc lakehouse queries" <<container>> as DuckDB
+    rectangle "dbt Core\n(CLI on host)" <<container>> as DBT
+    rectangle "Unity Catalog OSS\n(discovery preview)" <<container>> as Unity
+  }
+
+  rectangle "Python venv (uv)" <<host>> {
+    rectangle "skhema CLI" as Skhema
+    rectangle "gnosis CLI" as Gnosis
+  }
+
+  rectangle "Git working copy\n~/meshco/" <<host>> as Git
+
+}
+
+rectangle "GitHub Actions (remote)\n—  full-scale CI on push  —" <<host>> as CI
+
+DBT --> MinIO : Reads + writes bronze/silver/gold
+DBT --> Polaris : Register tables
+DuckDB --> MinIO
+DuckDB --> Polaris : Resolve table names
+Unity --> Polaris : Pulls metadata
+Skhema --> Git : Reads clients/<name>/
+Gnosis --> Git : Reads ontology/
+Git ..> CI : push → contract validation + full DSL validate
+
+note right of MinIO
+  Uses the same Iceberg format
+  as prod. The only difference
+  is storage backend (MinIO
+  vs S3) and metastore
+  (Polaris vs Glue) — both
+  Iceberg-compatible.
+end note
+
+@enduml

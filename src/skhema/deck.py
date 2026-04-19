@@ -28,6 +28,7 @@ class Diagram(NamedTuple):
     title: str
     svg_inline: str
     notes: str | None
+    prose_html: str | None = None
 
 
 class Section(NamedTuple):
@@ -88,15 +89,31 @@ def clean_svg_for_embed(svg_bytes: bytes) -> str:
     return svg.strip()
 
 
-def read_companion_notes(puml_path: str, docs_dir: str | None) -> str | None:
-    """Look up optional companion markdown in clients/<name>/docs/ matching this diagram."""
+def read_companion_notes(puml_path: str, dtype: str, docs_dir: str | None) -> str | None:
+    """Look up optional companion markdown for a diagram.
+
+    Searches in this order:
+      1. `<docs_dir>/<dtype>/<stem>.md` — typed subdirectory (matches docs.py)
+      2. `<docs_dir>/<stem>.md` — flat fallback
+
+    Returns the raw markdown text, or None.
+    """
     if not docs_dir or not os.path.isdir(docs_dir):
         return None
     stem = os.path.splitext(os.path.basename(puml_path))[0]
-    candidate = os.path.join(docs_dir, f"{stem}.md")
-    if not os.path.isfile(candidate):
-        return None
-    return open(candidate).read().strip()
+    for candidate in (
+        os.path.join(docs_dir, dtype, f"{stem}.md"),
+        os.path.join(docs_dir, f"{stem}.md"),
+    ):
+        if os.path.isfile(candidate):
+            return open(candidate).read().strip()
+    return None
+
+
+def _markdown_to_html(md: str) -> str:
+    """Render companion markdown for inline display via mistune."""
+    import mistune
+    return mistune.html(md)
 
 
 def build_sections(
@@ -125,13 +142,18 @@ def build_sections(
             print(f"  SKIP: {os.path.basename(puml_path)}: {e}", file=sys.stderr)
             continue
 
-        notes = read_companion_notes(puml_path, docs_dir) if include_notes else None
+        dtype = diagram_type(puml_path, diagrams_dir)
+        notes_md = (
+            read_companion_notes(puml_path, dtype, docs_dir) if include_notes else None
+        )
+        prose_html = _markdown_to_html(notes_md) if notes_md else None
         diagram = Diagram(
             title=diagram_title(puml_path),
             svg_inline=clean_svg_for_embed(svg_bytes),
-            notes=notes,
+            notes=notes_md,
+            prose_html=prose_html,
         )
-        grouped.setdefault(diagram_type(puml_path, diagrams_dir), []).append(diagram)
+        grouped.setdefault(dtype, []).append(diagram)
 
     sections: list[Section] = []
     total = 0

@@ -20,7 +20,11 @@ clients/*/*.html
 clients/*/*.pdf
 clients/*/*.pptx
 clients/*/deck_pages/
-clients/*/diagrams/exported/
+clients/*/diagrams/c4/exported/
+
+# Structurizr Lite runtime state (logs, search index, history)
+clients/*/.structurizr/
+clients/*/workspace.json
 
 # Working docs — plans, specs, design notes (local-only, not part of deliverable)
 docs/

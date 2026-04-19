@@ -1,0 +1,86 @@
+@startuml production-aws
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam rectangle {
+  BackgroundColor<<aws>> #232F3E
+  FontColor<<aws>> #ffffff
+  BackgroundColor<<zone>> #F3F4F6
+}
+
+title MeshCo — Production AWS deployment (eu-west-1 primary)
+
+rectangle "AWS eu-west-1" <<aws>> {
+
+  rectangle "VPC: data-platform-prod" <<zone>> {
+
+    rectangle "Private subnet: ingestion" {
+      rectangle "MSK (Kafka)\n3 brokers, m5.large" as MSK
+      rectangle "Debezium Connect\nEKS" as Deb
+      rectangle "Fivetran VPC peering\n(CRM sync)" as FT
+    }
+
+    rectangle "Private subnet: compute" {
+      rectangle "EKS cluster: platform-prod\nnode groups: m6i.2xlarge x6" as EKS
+      rectangle "Airflow\nHelm on EKS" as AF
+      rectangle "dbt Runner pods" as DBT
+      rectangle "Trino\n(federated query)" as Trino
+    }
+
+    rectangle "Data subnet" {
+      rectangle "S3 bucket: meshco-lakehouse-prod\nIceberg tables, 25 TB" as S3
+      rectangle "AWS Glue\n(metastore + catalog)" as Glue
+      rectangle "Unity Catalog\n(discovery + lineage)" as Unity
+    }
+
+    rectangle "ML subnet" {
+      rectangle "SageMaker Studio\nfor ML Engineers" as Studio
+      rectangle "SageMaker Endpoints\n(model serving)" as Endpoint
+      rectangle "Feast\n(offline: S3, online: DynamoDB)" as Feast
+    }
+
+    rectangle "Public subnet: edge" {
+      rectangle "ALB (internal)\ncube-api.meshco.internal" as ALB
+      rectangle "Cube.js\nECS Fargate" as Cube
+    }
+
+  }
+
+  rectangle "AWS IAM / SSO\nOkta federated" as SSO
+  rectangle "Secrets Manager" as SM
+  rectangle "CloudWatch + X-Ray" as CW
+
+}
+
+rectangle "AWS eu-west-2\n(DR pilot-light)" <<aws>> as DR
+
+MSK --> Deb
+MSK --> S3
+FT --> S3
+Deb --> S3
+AF --> DBT
+DBT --> S3
+DBT --> Glue
+Trino --> S3
+Trino --> Glue
+Glue --> Unity
+S3 --> Feast
+Feast --> Studio
+Feast --> Endpoint
+Studio --> S3
+Cube --> Glue
+Cube --> S3
+ALB --> Cube
+SSO .. EKS : RBAC
+SSO .. ALB : Auth
+SM .. EKS
+CW <-- EKS : Logs + metrics
+S3 ..> DR : Cross-region replication
+
+note right of DR
+  DR is pilot-light:
+  S3 replicates continuously;
+  compute spins up only on regional failover.
+end note
+
+@enduml

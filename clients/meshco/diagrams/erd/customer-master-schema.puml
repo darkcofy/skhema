@@ -1,0 +1,94 @@
+@startuml customer-master-schema
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam linetype ortho
+
+title MeshCo — Customer domain master-data schema (golden record)
+
+entity "customer_master" as Master {
+  * customer_id : uuid <<PK>>
+  --
+  display_name : text
+  primary_email : text
+  primary_phone : text
+  primary_country : char(2)
+  is_guest : boolean
+  is_b2b : boolean
+  pii_classification : enum(public, internal, confidential, restricted)
+  first_seen_at : timestamp
+  last_seen_at : timestamp
+  resolved_at : timestamp
+}
+
+entity "customer_identities" as Identity {
+  * identity_id : uuid <<PK>>
+  --
+  * customer_id : uuid <<FK Master>>
+  * source_system : enum(pos, commerce, crm)
+  * external_id : text
+  confidence : real
+  linked_at : timestamp
+  linked_by : enum(rule, ml, manual)
+}
+
+entity "customer_addresses" as Address {
+  * address_id : uuid <<PK>>
+  --
+  * customer_id : uuid <<FK Master>>
+  type : enum(billing, shipping, default)
+  line1 : text
+  line2 : text
+  city : text
+  region : text
+  postal_code : text
+  country : char(2)
+  is_primary : boolean
+}
+
+entity "customer_consent" as Consent {
+  * consent_id : uuid <<PK>>
+  --
+  * customer_id : uuid <<FK Master>>
+  purpose : enum(marketing, personalisation, analytics, sharing)
+  state : enum(granted, denied, withdrawn)
+  granted_at : timestamp
+  withdrawn_at : timestamp
+  source : text
+}
+
+entity "customer_segments" as Segment {
+  * segment_id : text <<PK>>
+  * customer_id : uuid <<FK Master>>
+  --
+  entered_at : timestamp
+  exited_at : timestamp
+  attributed_by : enum(ml, rule, manual)
+}
+
+entity "merge_history" as Merge {
+  * merge_id : uuid <<PK>>
+  --
+  * surviving_customer_id : uuid
+  * merged_customer_id : uuid
+  reason : text
+  merged_at : timestamp
+  merged_by : text
+}
+
+Master ||--o{ Identity
+Master ||--o{ Address
+Master ||--o{ Consent
+Master ||--o{ Segment
+Master }o--o{ Merge
+
+note bottom of Master
+  Gold data product: `customer.master_customer`
+  Identity resolution runs hourly; merges are
+  audited in merge_history for reversibility.
+  PII columns honour per-purpose consent; the
+  catalog's policy engine masks restricted values
+  for unauthorised consumers.
+end note
+
+@enduml

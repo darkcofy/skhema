@@ -1,0 +1,94 @@
+@startuml orders-core-schema
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam linetype ortho
+
+title MeshCo — Orders domain gold schema
+
+entity "customer_orders" as Order {
+  * order_id : uuid <<PK>>
+  --
+  * customer_id : uuid <<FK Customer>>
+  * channel : enum(pos, commerce)
+  * ordered_at : timestamp
+  * gross_amount : money
+  * currency : char(3)
+  status : enum(initiated, authorised, captured, refunded, disputed)
+  native_order_id : text
+}
+
+entity "order_lines" as Line {
+  * order_line_id : uuid <<PK>>
+  --
+  * order_id : uuid <<FK Order>>
+  * sku : text <<FK Product>>
+  * quantity : int
+  * unit_price : money
+  * discount_amount : money
+  fulfilment_id : uuid <<FK Shipment>>
+}
+
+entity "order_events" as Event {
+  * event_id : uuid <<PK>>
+  --
+  * order_id : uuid <<FK Order>>
+  * event_type : enum
+  * occurred_at : timestamp
+  actor : text
+  payload : jsonb
+}
+
+entity "payment_attempts" as Payment {
+  * attempt_id : uuid <<PK>>
+  --
+  * order_id : uuid <<FK Order>>
+  * method_type : enum(card, wallet, cash)
+  * state : enum(auth, capture, decline)
+  * amount : money
+  * attempted_at : timestamp
+}
+
+entity "customer_master" as Customer {
+  * customer_id : uuid <<PK>>
+  --
+  display_name : text
+  is_guest : boolean
+  primary_email : text
+  primary_country : char(2)
+}
+
+entity "product_catalog" as Product {
+  * sku : text <<PK>>
+  --
+  name : text
+  category_id : text
+  current_price : money
+  currency : char(3)
+}
+
+entity "shipments" as Shipment {
+  * shipment_id : uuid <<PK>>
+  --
+  * order_id : uuid <<FK Order>>
+  carrier : text
+  state : enum(pending, dispatched, in_transit, delivered, returned)
+  shipped_at : timestamp
+  delivered_at : timestamp
+}
+
+Customer ||--o{ Order
+Order ||--|{ Line
+Order ||--o{ Event
+Order ||--o{ Payment
+Order ||--o{ Shipment
+Line }o--|| Product
+
+note bottom of Order
+  Gold data product: `orders.transactional_orders`
+  Contract v2.1.0 — owner: orders domain
+  SLO freshness: 15 min from source
+  SLO completeness: 100% by D+1 09:00 UTC
+end note
+
+@enduml

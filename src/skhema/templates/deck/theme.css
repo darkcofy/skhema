@@ -82,18 +82,59 @@
 .reveal section.divider h2 { font-size: 2.5em; border: none; color: var(--skhema-accent); }
 
 /* ────────── diagram slides ────────── */
+.reveal .diagram-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  max-height: 72vh;
+}
+.reveal .diagram-row--solo {
+  grid-template-columns: 1fr;
+}
 .reveal .diagram {
   background: white;
   border-radius: 8px;
-  padding: 24px;
+  padding: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 70vh;
+  max-height: 72vh;
   overflow: hidden;
 }
 .reveal .diagram svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+
+.reveal .diagram-prose {
+  font-size: 0.48em;
+  line-height: 1.4;
+  color: var(--skhema-text);
+  max-height: 72vh;
+  overflow-y: auto;
+  padding: 0 4px;
+}
+.reveal .diagram-prose h1,
+.reveal .diagram-prose h2,
+.reveal .diagram-prose h3 {
+  font-size: 1.15em;
+  margin: 0.2em 0 0.4em;
+  color: var(--skhema-accent);
+  border-bottom: none;
+  display: block;
+  padding: 0;
+}
+.reveal .diagram-prose p { margin: 0 0 0.6em; }
+.reveal .diagram-prose ul,
+.reveal .diagram-prose ol { margin: 0 0 0.6em; padding-left: 1.4em; }
+.reveal .diagram-prose li { margin-bottom: 0.3em; }
+.reveal .diagram-prose code {
+  background: var(--skhema-surface);
+  color: var(--skhema-heading);
+  font-size: 0.92em;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.reveal .diagram-prose strong { color: var(--skhema-heading); }
 
 /* ────────── ADR slides ────────── */
 .reveal .adr-body { font-size: 0.75em; line-height: 1.5; }

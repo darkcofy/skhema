@@ -1,0 +1,53 @@
+@startuml contract-break-detection-flow
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam sequence {
+    ArrowColor #374151
+    ActorBackgroundColor #1168bd
+    LifeLineBorderColor #9CA3AF
+    ParticipantBackgroundColor #F3F4F6
+    ParticipantBorderColor #9CA3AF
+    ParticipantFontColor #111827
+}
+
+title MeshCo — Contract-break detection at PR time
+
+actor "Domain Engineer" as Dev
+participant "GitHub" as GH
+participant "CI Gate\n(GitHub Actions)" as CI
+participant "Contract Validator" as Val
+participant "Breaking-Change\nDetector" as Diff
+participant "Subscription Tracker" as Subs
+participant "Contract Repository" as Repo
+actor "Consuming Team" as Consumer
+
+Dev -> GH : Open PR changing schema
+GH -> CI : Triggers CI on pull_request
+activate CI
+CI -> Val : validate_contract(before, after)
+activate Val
+
+Val -> Repo : Load previous contract
+Val -> Diff : Compute breaking-change diff
+activate Diff
+Diff --> Val : {breaking: [drop_col: amount_usd], additive: [...]}
+deactivate Diff
+
+Val -> Subs : Who subscribes to `orders.transactional_orders`?
+Subs --> Val : [finance.close, ml.pricing]
+Val --> CI : FAIL\nBreaking change, 2 active consumers
+
+deactivate Val
+CI --> GH : Status: failure (contract break)
+deactivate CI
+GH --> Dev : PR blocked\n"Breaking change: amount_usd dropped.\nDeprecation window required (min 2 weeks per subscriber)."
+
+note over Dev, Consumer
+    The producer must either:
+    (a) keep the deprecated column + bump major version with a 2-week window, or
+    (b) coordinate migration with each named subscriber.
+    Merge is blocked until CI goes green.
+end note
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml reverse-etl-to-erp
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam sequence {
+    ArrowColor #374151
+    ActorBackgroundColor #1168bd
+    LifeLineBorderColor #9CA3AF
+    ParticipantBackgroundColor #F3F4F6
+    ParticipantBorderColor #9CA3AF
+    ParticipantFontColor #111827
+}
+
+title MeshCo — Reverse-ETL: customer LTV back into SAP after month-end close
+
+participant "Finance dbt job\n(gold layer)" as Gold
+participant "orders.recognised_revenue\nData Product" as RR
+participant "customer.ltv_monthly\nData Product" as LTV
+participant "Hightouch\n(Reverse-ETL)" as RETL
+participant "SAP ECC" as SAP
+actor "Finance User" as Emma
+
+Gold -> RR : Nightly run after EOD close
+Gold -> LTV : Compute LTV per customer_id
+
+== Month-end close sign-off ==
+Emma -> SAP : Post final close journals
+Emma -> RETL : Trigger "post-close refresh"
+
+activate RETL
+RETL -> LTV : SELECT customer_id, ltv_usd, cohort_month
+RETL -> RR  : SELECT period_id, recognised_amount
+RETL -> SAP : Write BAPI customer_master.ltv + revenue_period
+SAP --> RETL : 202 Accepted (async)
+deactivate RETL
+
+SAP --> Emma : Management reporting pack refreshed\n(usually within 15 min)
+
+note right of RETL
+    Reverse-ETL runs post-close only.
+    Running mid-month would create
+    drift between finance and product views.
+end note
+
+@enduml

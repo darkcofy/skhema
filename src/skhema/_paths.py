@@ -7,7 +7,6 @@ __file__ sits inside site-packages and the three-dirname trick gives you
 something nonsensical. Walking up from __file__ AND from CWD looking for
 a `clients/` marker is robust in both layouts.
 """
-import os
 from pathlib import Path
 
 
@@ -19,10 +18,6 @@ def find_repo_root() -> str:
     a directory containing `clients/`. Returns the first match; raises if
     neither path contains it.
     """
-    candidates = [Path(__file__).resolve()] + list(Path(__file__).resolve().parents)
-    candidates.append(Path.cwd().resolve())
-    candidates.extend(Path.cwd().resolve().parents)
-
     seen: set[Path] = set()
     for start in (Path(__file__).resolve(), Path.cwd().resolve()):
         for parent in [start, *start.parents]:

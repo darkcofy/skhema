@@ -92,6 +92,7 @@
   </div>
 
   <script>{{ reveal_js }}</script>
+  <script>{{ notes_plugin_js | safe }}</script>
   <script>
     Reveal.initialize({
       hash: true,
@@ -111,6 +112,9 @@
       minScale: 0.2,
       maxScale: 2.0,
       view: (location.search.match(/print-pdf/gi) ? 'print' : undefined),
+      // Register the speaker-notes plugin so `S` opens the popup presenter
+      // view with clock, current-slide notes, and next-slide preview.
+      plugins: [ RevealNotes ],
     });
 
     // Click-to-zoom: open any diagram in a full-viewport overlay so the

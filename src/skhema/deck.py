@@ -392,6 +392,11 @@ def render_deck_html(
     reveal_js = (vendor / "reveal.min.js").read_text()
     reveal_css = (vendor / "reveal.min.css").read_text()
     theme_white_css = (vendor / "theme-white.min.css").read_text()
+    # Speaker-notes plugin — powers the `S` key popup view with the
+    # presenter clock, current-slide notes, and next-slide preview.
+    # The bundled plugin opens about:blank and writes the speaker-view
+    # HTML programmatically, so no extra file needs to be served.
+    notes_plugin_js = (vendor / "notes.min.js").read_text()
 
     tpl_dir = _templates_dir()
     env = Environment(
@@ -414,6 +419,7 @@ def render_deck_html(
         reveal_css=reveal_css,
         theme_white_css=theme_white_css,
         skhema_theme_css=skhema_theme_css,
+        notes_plugin_js=notes_plugin_js,
     )
 
 

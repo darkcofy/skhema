@@ -125,6 +125,52 @@ Two files, both YAML.
 - [ ] Invariants are testable statements, not opinions
 - [ ] No events without a known `entity` (orphan events indicate missing concepts)
 
+## Handoff to gnosis
+
+Save your LLM output under `clients/<name>/transcripts/_drafts/` as a single **combined** YAML with `lifecycles:` and/or `events:` top-level keys (the skill produces both at once and transition triggers cross-reference event names, so ingest them together):
+
+```yaml
+lifecycles:
+  - entity: Transaction
+    states: [...]
+    transitions:
+      - from: initiated
+        to: authorised
+        trigger: TransactionAuthorised    # must match an event name
+    ...
+
+events:
+  - name: TransactionAuthorised
+    ...
+```
+
+Then:
+
+```bash
+gnosis ingest behavior \
+  --from clients/meshco/transcripts/_drafts/2026-05-10-behavior-extraction.yaml \
+  --client meshco \
+  --session 2026-05-10-week3-behavior \
+  --interviewer alfred
+```
+
+What gnosis enforces when you run this:
+
+**Hard schema (refused if violated — nothing is written):**
+
+- Top-level must be a mapping with at least one of `lifecycles` / `events` keys
+- Each lifecycle: `entity` in PascalCase; `states` with ≥2 entries each having snake_case `name` + non-empty `description`; `transitions` with ≥1 entry each having `from`/`to` (referencing named states) and `trigger`
+- Each event: `name` in PascalCase; non-empty `domain`, `entity` (PascalCase), `triggered_by`; `carries` with ≥1 payload field
+
+**Soft lint (reported to `ontology/ingest-warnings.md`, non-blocking):**
+
+- `unknown_entity` — a lifecycle or event `entity` not present in `02_concepts/candidate-concepts.yaml`. Catches extraction against the wrong vocabulary.
+- `unknown_transition_trigger` — a lifecycle transition `trigger` that doesn't match any event name (in the current batch or `events.yaml`). The triggers-to-events link is what makes lifecycles + events a coherent pair.
+- `event_not_past_tense` — an event name whose final PascalCase segment isn't a past-tense verb form. Heuristic (suffixes like `-ed`, `-en`, plus a whitelist of common irregulars). `ShipOrder` → flagged; `OrderShipped` → clean.
+- `unknown_speaker` — a lifecycle or event `source_quote` whose `source` doesn't match a stakeholder in `00_scope/stakeholders.yaml`.
+
+**Merge behaviour:** lifecycles are keyed by `entity` (case-insensitive); events by `name`. Re-ingesting an existing entity unions states (new wins on name collision), transitions (dedup by `(from,to,trigger)` triple), invariants, and source quotes. Re-ingesting an existing event unions `carries` and `consumed_by`, overwrites scalar fields (`domain`, `entity`, `triggered_by`). Every merged entry carries a `last_ingested` block.
+
 ## Examples
 
 ### Input

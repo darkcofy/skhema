@@ -91,19 +91,83 @@ Requires Python 3.11+, PlantUML binary on PATH (or `PLANTUML_BIN` env var), and 
 
 ## Gnosis workflow
 
-```bash
-gnosis init meshco --domain "Retail Data Mesh"
-# Fill in the six stages — either by hand, or by applying skills to transcripts
-# with your LLM of choice:
-#   • skills/gnosis/extracting-concepts-from-transcripts.md
-#   • skills/gnosis/extracting-glossary-terms.md
-#   • skills/gnosis/detecting-terminology-synonyms.md
-#   • skills/gnosis/extracting-stakeholders.md
-#   • skills/gnosis/extracting-events-and-lifecycles.md
+Gnosis has five top-level commands:
 
-gnosis status --client meshco       # See stage completion + artifact readiness
-gnosis generate available --client meshco   # Produce all READY artifacts
+```bash
+gnosis init <client> --domain "<domain>"      # scaffold a new ontology workspace
+gnosis ingest <artifact> --from <file> ...    # validate + merge LLM extractions
+gnosis status --client <client>               # stage completion + lint warnings
+gnosis generate available --client <client>   # render ready artifacts (brief, glossary, concept map, …)
+gnosis interview-kit --client <client> \
+  --stakeholder "<name>"                      # deterministic per-stakeholder interview agenda
 ```
+
+The day-to-day loop is **skill → LLM → ingest**: read a `skills/gnosis/*.md` playbook, apply it against your LLM of choice plus the raw material, save the output under `clients/<name>/transcripts/_drafts/`, then hand it to `gnosis ingest`. Gnosis validates the schema, runs semantic lint (non-blocking), merges into the workspace with `last_ingested` provenance, and regenerates `ontology/ingest-warnings.md`.
+
+### The seven ingest artifacts
+
+Each skill in `skills/gnosis/` pairs with a `gnosis ingest <artifact>` command. The skill tells the consultant what to prompt; the command enforces the contract on whatever the LLM returned.
+
+| Artifact | Skill | Source | Target | Merge policy |
+|---|---|---|---|---|
+| `stakeholders` | `extracting-stakeholders.md` | YAML | `00_scope/stakeholders.yaml` | Compound key for TBDs; union interests + decision_rights |
+| `glossary` | `extracting-glossary-terms.md` | CSV | `01_language/glossary-seeds.csv` | **Gentle** — curated definitions never clobbered; aliases unioned |
+| `synonyms` | `detecting-terminology-synonyms.md` | YAML | `01_language/synonym-conflicts.{yaml,md}` | YAML canonical, markdown rendered; one-time backup of hand-authored `.md` |
+| `concepts` | `extracting-concepts-from-transcripts.md` | YAML | `02_concepts/candidate-concepts.yaml` | Overwrite scalars; union source_quotes, related_to, open_questions |
+| `mappings` | `mapping-source-systems-to-concepts.md` | CSV | `03_mappings/source-to-canonical.csv` | **Gentle** — curated mappings never clobbered; notes unioned |
+| `behavior` | `extracting-events-and-lifecycles.md` | YAML (combined `lifecycles:` + `events:`) | `04_behavior/{lifecycle-states,events}.yaml` | Union states/transitions/carries; cross-file trigger ↔ event lint |
+| `formalization` | `formalizing-ontology-from-workspace.md` | YAML | `05_formalization/ontology.yaml` | Overwrite scalars; union properties, relationships, traces_to |
+
+Stages 0 → 5 progress from left to right, but in practice you'll iterate: a concepts ingest that raises `unknown_speaker` warnings sends you back to `stakeholders`; a formalization ingest that raises `unresolved_synonym_as_class` sends you back to `synonyms`. The warnings file is how the stages cross-reference each other.
+
+### Running an ingest
+
+```bash
+# After applying skills/gnosis/extracting-concepts-from-transcripts.md to
+# transcripts in Claude/Bedrock/ChatGPT, save the YAML output:
+#   clients/meshco/transcripts/_drafts/2026-05-06-concepts-extraction.yaml
+
+gnosis ingest concepts \
+  --from clients/meshco/transcripts/_drafts/2026-05-06-concepts-extraction.yaml \
+  --client meshco \
+  --session 2026-05-06-week3-extraction \
+  --interviewer alfred
+```
+
+Every ingest requires `--session` and `--interviewer` — these are stamped onto each merged entry as provenance so later you can trace which concepts came from which interview.
+
+### Contract model
+
+- **Hard schema** (refused — nothing is written): required fields, type checks, enum values, PascalCase / snake_case rules. Errors are collected and printed all at once.
+- **Soft lint** (reported to `ontology/ingest-warnings.md`, non-blocking): unknown speakers, dangling references, low-confidence entries without open_questions, non-past-tense event names, transition triggers without matching events, relationship targets not in the ontology, etc.
+- **Provenance** (required on every ingest): `--session` and `--interviewer` are stamped on each touched entry. Git supplies the rest of the history.
+
+Fix warnings by editing the workspace (add the missing stakeholder, rename the dangling reference, …) or by correcting the source fixture and re-ingesting. `gnosis status` surfaces the current warning count after each run.
+
+### Checking state and generating deliverables
+
+```bash
+gnosis status --client meshco                # stage %s + artifact readiness + lint warning count
+gnosis generate available --client meshco    # render all READY artifacts (engagement brief, glossary, concept map, …)
+```
+
+### Generating per-stakeholder interview kits
+
+`gnosis interview-kit` walks the current workspace and produces a markdown briefing for the next conversation — deterministic, no LLM involved. For each named stakeholder it pulls:
+
+- **Open questions** from concepts where they're cited as a source
+- **Low-confidence concepts** they contributed to (worth firming up)
+- **Unresolved synonym conflicts** where their usage is on record
+- **TBD stakeholders** they may be able to introduce
+
+```bash
+gnosis interview-kit --client meshco --stakeholder "Emma Ward"
+# → generated/interview-kits/2026-05-12-emma-ward.md
+
+gnosis interview-kit --client meshco    # omit --stakeholder to generate one per named stakeholder
+```
+
+Regenerate before every session to pick up any intervening ingests.
 
 ## Skhema workflow
 
@@ -123,9 +187,10 @@ skhema validate                                # Lint conventions
 skhema/
 ├── src/
 │   ├── skhema/            # Packaging: render, gallery, docs, deck, adr, structurizr
-│   └── gnosis/            # Discovery: init, status, generate, readiness
+│   └── gnosis/            # Discovery: init, status, generate, ingest_*, interview_kit, readiness
 ├── skills/                # Dual-use methodology playbooks
-│   ├── gnosis/            # 5 extraction skills
+│   ├── gnosis/            # 7 skills — one per ingest artifact (stakeholders, glossary, synonyms,
+│   │                      #            concepts, mappings, events+lifecycles, formalization)
 │   ├── skhema/            # 5 authoring skills
 │   └── README.md          # Dual-use explanation + portability table
 ├── clients/

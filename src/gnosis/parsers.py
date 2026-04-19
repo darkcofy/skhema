@@ -35,20 +35,30 @@ def count_csv_rows(path: str) -> int:
 
 
 def count_md_entries(path: str) -> int:
-    """Count H2 headings under the 'Capture' section in a Markdown file."""
+    """Count H2 headings with non-empty body content.
+
+    Supports two markdown shapes:
+      1. Template-style files with a `## Capture` section followed by H2 subsections,
+         optionally terminated by `## Completion criteria` (original authoring workflow).
+      2. Flat auto-generated files where H2 sections sit directly under the H1 title
+         (e.g. the synonym-conflicts.md rendered by `gnosis ingest synonyms`).
+
+    In shape (1), scan only inside the Capture block. Otherwise count all H2 sections
+    in the document.
+    """
     if not os.path.isfile(path):
         return 0
     with open(path, "r") as f:
         content = f.read()
+
     capture_match = re.search(r"^## Capture\s*$", content, re.MULTILINE)
-    if not capture_match:
-        return 0
-    after_capture = content[capture_match.end():]
-    end_match = re.search(r"^## Completion criteria\s*$", after_capture, re.MULTILINE)
-    if end_match:
-        section_text = after_capture[:end_match.start()]
+    if capture_match:
+        after_capture = content[capture_match.end():]
+        end_match = re.search(r"^## Completion criteria\s*$", after_capture, re.MULTILINE)
+        section_text = after_capture[:end_match.start()] if end_match else after_capture
     else:
-        section_text = after_capture
+        section_text = content
+
     headings = list(re.finditer(r"^## (.+)$", section_text, re.MULTILINE))
     count = 0
     for i, heading in enumerate(headings):

@@ -69,6 +69,36 @@ Required fields: `name`, `domain`, `description`, `source_quotes` (at least one)
 - [ ] Concept names are singular nouns (`Transaction`, not `Transactions` or `To transact`)
 - [ ] Domain field matches one of the domains in `00_scope/engagement.md`
 
+## Handoff to gnosis
+
+Save your LLM output under `clients/<name>/transcripts/_drafts/` (date-stamped, e.g. `2026-05-06-concepts-extraction.yaml`) and then hand it to gnosis for validation and merge:
+
+```bash
+gnosis ingest concepts \
+  --from clients/meshco/transcripts/_drafts/2026-05-06-concepts-extraction.yaml \
+  --client meshco \
+  --session 2026-05-06-week3-extraction \
+  --interviewer alfred
+```
+
+What gnosis enforces when you run this:
+
+**Hard schema (refused if violated — nothing is written):**
+
+- Each entry has `name` (PascalCase), `domain`, `description` (≥ 20 chars), and at least one `source_quote`
+- Each `source_quote` has non-empty `quote`, `source`, and an ISO `date`
+- `confidence`, if set, is one of `high` / `medium` / `low`
+
+**Soft lint (reported to `ontology/ingest-warnings.md`, non-blocking):**
+
+- `unknown_speaker` — a `source_quote.source` that doesn't resolve to a stakeholder in `00_scope/stakeholders.yaml`
+- `dangling_related_to` — a `related_to` entry that isn't an existing concept or another concept in the same ingest
+- `low_confidence_missing_questions` — `confidence: low` without at least one `open_questions` entry
+
+Fix warnings by editing the workspace (add the missing stakeholder, rename the dangling reference, add an open question) and re-running the ingest, or by correcting the source YAML and re-ingesting. `gnosis status` will show the warning count after each run.
+
+Merges are **additive by name (case-insensitive)**: `source_quotes`, `related_to`, and `open_questions` are unioned across ingests; `description` / `domain` / `confidence` are overwritten from the new entry. Every merged entry carries a `last_ingested` block recording the session, interviewer, and timestamp — so later you can trace who sourced which concept in which session.
+
 ## Examples
 
 ### Input (transcript excerpt)

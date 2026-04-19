@@ -1,0 +1,80 @@
+- entity: Order
+  states:
+  - name: placed
+    description: Customer has submitted an order via POS or commerce; payment not yet authorised.
+  - name: paid
+    description: Payment authorisation succeeded and capture is complete or scheduled.
+  - name: fulfilled
+    description: All lines picked and a shipment has been dispatched toward the customer.
+  - name: delivered
+    description: Shipment confirmed delivered to the customer address.
+  - name: cancelled
+    description: Order was cancelled before fulfilment; payment reversed if captured.
+  - name: refunded
+    description: Order was refunded post-delivery, typically following a return.
+  transitions:
+  - from: placed
+    to: paid
+    trigger: OrderPaid
+  - from: placed
+    to: cancelled
+    trigger: OrderCancelled
+  - from: paid
+    to: fulfilled
+    trigger: OrderShipped
+  - from: fulfilled
+    to: delivered
+    trigger: ShipmentDelivered
+  - from: delivered
+    to: refunded
+    trigger: OrderRefundCompleted
+  invariants:
+  - An order cannot return to `placed` once it has moved to `paid`.
+  - '`cancelled` is terminal for pre-fulfilment orders; `refunded` is terminal for post-delivery orders.'
+  - The finance feed only carries orders in `paid` or later states.
+  source_quotes:
+  - quote: An order at the till and an order on the web are the same thing conceptually — both are customer
+      orders
+    source: Carol Singh
+    date: '2026-04-16'
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- entity: DataProduct
+  states:
+  - name: proposed
+    description: Domain team has drafted the data-product spec; awaiting platform review.
+  - name: draft
+    description: Platform review completed; contract skeleton exists but no production data yet.
+  - name: published
+    description: Live with a signed contract, SLOs instrumented, consumers onboarded.
+  - name: deprecated
+    description: Platform team has announced retirement; consumers notified; new consumers blocked.
+  - name: retired
+    description: Data is no longer produced; read-only historical access only.
+  transitions:
+  - from: proposed
+    to: draft
+    trigger: DataProductReviewed
+  - from: draft
+    to: published
+    trigger: DataProductPublished
+  - from: published
+    to: deprecated
+    trigger: DataProductDeprecated
+  - from: deprecated
+    to: retired
+    trigger: DataProductRetired
+  invariants:
+  - A data product cannot move from `retired` back to any active state; a revival is a new data product.
+  - Contracts are immutable once the data product is `published` — new versions ship under a new contract.
+  - A `published` data product must have at least one instrumented SLO.
+  source_quotes:
+  - quote: 'Every lighthouse data product ships with three SLOs minimum: freshness, completeness, accuracy'
+    source: Bob Murphy
+    date: '2026-04-17'
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'

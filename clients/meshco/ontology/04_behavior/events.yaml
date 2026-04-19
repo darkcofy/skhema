@@ -1,0 +1,147 @@
+- name: OrderPaid
+  domain: orders
+  entity: Order
+  triggered_by: Payment capture confirmed by the acquirer
+  carries:
+  - order_id
+  - customer_id
+  - total_amount
+  - currency
+  - paid_at
+  consumed_by:
+  - FinanceFeed
+  - Fulfilment service
+  - Cohort materialisation
+  source_quotes:
+  - quote: Every order has one customer
+    source: Carol Singh
+    date: '2026-04-16'
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: OrderShipped
+  domain: orders
+  entity: Order
+  triggered_by: Dispatch from fulfilment centre or store pick
+  carries:
+  - order_id
+  - shipment_id
+  - shipped_at
+  - carrier
+  consumed_by:
+  - Customer notification service
+  - Finance feed
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: ShipmentDelivered
+  domain: fulfilment
+  entity: Shipment
+  triggered_by: Carrier delivery confirmation event
+  carries:
+  - shipment_id
+  - order_id
+  - delivered_at
+  - signature_captured
+  consumed_by:
+  - Customer notification service
+  - Returns eligibility clock
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: DataProductPublished
+  domain: platform
+  entity: DataProduct
+  triggered_by: Platform CI pipeline signs off and publishes the contract
+  carries:
+  - data_product_id
+  - contract_version
+  - slo_profile
+  - published_at
+  consumed_by:
+  - Mesh catalog
+  - Consumer onboarding service
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: DataProductDeprecated
+  domain: platform
+  entity: DataProduct
+  triggered_by: Platform team announces retirement with a cut-off date
+  carries:
+  - data_product_id
+  - deprecation_announced_at
+  - retirement_target_at
+  consumed_by:
+  - Consumer notification service
+  - Mesh catalog
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: ContractBreakDetected
+  domain: platform
+  entity: DataContract
+  triggered_by: PR-time CI contract diff surfaces a breaking change
+  carries:
+  - data_product_id
+  - pr_url
+  - break_category
+  - detected_at
+  consumed_by:
+  - PR gate service
+  - Ops dashboard
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: OrderCancelled
+  domain: orders
+  entity: Order
+  triggered_by: Customer or agent cancels the order before fulfilment
+  carries:
+  - order_id
+  - cancelled_at
+  - cancellation_reason
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: DataProductReviewed
+  domain: platform
+  entity: DataProduct
+  triggered_by: Platform review board signs off on the draft spec
+  carries:
+  - data_product_id
+  - reviewer
+  - reviewed_at
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: DataProductRetired
+  domain: platform
+  entity: DataProduct
+  triggered_by: Retirement cut-off date reached; data no longer produced
+  carries:
+  - data_product_id
+  - retired_at
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: ShipOrder
+  domain: fulfilment
+  entity: Order
+  triggered_by: Warehouse operator confirms pack and dispatch
+  carries:
+  - order_id
+  - shipped_at
+  last_ingested:
+    session: 2026-05-10-week3-behavior
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'

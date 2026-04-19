@@ -1,0 +1,40 @@
+# LLM-extracted stakeholders from week-3 transcripts.
+# Source transcripts:
+#   - transcripts/2026-05-04-emma-finance-deepdive.md (Dan Kowalski mentioned)
+#   - transcripts/2026-05-05-dave-semantic-layer.md (Priya mentioned as incoming ML lead)
+# Extracted using skills/gnosis/extracting-stakeholders.md
+# Stage before ingest — review, then:
+#   gnosis ingest stakeholders --from transcripts/_drafts/2026-05-07-stakeholders-extraction.yaml \
+#     --client meshco --session 2026-05-07-week3-stakeholders --interviewer alfred
+
+- name: Dan Kowalski
+  role: Treasury Operations Lead
+  team: Finance · Treasury
+  interests:
+    - Period-boundary exception handling
+    - Settlement reconciliation accuracy
+    - Reducing manual month-end intervention
+  decision_rights:
+    - Settlement reconciliation process
+    - Period-boundary exception resolution
+  influence: high
+  notes: >
+    Surfaced indirectly via Emma Ward — owns every month-end settlement
+    post-mortem. Needs to be pulled into a dedicated interview before
+    stage 4 (behaviour) work starts. Not present at kickoff.
+
+- name: Priya
+  role: ML Platform Lead (incoming)
+  team: Engineering · ML
+  interests:
+    - Feature store selection
+    - Metric definitions exposed as features
+    - Cube over Looker-based semantics
+  influence: high
+  engagement_cadence: TBD
+  notes: >
+    Starts in two weeks per Dave Kim. Strong opinions on tooling; likely
+    to push for Cube. Surname and contact details unknown until onboarding.
+    This entry supersedes the TBD "ML Platform Lead" placeholder that was
+    scaffolded at kickoff — clean up the TBD entry after confirming Priya's
+    full name and email.

@@ -1,21 +1,34 @@
 term,definition,source,domain,aliases,notes
-Data Product,"A curated, owned, SLO-backed dataset exposed to consumers with a published contract","2026-04-16 Data Council kickoff",platform,"DP",
-Data Contract,"A producer-consumer agreement about a data product's schema, semantics, freshness, and quality","2026-04-16 Data Council kickoff",platform,"contract",Enforced at PR time via CI
-Domain,"A business-owned area that publishes one or more data products; MeshCo has five: customer, product, orders, inventory, fulfilment","2026-04-16 Data Council kickoff",platform,,
-Producer,"A team that publishes a data product","2026-04-16 Data Council kickoff",platform,"domain team",
-Consumer,"A team or service that reads a data product through its contract","2026-04-16 Data Council kickoff",platform,,
-SLO,"Service level objective — quantified promise about freshness, quality, or availability of a data product","2026-04-16 Data Council kickoff",platform,"service level objective","Distinct from SLA: SLOs are internal targets"
-Lineage,"The end-to-end path data takes from source systems through transforms to consumers; column-level when possible","2026-04-17 Bob Murphy",platform,,Captured via OpenLineage
-Bronze,"The rawest reliable layer in the lakehouse — type-safe but un-enriched CDC output","2026-04-17 Bob Murphy",lakehouse,"raw layer","Part of medallion architecture"
-Silver,"Cleaned, deduplicated, joined lakehouse layer — the basis for gold models","2026-04-17 Bob Murphy",lakehouse,,
-Gold,"Business-facing, SLO-backed lakehouse layer — data products are served from gold","2026-04-17 Bob Murphy",lakehouse,,
-Close,"Monthly close — the finance process of finalising the month's financial results and reporting","2026-04-18 Emma Ward",finance,"month-end close",Finance pain point
-Order,"A customer's purchase intent, typically one basket of products at one time","2026-04-16 Carol Singh",orders,,"Commerce and POS have different order IDs; identity resolution needed"
-Customer,"A person or organisation that transacts with MeshCo","2026-04-16 Carol Singh",customer,"account holder, buyer","Conflicts: Carol uses 'customer'; Sales Ops uses 'account holder'"
-Shipment,"A physical delivery of one or more order lines to a customer address","2026-04-16 Supply Chain",fulfilment,"delivery",,
-Product,"An item in the MeshCo catalogue — SKU-level","2026-04-16 Carol Singh",product,"SKU, item",
-Auth Failure,"A POS or commerce transaction that fails authorisation at the card network","2026-04-17 Bob Murphy",payments,"decline","Not in current engagement scope but frequently referenced"
-EOD,"End of day — daily batch cut-off for captures, reconciliation, and ERP handoff","2026-04-17 Bob Murphy",platform,"end of day",Typically midnight UTC
-CDC,"Change data capture — streaming source database mutations into the lakehouse","2026-04-17 Bob Murphy",ingestion,"change data capture",Debezium + Kafka stack
-Medallion,"The bronze/silver/gold layering convention in the lakehouse","2026-04-17 Bob Murphy",lakehouse,,"Databricks-era term; we use it but don't use Delta"
-Contract Break,"A change to a producer's data product that violates its published contract","2026-04-18 Platform Team",platform,"breaking change",Detected at PR time in CI
+Data Product,"A curated, owned, SLO-backed dataset exposed to consumers with a published contract",2026-04-16 Data Council kickoff,platform,DP,
+Data Contract,"A producer-consumer agreement about a data product's schema, semantics, freshness, and quality",2026-04-16 Data Council kickoff,platform,contract,Enforced at PR time via CI
+Domain,"A business-owned area that publishes one or more data products; MeshCo has five: customer, product, orders, inventory, fulfilment",2026-04-16 Data Council kickoff,platform,,
+Producer,A team that publishes a data product,2026-04-16 Data Council kickoff,platform,domain team,
+Consumer,A team or service that reads a data product through its contract,2026-04-16 Data Council kickoff,platform,,
+SLO,"Service level objective — quantified promise about freshness, quality, or availability of a data product",2026-04-16 Data Council kickoff,platform,service level objective,Distinct from SLA: SLOs are internal targets
+Lineage,The end-to-end path data takes from source systems through transforms to consumers; column-level when possible,2026-04-17 Bob Murphy,platform,,Captured via OpenLineage
+Bronze,The rawest reliable layer in the lakehouse — type-safe but un-enriched CDC output,2026-04-17 Bob Murphy,lakehouse,raw layer,Part of medallion architecture
+Silver,"Cleaned, deduplicated, joined lakehouse layer — the basis for gold models",2026-04-17 Bob Murphy,lakehouse,,
+Gold,"Business-facing, SLO-backed lakehouse layer — data products are served from gold",2026-04-17 Bob Murphy,lakehouse,,
+Close,Monthly close — the finance process of finalising the month's financial results and reporting,2026-04-18 Emma Ward,finance,month-end close,Finance pain point
+Order,"A customer's purchase intent, typically one basket of products at one time",2026-04-16 Carol Singh,orders,,Commerce and POS have different order IDs; identity resolution needed
+Customer,A person or organisation that transacts with MeshCo,2026-04-16 Carol Singh,customer,"account holder, buyer",Conflicts: Carol uses 'customer'; Sales Ops uses 'account holder'
+Shipment,A physical delivery of one or more order lines to a customer address,2026-04-16 Supply Chain,fulfilment,delivery,
+Product,An item in the MeshCo catalogue — SKU-level,2026-04-16 Carol Singh,product,"SKU, item",
+Auth Failure,A POS or commerce transaction that fails authorisation at the card network,2026-04-17 Bob Murphy,payments,decline,Not in current engagement scope but frequently referenced
+EOD,"End of day — daily batch cut-off for captures, reconciliation, and ERP handoff",2026-04-17 Bob Murphy,platform,end of day,Typically midnight UTC
+CDC,Change data capture — streaming source database mutations into the lakehouse,2026-04-17 Bob Murphy,ingestion,change data capture,Debezium + Kafka stack
+Medallion,The bronze/silver/gold layering convention in the lakehouse,2026-04-17 Bob Murphy,lakehouse,,Databricks-era term; we use it but don't use Delta
+Contract Break,A change to a producer's data product that violates its published contract,2026-04-18 Platform Team,platform,breaking change,Detected at PR time in CI
+Accounting Period,A 4-4-5 fiscal-calendar period code stamped onto every commercial event at the point of capture,2026-05-04 Emma Ward,finance,"period, fiscal period",
+Settlement,The reconciliation point where captured payments meet the books; settlement files arrive T+2 from the acquirer,2026-05-04 Emma Ward,finance,,
+Finance Feed,The outbound curated dataset flowing from commercial systems into SAP at end of each accounting period,2026-05-04 Emma Ward,finance,,"Historically a service, now just a dataset name"
+Pending Settlement Position,The running delta between captured and settled payments that finance reconciles against the bank,2026-05-04 Dan Kowalski,finance,,
+Report Package,The bundle of ~30 curated reports delivered to group finance at end of close,2026-05-04 Emma Ward,finance,,Not a data product — a deliverable composed of multiple data products
+Reverse-ETL,The pattern of piping curated analytics datasets back into operational systems (SAP in the meshco case),2026-05-04 Emma Ward,finance,"reverse ETL, rETL",
+Metric,"A business-level measurement with a defined grain, approved filters, and an owner; distinct from a measure",2026-05-05 Dave Kim,analytics,,
+Measure,"A column-level aggregate expression (sum, count distinct) without business context",2026-05-05 Dave Kim,analytics,,
+Cohort,A reusable slice of customers defined once and reported across any metric,2026-05-05 Dave Kim,analytics,,Today defined inconsistently across Braze
+Cohort Definition,"The versioned, owned, contract-backed artifact that pins down a Cohort",2026-05-05 Dave Kim,analytics,,
+Metric Surface,"The outward face of the semantic layer — SQL for BI, REST for reverse-ETL, Python for ML",2026-05-05 Dave Kim,analytics,,Dave's coinage; may not survive to final vocabulary
+Cube,,2026-05-05 Nina Patel,analytics,,
+Semantic Layer,,2026-05-05 Dave Kim,analytics,,

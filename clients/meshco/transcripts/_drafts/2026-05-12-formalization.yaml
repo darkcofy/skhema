@@ -1,0 +1,209 @@
+# LLM-synthesised canonical ontology for MeshCo.
+# Rolled up from:
+#   - 02_concepts/candidate-concepts.yaml (21 concepts)
+#   - 01_language/glossary-seeds.csv (33 terms)
+#   - 01_language/synonym-conflicts.yaml (3 conflicts)
+#   - 04_behavior/lifecycle-states.yaml (Order, DataProduct)
+#   - 04_behavior/events.yaml (10 events)
+#   - 03_mappings/source-to-canonical.csv (18 mappings)
+#
+# Extracted using skills/gnosis/formalizing-ontology-from-workspace.md
+# Stage before ingest — review, then:
+#   gnosis ingest formalization --from transcripts/_drafts/2026-05-12-formalization.yaml \
+#     --client meshco --session 2026-05-12-week5-formalization --interviewer alfred
+
+- name: Customer
+  definition: A person or organisation that transacts with MeshCo; identity resolved across POS, Commerce, and Salesforce via the golden-record process.
+  identifier: id
+  properties:
+    - id
+    - email
+    - golden_record_version
+  relationships:
+    - target: Order
+      type: has_many
+      label: placed_orders
+      cardinality: 1:N
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Customer
+    - 03_mappings/source-to-canonical.csv#pos.customers
+    - 03_mappings/source-to-canonical.csv#commerce.customers
+    - 03_mappings/source-to-canonical.csv#salesforce.account
+
+- name: Order
+  definition: A customer's purchase intent — one basket at one time, across POS or commerce. Distinct from ERP's PurchaseOrder concept.
+  identifier: id
+  properties:
+    - id
+    - customer_id
+    - placed_at
+    - status
+    - total_amount
+    - currency
+    - line_items
+  relationships:
+    - target: Customer
+      type: belongs_to
+      label: placed_by
+      cardinality: N:1
+    - target: Shipment
+      type: has_many
+      label: fulfilled_by
+      cardinality: 1:N
+    - target: Payment
+      type: has_many
+      label: paid_by
+      cardinality: 1:N
+    - target: LineItem             # intentionally missing from this ontology → relationship_target_unknown
+      type: has_many
+      label: contains
+      cardinality: 1:N
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Order
+    - 04_behavior/lifecycle-states.yaml#Order
+    - 01_language/synonym-conflicts.md#Order-homonym
+
+- name: Product
+  definition: An item in the MeshCo catalogue at SKU level, with marketing attributes and current pricing.
+  identifier: id
+  properties:
+    - id
+    - name
+    - category
+    - price
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Product
+    - 03_mappings/source-to-canonical.csv#pos.products
+
+- name: Shipment
+  definition: A physical movement of one or more order lines from a fulfilment point to a customer address.
+  identifier: id
+  properties:
+    - id
+    - order_id
+    - tracking_number
+    - carrier
+    - status
+    - dispatched_at
+    - delivered_at
+  relationships:
+    - target: Order
+      type: belongs_to
+      label: fulfils
+      cardinality: N:1
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Shipment
+    - 03_mappings/source-to-canonical.csv#fulfilment.shipments
+
+- name: Payment
+  definition: The financial settlement of an order, tracked from authorisation through capture.
+  identifier: id
+  properties:
+    - id
+    - order_id
+    - customer_id
+    - amount
+    - captured_at
+  relationships:
+    - target: Order
+      type: belongs_to
+      label: pays_for
+      cardinality: N:1
+    - target: Settlement
+      type: has_one
+      label: settled_by
+      cardinality: "1:1"
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Payment
+    - 03_mappings/source-to-canonical.csv#pos.transactions
+
+- name: Settlement
+  definition: The reconciliation point where captured payments meet the books; authority for 'settled' sits with finance.
+  identifier: id
+  properties:
+    - id
+    - payment_id
+    - settled_amount
+    - accounting_period
+    - settled_at
+  relationships:
+    - target: Payment
+      type: belongs_to
+      label: settles
+      cardinality: "1:1"
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Settlement
+    - 01_language/glossary-seeds.csv#Settlement
+
+- name: DataProduct
+  definition: A curated, owned, SLO-backed dataset exposed to consumers through a versioned contract. The unit of ownership and consumption in the mesh.
+  identifier: id
+  properties:
+    # Intentional: `id` is declared as identifier but missing from properties → missing_identifier_property
+    - name
+    - domain
+    - owner
+    - status
+    - current_contract_version
+  relationships:
+    - target: DataContract
+      type: has_many
+      label: versions
+      cardinality: 1:N
+    - target: SLO
+      type: has_many
+      label: guarantees
+      cardinality: 1:N
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#DataProduct
+    - 04_behavior/lifecycle-states.yaml#DataProduct
+
+- name: DataContract
+  definition: A producer-consumer agreement capturing a data product's schema, semantics, freshness, and quality guarantees; validated at deployment time.
+  identifier: id
+  properties:
+    - id
+    - data_product_id
+    - version
+    - schema
+    - published_at
+  relationships:
+    - target: DataProduct
+      type: belongs_to
+      label: contracts
+      cardinality: N:1
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#DataContract
+
+- name: SLO
+  definition: A service level objective — a quantified promise (freshness, quality, availability) a data product makes to its consumers.
+  identifier: id
+  properties:
+    - id
+    - data_product_id
+    - dimension
+    - target_value
+    - measured_value
+  relationships:
+    - target: DataProduct
+      type: belongs_to
+      label: scopes
+      cardinality: N:1
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#SLO
+
+- name: Metric
+  # Metric is listed as a term in an unresolved synonym conflict (Metric / Measure,
+  # proposed_canonical: null) — ingest will flag this as unresolved_synonym_as_class.
+  # Leaving intentionally so the formalisation blocker is visible before workshop.
+  definition: A business-level measurement with a defined grain, approved filters, and an owner; distinct from a measure.
+  identifier: id
+  properties:
+    - id
+    - name
+    - grain
+    - definition
+    - owner
+  traces_to:
+    - 02_concepts/candidate-concepts.yaml#Metric
+    - 01_language/synonym-conflicts.yaml#Metric-Measure

@@ -1,66 +1,47 @@
-# Terminology synonyms and conflicts — MeshCo
+# Terminology synonyms and conflicts
 
-## Capture
+*Auto-generated from `01_language/synonym-conflicts.yaml` by `gnosis ingest synonyms`. Do not hand-edit — edit the YAML (or re-ingest) and this file will be regenerated.*
 
-## Synonym: Customer / Account Holder / Buyer
+## Near-synonym: Metric / Measure
 
-- **Terms used:** customer, account holder, buyer
+- **Terms used:** metric, measure
 - **Used by:**
-  - "customer" — Carol Singh (Customer Domain Lead), platform team
-  - "account holder" — Sales Ops team (from Salesforce language), Finance
-  - "buyer" — Product team (commerce-platform language)
+  - "metric" — Dave Kim, Emma Ward
+  - "measure" — Dave Kim
 - **Evidence of same meaning:**
-  - Carol: "Every order has one customer" (2026-04-16)
-  - Sales Ops: "Account holder is the person the Salesforce record is against" (2026-04-16)
-  - Product: "Buyers are who place orders on the web" (2026-04-17)
-- **Evidence of possible distinction:**
-  - Corporate B2B orders: the buyer (person clicking) may differ from the account holder (entity billed). This case currently has no canonical model.
-- **Type:** near-synonym
-- **Severity:** high — load-bearing for cross-domain data products
-- **Proposed canonical:** Customer (most-used across domains, and already canonical in the customer domain)
-- **Open questions:**
-  - B2B: should we model Buyer and AccountHolder as distinct concepts, or collapse into Customer with a sub-type?
-
-## Homonym: Order
-
-- **Terms used:** order
-- **Used by:**
-  - Commerce team uses "order" for a shopping-cart checkout (one basket)
-  - POS team uses "order" for a single-receipt purchase (one in-store visit)
-  - ERP uses "order" for a purchase order (supplier-side) which is completely unrelated
+  - Dave Kim (2026-05-05): "Today nobody draws the line. 'Metric' and 'measure' are used interchangeably, including by me on bad days."
 - **Evidence of different meaning:**
-  - Commerce: "Orders go through auth, capture, and fulfilment"
-  - POS: "Every order at the till is a new order"
-  - ERP: "Purchase orders are raised against suppliers for stock"
-- **Type:** homonym — same word, three different concepts
-- **Severity:** high — must be namespaced or renamed to avoid corrupting the cross-domain model
-- **Proposed resolution:** `CustomerOrder` (commerce + POS unified), `PurchaseOrder` (ERP, supplier-side). Rename `CustomerOrder` to just `Order` within the retail-customer domain if namespacing is clear.
-
-## Synonym: Data Product / Data Set / Feed
-
-- **Terms used:** data product, data set, feed
-- **Used by:**
-  - Platform team: "data product"
-  - Legacy central-data team: "data set" (table in the warehouse)
-  - Domain engineering: "feed" (for real-time streams)
-- **Evidence of same meaning:**
-  - Alice: "A data set is just what we used to call a data product before we had contracts" (2026-04-16)
-  - Bob: "Feeds are data products too — real-time ones" (2026-04-17)
-- **Type:** synonym (retirement candidate)
-- **Severity:** medium — will resolve naturally as mesh terminology takes hold; must not appear in new artefacts
-- **Proposed canonical:** Data Product. Deprecate "data set" and "feed" in any new documentation.
+  - Dave Kim (2026-05-05): "A metric is a measure plus context: grain, filters, business meaning. 'Weekly active customers' is a metric. 'Count distinct of customer_id' is a measure."
+  - Emma Ward (2026-05-04): "Dave owns the how. I own the what."
+- **Type:** near-synonym
+- **Severity:** high
+- **Rationale:** Today used interchangeably, but Dave explicitly wants them modelled as distinct concepts (Measure = SQL primitive; Metric = business deliverable with grain/filter/owner). Must resolve before stage-2 concept modelling.
 - **Open questions:**
-  - Do we retain "feed" for the streaming sub-type, or collapse everything under Data Product with a delivery-mode attribute?
+  - Do we formalise the split now, knowing current usage is sloppy? Or document current usage and mark the intended split as a stage-5 formalisation decision?
+  - Does "Metric" subsume MetricDefinition, or are they separate concepts (metric = idea; metric definition = contract-backed artefact)?
 
-## Near-synonym: Lineage / Provenance
+## Near-synonym: Data Product / Metric Definition
 
-- **Terms used:** lineage, provenance
+- **Terms used:** data product, metric definition
 - **Used by:**
-  - Platform team: "lineage"
-  - Compliance team: "provenance" (regulatory language)
-- **Evidence:**
-  - Bob: "We track lineage column-by-column" (2026-04-17)
-  - Compliance: "We need provenance for the audit trail" (2026-04-18)
-- **Type:** near-synonym — overlapping but not identical. Provenance typically includes *who did what* (auditability), lineage is primarily *where data came from* (tracing).
-- **Severity:** low — both will coexist; worth noting that they're not interchangeable
-- **Proposed resolution:** Keep both. Lineage for technical flow, provenance for audit trail. Document the distinction in the glossary.
+  - "data product" — Alice Chen, Bob Murphy
+  - "metric definition" — Dave Kim
+- **Evidence of same meaning:**
+  - Alice Chen (2026-04-16): "A data product is a first-class citizen — it has an owner, a contract, an SLO, and a bill."
+  - Dave Kim (2026-05-05): "The metric definition IS a data product, in my view — it has an owner, a schema (grain + dimensions), an SLO, a contract."
+- **Type:** near-synonym
+- **Severity:** medium
+- **Proposed canonical:** data product — Dave argues metric definitions should be a sub-class of data product with the same contract mechanics. Treating them as peers would create duplicate ownership and SLO machinery.
+- **Open questions:**
+  - Is MetricDefinition a specialisation of DataProduct (inheritance) or just a labelled instance (tagging)?
+
+## Homonym: Finance Feed (dataset) vs Finance Feed (retired service)
+
+- **Terms used:** finance feed
+- **Used by:**
+  - "finance feed" — Emma Ward
+- **Evidence of different meaning:**
+  - Emma Ward (2026-05-04): "It used to be a system — there was a service called FinanceFeed back in 2019 — but we decommissioned the service and now it's just the thing we call the outbound-to-SAP curated dataset."
+- **Type:** homonym
+- **Severity:** low
+- **Proposed canonical:** finance feed — Emma disambiguates in-session: the service is retired, the name carried over to the dataset. Documenting the homonym for newcomers so old runbooks don't cause confusion. No model change needed.

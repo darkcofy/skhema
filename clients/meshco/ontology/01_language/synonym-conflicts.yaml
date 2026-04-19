@@ -1,0 +1,96 @@
+- title: Metric / Measure
+  type: near-synonym
+  severity: high
+  terms:
+  - metric
+  - measure
+  used_by:
+  - term: metric
+    speakers:
+    - Dave Kim
+    - Emma Ward
+  - term: measure
+    speakers:
+    - Dave Kim
+  evidence:
+  - quote: 'A metric is a measure plus context: grain, filters, business meaning. ''Weekly active customers''
+      is a metric. ''Count distinct of customer_id'' is a measure.'
+    source: Dave Kim
+    date: '2026-05-05'
+    polarity: different
+  - quote: Today nobody draws the line. 'Metric' and 'measure' are used interchangeably, including by
+      me on bad days.
+    source: Dave Kim
+    date: '2026-05-05'
+    polarity: same
+  - quote: Dave owns the how. I own the what.
+    source: Emma Ward
+    date: '2026-05-04'
+    polarity: different
+  rationale: Today used interchangeably, but Dave explicitly wants them modelled as distinct concepts
+    (Measure = SQL primitive; Metric = business deliverable with grain/filter/owner). Must resolve before
+    stage-2 concept modelling.
+  open_questions:
+  - Do we formalise the split now, knowing current usage is sloppy? Or document current usage and mark
+    the intended split as a stage-5 formalisation decision?
+  - Does "Metric" subsume MetricDefinition, or are they separate concepts (metric = idea; metric definition
+    = contract-backed artefact)?
+  last_ingested:
+    session: 2026-05-09-week3-synonyms
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- title: Data Product / Metric Definition
+  type: near-synonym
+  severity: medium
+  terms:
+  - data product
+  - metric definition
+  used_by:
+  - term: data product
+    speakers:
+    - Alice Chen
+    - Bob Murphy
+  - term: metric definition
+    speakers:
+    - Dave Kim
+  evidence:
+  - quote: A data product is a first-class citizen — it has an owner, a contract, an SLO, and a bill.
+    source: Alice Chen
+    date: '2026-04-16'
+    polarity: same
+  - quote: The metric definition IS a data product, in my view — it has an owner, a schema (grain + dimensions),
+      an SLO, a contract.
+    source: Dave Kim
+    date: '2026-05-05'
+    polarity: same
+  proposed_canonical: data product
+  rationale: Dave argues metric definitions should be a sub-class of data product with the same contract
+    mechanics. Treating them as peers would create duplicate ownership and SLO machinery.
+  open_questions:
+  - Is MetricDefinition a specialisation of DataProduct (inheritance) or just a labelled instance (tagging)?
+  last_ingested:
+    session: 2026-05-09-week3-synonyms
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- title: Finance Feed (dataset) vs Finance Feed (retired service)
+  type: homonym
+  severity: low
+  terms:
+  - finance feed
+  used_by:
+  - term: finance feed
+    speakers:
+    - Emma Ward
+  evidence:
+  - quote: It used to be a system — there was a service called FinanceFeed back in 2019 — but we decommissioned
+      the service and now it's just the thing we call the outbound-to-SAP curated dataset.
+    source: Emma Ward
+    date: '2026-05-04'
+    polarity: different
+  proposed_canonical: finance feed
+  rationale: 'Emma disambiguates in-session: the service is retired, the name carried over to the dataset.
+    Documenting the homonym for newcomers so old runbooks don''t cause confusion. No model change needed.'
+  last_ingested:
+    session: 2026-05-09-week3-synonyms
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'

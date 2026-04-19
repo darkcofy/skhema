@@ -1,0 +1,202 @@
+# LLM-extracted lifecycles and events from mixed source material:
+#   - transcripts/2026-05-04-emma-finance-deepdive.md (settlement + period flow)
+#   - transcripts/2026-05-05-dave-semantic-layer.md (metric/cohort publishing)
+#   - clients/meshco/docs/ (notional — order fulfilment runbook excerpt)
+# Extracted using skills/gnosis/extracting-events-and-lifecycles.md
+#
+# Stage before ingest — review, then:
+#   gnosis ingest behavior --from transcripts/_drafts/2026-05-10-behavior-extraction.yaml \
+#     --client meshco --session 2026-05-10-week3-behavior --interviewer alfred
+
+lifecycles:
+  - entity: Order
+    states:
+      - name: placed
+        description: Customer has submitted an order via POS or commerce; payment not yet authorised.
+      - name: paid
+        description: Payment authorisation succeeded and capture is complete or scheduled.
+      - name: fulfilled
+        description: All lines picked and a shipment has been dispatched toward the customer.
+      - name: delivered
+        description: Shipment confirmed delivered to the customer address.
+      - name: cancelled
+        description: Order was cancelled before fulfilment; payment reversed if captured.
+      - name: refunded
+        description: Order was refunded post-delivery, typically following a return.
+    transitions:
+      - from: placed
+        to: paid
+        trigger: OrderPaid
+      - from: placed
+        to: cancelled
+        trigger: OrderCancelled
+      - from: paid
+        to: fulfilled
+        trigger: OrderShipped
+      - from: fulfilled
+        to: delivered
+        trigger: ShipmentDelivered
+      - from: delivered
+        to: refunded
+        trigger: OrderRefundCompleted        # intentionally not in events list → unknown_transition_trigger
+    invariants:
+      - "An order cannot return to `placed` once it has moved to `paid`."
+      - "`cancelled` is terminal for pre-fulfilment orders; `refunded` is terminal for post-delivery orders."
+      - "The finance feed only carries orders in `paid` or later states."
+    source_quotes:
+      - quote: "An order at the till and an order on the web are the same thing conceptually — both are customer orders"
+        source: Carol Singh
+        date: 2026-04-16
+
+  - entity: DataProduct
+    states:
+      - name: proposed
+        description: Domain team has drafted the data-product spec; awaiting platform review.
+      - name: draft
+        description: Platform review completed; contract skeleton exists but no production data yet.
+      - name: published
+        description: Live with a signed contract, SLOs instrumented, consumers onboarded.
+      - name: deprecated
+        description: Platform team has announced retirement; consumers notified; new consumers blocked.
+      - name: retired
+        description: Data is no longer produced; read-only historical access only.
+    transitions:
+      - from: proposed
+        to: draft
+        trigger: DataProductReviewed
+      - from: draft
+        to: published
+        trigger: DataProductPublished
+      - from: published
+        to: deprecated
+        trigger: DataProductDeprecated
+      - from: deprecated
+        to: retired
+        trigger: DataProductRetired
+    invariants:
+      - "A data product cannot move from `retired` back to any active state; a revival is a new data product."
+      - "Contracts are immutable once the data product is `published` — new versions ship under a new contract."
+      - "A `published` data product must have at least one instrumented SLO."
+    source_quotes:
+      - quote: "Every lighthouse data product ships with three SLOs minimum: freshness, completeness, accuracy"
+        source: Bob Murphy
+        date: 2026-04-17
+
+events:
+  - name: OrderPaid
+    domain: orders
+    entity: Order
+    triggered_by: Payment capture confirmed by the acquirer
+    carries:
+      - order_id
+      - customer_id
+      - total_amount
+      - currency
+      - paid_at
+    consumed_by:
+      - FinanceFeed
+      - Fulfilment service
+      - Cohort materialisation
+    source_quotes:
+      - quote: "Every order has one customer"
+        source: Carol Singh
+        date: 2026-04-16
+
+  - name: OrderShipped
+    domain: orders
+    entity: Order
+    triggered_by: Dispatch from fulfilment centre or store pick
+    carries:
+      - order_id
+      - shipment_id
+      - shipped_at
+      - carrier
+    consumed_by:
+      - Customer notification service
+      - Finance feed
+
+  - name: ShipmentDelivered
+    domain: fulfilment
+    entity: Shipment
+    triggered_by: Carrier delivery confirmation event
+    carries:
+      - shipment_id
+      - order_id
+      - delivered_at
+      - signature_captured
+    consumed_by:
+      - Customer notification service
+      - Returns eligibility clock
+
+  - name: DataProductPublished
+    domain: platform
+    entity: DataProduct
+    triggered_by: Platform CI pipeline signs off and publishes the contract
+    carries:
+      - data_product_id
+      - contract_version
+      - slo_profile
+      - published_at
+    consumed_by:
+      - Mesh catalog
+      - Consumer onboarding service
+
+  - name: DataProductDeprecated
+    domain: platform
+    entity: DataProduct
+    triggered_by: Platform team announces retirement with a cut-off date
+    carries:
+      - data_product_id
+      - deprecation_announced_at
+      - retirement_target_at
+    consumed_by:
+      - Consumer notification service
+      - Mesh catalog
+
+  - name: ContractBreakDetected
+    domain: platform
+    entity: DataContract
+    triggered_by: PR-time CI contract diff surfaces a breaking change
+    carries:
+      - data_product_id
+      - pr_url
+      - break_category
+      - detected_at
+    consumed_by:
+      - PR gate service
+      - Ops dashboard
+
+  - name: OrderCancelled
+    domain: orders
+    entity: Order
+    triggered_by: Customer or agent cancels the order before fulfilment
+    carries:
+      - order_id
+      - cancelled_at
+      - cancellation_reason
+
+  - name: DataProductReviewed
+    domain: platform
+    entity: DataProduct
+    triggered_by: Platform review board signs off on the draft spec
+    carries:
+      - data_product_id
+      - reviewer
+      - reviewed_at
+
+  - name: DataProductRetired
+    domain: platform
+    entity: DataProduct
+    triggered_by: Retirement cut-off date reached; data no longer produced
+    carries:
+      - data_product_id
+      - retired_at
+
+  # Intentional lint trigger: imperative / not past-tense name.
+  - name: ShipOrder
+    domain: fulfilment
+    entity: Order
+    triggered_by: Warehouse operator confirms pack and dispatch
+    carries:
+      - order_id
+      - shipped_at

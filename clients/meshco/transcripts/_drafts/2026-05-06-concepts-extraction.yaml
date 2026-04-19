@@ -1,0 +1,130 @@
+# LLM-extracted candidate concepts from week-3 transcripts.
+# Source transcripts:
+#   - transcripts/2026-05-04-emma-finance-deepdive.md
+#   - transcripts/2026-05-05-dave-semantic-layer.md
+# Extracted using skills/gnosis/extracting-concepts-from-transcripts.md
+# Stage before ingest — review, then:
+#   gnosis ingest concepts --from transcripts/_drafts/2026-05-06-concepts-extraction.yaml \
+#     --client meshco --session 2026-05-06-week3-extraction --interviewer alfred
+
+- name: AccountingPeriod
+  domain: finance
+  description: A 4-4-5 fiscal-calendar period code stamped onto every commercial event at the point of capture. Period boundaries are enforced by a central period service; mismatches surface as treasury reconciliation exceptions.
+  related_to:
+    - Order
+    - Settlement
+    - FinanceFeed
+  source_quotes:
+    - quote: "We run on a 4-4-5 calendar, not calendar months — so period 4 isn't April, it's weeks 14-17 of our fiscal year. Every commercial event gets stamped with a period the moment it's captured."
+      source: Emma Ward
+      date: 2026-05-04
+  confidence: high
+
+- name: Settlement
+  domain: finance
+  description: The reconciliation point where captured payments meet the books. Settlement files arrive T+2 from the acquirer; the delta between captured and settled is the pending settlement position. Authority for the definition of "settled" sits with finance.
+  related_to:
+    - Payment
+    - AccountingPeriod
+    - FinanceFeed
+  source_quotes:
+    - quote: "Settlement is where payments meet the books. When a customer pays with a card, there's an authorisation, then a capture, then a settlement file comes back from the acquirer — typically T+2."
+      source: Emma Ward
+      date: 2026-05-04
+    - quote: "Dan owns period-boundary exceptions and the settlement reconciliation."
+      source: Dan Kowalski
+      date: 2026-05-04
+  confidence: high
+  open_questions:
+    - Are chargebacks reflected as a reversal of Settlement, or as a linked ChargebackSettlement entry?
+
+- name: FinanceFeed
+  domain: finance
+  description: The outbound curated dataset that flows from commercial systems into SAP at end of each accounting period. Historically a service, now just the name of the dataset.
+  related_to:
+    - AccountingPeriod
+    - Settlement
+    - Order
+  source_quotes:
+    - quote: "It used to be a system — there was a service called FinanceFeed back in 2019 — but we decommissioned the service and now it's just the thing we call the outbound-to-SAP curated dataset."
+      source: Emma Ward
+      date: 2026-05-04
+  confidence: low
+
+- name: ReportPackage
+  domain: finance
+  description: The bundle of ~30 curated reports delivered to group finance and the board at end of close. A deliverable composed of multiple data products (revenue by region, margin by category, cohort views), not a data product itself.
+  related_to:
+    - DataProduct
+    - DataCouncil
+    - CohortDefinition
+  source_quotes:
+    - quote: "The report package — that's the bundle of thirty-ish reports that go to group finance and the board."
+      source: Emma Ward
+      date: 2026-05-04
+  confidence: medium
+  open_questions:
+    - Should ReportPackage be modelled as a first-class concept or as a class of DataProduct with a composition relationship?
+
+- name: Metric
+  domain: analytics
+  description: A business-level measurement defined with a grain, set of approved filters, and an owner. Distinct from a Measure — a Metric is a Measure plus semantic context.
+  related_to:
+    - Measure
+    - MetricDefinition
+    - DataProduct
+  source_quotes:
+    - quote: "A metric is a measure plus context: grain, filters, business meaning. 'Weekly active customers' is a metric. 'Count distinct of customer_id' is a measure."
+      source: Dave Kim
+      date: 2026-05-05
+  confidence: high
+
+- name: Measure
+  domain: analytics
+  description: A column-level aggregate expression (sum, count distinct, etc.) without business context. Composes into Metrics. SQL-level primitive.
+  related_to:
+    - Metric
+  source_quotes:
+    - quote: "A measure is a column-level aggregate — sum of order_value, count of distinct customers, that kind of thing."
+      source: Dave Kim
+      date: 2026-05-05
+  confidence: high
+
+- name: Cohort
+  domain: analytics
+  description: A reusable slice of customers defined once and reported across any metric. Example "customers whose first order was in period 4". Today defined inconsistently across marketing, finance, and ML tooling.
+  related_to:
+    - Customer
+    - CohortDefinition
+    - Metric
+  source_quotes:
+    - quote: "You define the cohort once — say, 'customers whose first order was in period 4' — and then you report any metric across that cohort."
+      source: Dave Kim
+      date: 2026-05-05
+  confidence: high
+
+- name: CohortDefinition
+  domain: analytics
+  description: The versioned, owned, contract-backed artifact that pins down a cohort. Distinct from Cohort (the idea); CohortDefinition is the reviewable specification.
+  related_to:
+    - Cohort
+    - DataContract
+    - MetricDefinition
+  source_quotes:
+    - quote: "Cohort is the idea. CohortDefinition is the versioned, owned, contract-backed artifact. If the definition changes, anything built on it needs to be notified."
+      source: Dave Kim
+      date: 2026-05-05
+  confidence: high
+
+- name: MetricDefinition
+  domain: analytics
+  description: The owned, contract-backed definition of a Metric. Treated as a DataProduct with semantic payload — has grain, dimensions, SLO, and a breaking-change policy.
+  related_to:
+    - Metric
+    - DataProduct
+    - DataContract
+  source_quotes:
+    - quote: "The metric definition IS a data product, in my view — it has an owner, a schema (grain + dimensions), an SLO, a contract."
+      source: Dave Kim
+      date: 2026-05-05
+  confidence: high

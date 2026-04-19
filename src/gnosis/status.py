@@ -7,6 +7,7 @@ import argparse
 import os
 
 from gnosis.client import find_repo_root, detect_client, resolve_workspace
+from gnosis.ingest import count_warnings
 from gnosis.readiness import (
     load_rules,
     evaluate_all,
@@ -22,6 +23,7 @@ def compute_status(rules: dict, workspace_path: str) -> dict:
     Returns a dict with:
         stages: list of {name, index, completion_pct}
         artifacts: dict of artifact_key -> ArtifactStatus
+        lint: {warnings_count, warnings_file} if any ingest has run
     """
     stages = []
     for i, name in enumerate(STAGE_NAMES):
@@ -34,10 +36,19 @@ def compute_status(rules: dict, workspace_path: str) -> dict:
 
     artifacts = evaluate_all(rules, workspace_path)
 
-    return {
+    result: dict = {
         "stages": stages,
         "artifacts": artifacts,
     }
+
+    warnings_path = os.path.join(workspace_path, "ingest-warnings.md")
+    if os.path.isfile(warnings_path):
+        result["lint"] = {
+            "warnings_count": count_warnings(warnings_path),
+            "warnings_file": warnings_path,
+        }
+
+    return result
 
 
 def format_status(status: dict, rules: dict) -> str:
@@ -74,6 +85,18 @@ def format_status(status: dict, rules: dict) -> str:
         if artifact_status.missing:
             for msg in artifact_status.missing:
                 lines.append(f"        {msg}")
+
+    if "lint" in status:
+        lint = status["lint"]
+        count = lint["warnings_count"]
+        lines.append("")
+        lines.append("=== Lint Warnings ===")
+        lines.append("")
+        if count == 0:
+            lines.append("  Clean — last ingest produced no warnings.")
+        else:
+            rel_path = os.path.relpath(lint["warnings_file"], os.getcwd())
+            lines.append(f"  {count} warning(s) from last ingest — see {rel_path}")
 
     return "\n".join(lines)
 

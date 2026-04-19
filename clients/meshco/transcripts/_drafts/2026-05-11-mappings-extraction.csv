@@ -1,0 +1,19 @@
+source_system,source_entity,source_field,canonical_concept,canonical_property,mapping_type,confidence,notes
+pos,transactions,txn_id,Payment,id,direct,high,Primary key in POS (POS calls it a transaction; meshco canonical is Payment)
+pos,transactions,customer_ref,Customer,id,foreign_key,high,FK into POS customers table
+pos,transactions,amount_cents,Payment,amount,transform,high,Minor units — divide by 100 for canonical Money
+pos,transactions,captured_at,Payment,captured_at,direct,high,UTC
+pos,customers,id,Customer,id,direct,high,POS customer master key
+pos,customers,email,Customer,email,direct,medium,"Not always populated — POS allows anonymous purchases"
+pos,products,sku,Product,id,direct,high,SKU is canonical Product identifier
+commerce,orders,order_uuid,Order,id,direct,high,Shopify order GID
+commerce,orders,customer_id,Customer,id,foreign_key,medium,"Different ID space from POS — identity resolution via CRM"
+commerce,orders,total_price,Order,total_amount,direct,high,Already in major units
+commerce,customers,id,Customer,id,direct,medium,"Shopify customer ID — conflicts with POS and CRM; see authority-notes.md"
+erp,purchase_orders,po_number,,,ambiguous,low,"ERP 'purchase order' is a supplier PO — distinct from customer Order. Flagged in synonym-conflicts."
+erp,gl_accounts,account_code,,,unmapped,high,Finance-internal; no canonical equivalent at engagement scope
+erp,fraud_flags,flag_code,Fraud,reason,direct,medium,
+salesforce,account,account_id,Customer,id,direct,medium,
+salesforce,account,industry_vertical,,,ambiguous,low,
+fulfilment,shipments,tracking_number,Shipment,tracking_number,direct,high,
+fulfilment,shipments,order_ref,Order,id,foreign_key,high,

@@ -72,10 +72,17 @@ class TestCountMdEntries:
         )
         assert count_md_entries(str(f)) == 2
 
-    def test_no_capture_section(self, tmp_path):
+    def test_no_capture_falls_back_to_all_h2(self, tmp_path):
+        """For auto-generated files without ## Capture, count all H2 with content."""
         f = tmp_path / "no_capture.md"
         f.write_text("# Title\n\n## Purpose\nText.\n\n## Other\nStuff.\n")
-        assert count_md_entries(str(f)) == 0
+        assert count_md_entries(str(f)) == 2
+
+    def test_no_capture_empty_h2_not_counted(self, tmp_path):
+        """Empty H2 sections still don't count in flat mode."""
+        f = tmp_path / "no_capture_empty.md"
+        f.write_text("# Title\n\n## Section A\n\n## Section B\nHas content.\n")
+        assert count_md_entries(str(f)) == 1
 
     def test_empty_capture_section(self, tmp_path):
         f = tmp_path / "empty_capture.md"

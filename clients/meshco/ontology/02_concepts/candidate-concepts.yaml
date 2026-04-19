@@ -1,153 +1,327 @@
 - name: Customer
   domain: customer
-  description: A person or organisation that transacts with MeshCo; identity resolved across POS, commerce, CRM via the golden-record process.
+  description: A person or organisation that transacts with MeshCo; identity resolved across POS, commerce,
+    CRM via the golden-record process.
   related_to:
-    - Order
-    - Shipment
-    - Account
+  - Order
+  - Shipment
+  - Account
   source_quotes:
-    - quote: "Every order has one customer"
-      source: Carol Singh (Customer Domain Lead)
-      date: 2026-04-16
+  - quote: Every order has one customer
+    source: Carol Singh (Customer Domain Lead)
+    date: '2026-04-16'
   confidence: high
   open_questions:
-    - B2B corporate case — is the paying Account a separate concept from the Customer who places the order?
-
+  - B2B corporate case — is the paying Account a separate concept from the Customer who places the order?
 - name: Order
   domain: orders
-  description: A customer's purchase intent — one basket at one time, across POS or commerce. Distinct from ERP's PurchaseOrder concept.
+  description: A customer's purchase intent — one basket at one time, across POS or commerce. Distinct
+    from ERP's PurchaseOrder concept.
   related_to:
-    - Customer
-    - Product
-    - Shipment
-    - Payment
+  - Customer
+  - Product
+  - Shipment
+  - Payment
   source_quotes:
-    - quote: "An order at the till and an order on the web are the same thing conceptually — both are customer orders"
-      source: Carol Singh
-      date: 2026-04-16
+  - quote: An order at the till and an order on the web are the same thing conceptually — both are customer
+      orders
+    source: Carol Singh
+    date: '2026-04-16'
   confidence: high
   open_questions:
-    - Do we namespace as CustomerOrder to avoid collision with ERP PurchaseOrder?
-
+  - Do we namespace as CustomerOrder to avoid collision with ERP PurchaseOrder?
 - name: Product
   domain: product
-  description: An item in the MeshCo catalogue at SKU level, with its marketing attributes (name, imagery, taxonomy) and current pricing.
+  description: An item in the MeshCo catalogue at SKU level, with its marketing attributes (name, imagery,
+    taxonomy) and current pricing.
   related_to:
-    - Order
-    - Inventory
+  - Order
+  - Inventory
   source_quotes:
-    - quote: "Product means SKU, not the marketing hierarchy — the hierarchy is a separate thing"
-      source: Carol Singh
-      date: 2026-04-16
+  - quote: Product means SKU, not the marketing hierarchy — the hierarchy is a separate thing
+    source: Carol Singh
+    date: '2026-04-16'
   confidence: high
   open_questions:
-    - Should marketing-level Product (the parent) be modelled separately as ProductFamily?
-
+  - Should marketing-level Product (the parent) be modelled separately as ProductFamily?
 - name: Shipment
   domain: fulfilment
-  description: A physical movement of one or more order lines from a fulfilment point (store or 3PL warehouse) to a customer address.
+  description: A physical movement of one or more order lines from a fulfilment point (store or 3PL warehouse)
+    to a customer address.
   related_to:
-    - Order
-    - Customer
+  - Order
+  - Customer
   source_quotes:
-    - quote: "Shipments are the physical journey; a delivery is when it actually lands"
-      source: Supply Chain
-      date: 2026-04-16
+  - quote: Shipments are the physical journey; a delivery is when it actually lands
+    source: Supply Chain
+    date: '2026-04-16'
   confidence: high
-
 - name: DataProduct
   domain: platform
-  description: A curated, owned, SLO-backed dataset exposed to consumers through a versioned contract. The unit of ownership and consumption in the mesh.
+  description: A curated, owned, SLO-backed dataset exposed to consumers through a versioned contract.
+    The unit of ownership and consumption in the mesh.
   related_to:
-    - DataContract
-    - Domain
-    - SLO
+  - DataContract
+  - Domain
+  - SLO
   source_quotes:
-    - quote: "A data product is a first-class citizen — it has an owner, a contract, an SLO, and a bill"
-      source: Alice Chen
-      date: 2026-04-16
+  - quote: A data product is a first-class citizen — it has an owner, a contract, an SLO, and a bill
+    source: Alice Chen
+    date: '2026-04-16'
   confidence: high
-
 - name: DataContract
   domain: platform
-  description: A producer-consumer agreement capturing a data product's schema, semantics, freshness, and quality guarantees; validated at deployment time.
+  description: A producer-consumer agreement capturing a data product's schema, semantics, freshness,
+    and quality guarantees; validated at deployment time.
   related_to:
-    - DataProduct
-    - ContractBreak
+  - DataProduct
+  - ContractBreak
   source_quotes:
-    - quote: "Contracts are the firewall — you can't break downstream consumers silently any more"
-      source: Alice Chen
-      date: 2026-04-16
+  - quote: Contracts are the firewall — you can't break downstream consumers silently any more
+    source: Alice Chen
+    date: '2026-04-16'
   confidence: high
-
 - name: Domain
   domain: platform
-  description: A business-owned area that publishes one or more data products. MeshCo has five domains in scope for the initial mesh rollout.
+  description: A business-owned area that publishes one or more data products. MeshCo has five domains
+    in scope for the initial mesh rollout.
   related_to:
-    - DataProduct
-    - Producer
+  - DataProduct
+  - Producer
   source_quotes:
-    - quote: "Our five domains are customer, product, orders, inventory, fulfilment"
-      source: Alice Chen
-      date: 2026-04-16
+  - quote: Our five domains are customer, product, orders, inventory, fulfilment
+    source: Alice Chen
+    date: '2026-04-16'
   confidence: high
-
 - name: SLO
   domain: platform
-  description: A service level objective — a quantified promise (freshness, quality, availability) a data product makes to its consumers.
+  description: A service level objective — a quantified promise (freshness, quality, availability) a data
+    product makes to its consumers.
   related_to:
-    - DataProduct
-    - DataContract
+  - DataProduct
+  - DataContract
   source_quotes:
-    - quote: "Every lighthouse data product ships with three SLOs minimum: freshness, completeness, accuracy"
-      source: Bob Murphy
-      date: 2026-04-17
+  - quote: 'Every lighthouse data product ships with three SLOs minimum: freshness, completeness, accuracy'
+    source: Bob Murphy
+    date: '2026-04-17'
   confidence: high
-
 - name: LineageEdge
   domain: platform
-  description: A column-level link between an upstream dataset and a downstream dataset, capturing derivation (how the downstream column was computed).
+  description: A column-level link between an upstream dataset and a downstream dataset, capturing derivation
+    (how the downstream column was computed).
   related_to:
-    - DataProduct
+  - DataProduct
   source_quotes:
-    - quote: "We need column-level lineage — table-level is useless for impact analysis"
-      source: Bob Murphy
-      date: 2026-04-17
+  - quote: We need column-level lineage — table-level is useless for impact analysis
+    source: Bob Murphy
+    date: '2026-04-17'
   confidence: high
-
 - name: ContractBreak
   domain: platform
-  description: A change to a data product that violates its published contract (schema change, SLO miss, semantic shift). Detected at PR time and blocks the deployment.
+  description: A change to a data product that violates its published contract (schema change, SLO miss,
+    semantic shift). Detected at PR time and blocks the deployment.
   related_to:
-    - DataContract
-    - DataProduct
+  - DataContract
+  - DataProduct
   source_quotes:
-    - quote: "If CI goes red on a contract break, the PR can't merge — no exceptions"
-      source: Bob Murphy
-      date: 2026-04-17
+  - quote: If CI goes red on a contract break, the PR can't merge — no exceptions
+    source: Bob Murphy
+    date: '2026-04-17'
   confidence: high
-
 - name: Payment
   domain: payments
-  description: The financial settlement of an order, tracked from authorisation through capture. Out of primary engagement scope but referenced by orders and finance.
+  description: The financial settlement of an order, tracked from authorisation through capture. Out of
+    primary engagement scope but referenced by orders and finance.
   related_to:
-    - Order
+  - Order
   source_quotes:
-    - quote: "We don't own payments in this engagement but orders depend on them"
-      source: Carol Singh
-      date: 2026-04-16
+  - quote: We don't own payments in this engagement but orders depend on them
+    source: Carol Singh
+    date: '2026-04-16'
   confidence: medium
   open_questions:
-    - Is there a future engagement planned for payments as its own domain?
-
+  - Is there a future engagement planned for payments as its own domain?
 - name: Inventory
   domain: inventory
-  description: The current count of a product at a specific location (store, warehouse, 3PL). Updated by sales, receipts, and transfers.
+  description: The current count of a product at a specific location (store, warehouse, 3PL). Updated
+    by sales, receipts, and transfers.
   related_to:
-    - Product
-    - Shipment
+  - Product
+  - Shipment
   source_quotes:
-    - quote: "Inventory is the hardest domain because it changes constantly and every channel wants real-time"
-      source: Supply Chain
-      date: 2026-04-16
+  - quote: Inventory is the hardest domain because it changes constantly and every channel wants real-time
+    source: Supply Chain
+    date: '2026-04-16'
   confidence: medium
+- name: AccountingPeriod
+  domain: finance
+  description: A 4-4-5 fiscal-calendar period code stamped onto every commercial event at the point of
+    capture. Period boundaries are enforced by a central period service; mismatches surface as treasury
+    reconciliation exceptions.
+  related_to:
+  - Order
+  - Settlement
+  - FinanceFeed
+  source_quotes:
+  - quote: We run on a 4-4-5 calendar, not calendar months — so period 4 isn't April, it's weeks 14-17
+      of our fiscal year. Every commercial event gets stamped with a period the moment it's captured.
+    source: Emma Ward
+    date: '2026-05-04'
+  confidence: high
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: Settlement
+  domain: finance
+  description: The reconciliation point where captured payments meet the books. Settlement files arrive
+    T+2 from the acquirer; the delta between captured and settled is the pending settlement position.
+    Authority for the definition of "settled" sits with finance.
+  related_to:
+  - Payment
+  - AccountingPeriod
+  - FinanceFeed
+  source_quotes:
+  - quote: Settlement is where payments meet the books. When a customer pays with a card, there's an authorisation,
+      then a capture, then a settlement file comes back from the acquirer — typically T+2.
+    source: Emma Ward
+    date: '2026-05-04'
+  - quote: Dan owns period-boundary exceptions and the settlement reconciliation.
+    source: Dan Kowalski
+    date: '2026-05-04'
+  confidence: high
+  open_questions:
+  - Are chargebacks reflected as a reversal of Settlement, or as a linked ChargebackSettlement entry?
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: FinanceFeed
+  domain: finance
+  description: The outbound curated dataset that flows from commercial systems into SAP at end of each
+    accounting period. Historically a service, now just the name of the dataset.
+  related_to:
+  - AccountingPeriod
+  - Settlement
+  - Order
+  source_quotes:
+  - quote: It used to be a system — there was a service called FinanceFeed back in 2019 — but we decommissioned
+      the service and now it's just the thing we call the outbound-to-SAP curated dataset.
+    source: Emma Ward
+    date: '2026-05-04'
+  confidence: low
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: ReportPackage
+  domain: finance
+  description: The bundle of ~30 curated reports delivered to group finance and the board at end of close.
+    A deliverable composed of multiple data products (revenue by region, margin by category, cohort views),
+    not a data product itself.
+  related_to:
+  - DataProduct
+  - DataCouncil
+  - CohortDefinition
+  source_quotes:
+  - quote: The report package — that's the bundle of thirty-ish reports that go to group finance and the
+      board.
+    source: Emma Ward
+    date: '2026-05-04'
+  confidence: medium
+  open_questions:
+  - Should ReportPackage be modelled as a first-class concept or as a class of DataProduct with a composition
+    relationship?
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: Metric
+  domain: analytics
+  description: A business-level measurement defined with a grain, set of approved filters, and an owner.
+    Distinct from a Measure — a Metric is a Measure plus semantic context.
+  related_to:
+  - Measure
+  - MetricDefinition
+  - DataProduct
+  source_quotes:
+  - quote: 'A metric is a measure plus context: grain, filters, business meaning. ''Weekly active customers''
+      is a metric. ''Count distinct of customer_id'' is a measure.'
+    source: Dave Kim
+    date: '2026-05-05'
+  confidence: high
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: Measure
+  domain: analytics
+  description: A column-level aggregate expression (sum, count distinct, etc.) without business context.
+    Composes into Metrics. SQL-level primitive.
+  related_to:
+  - Metric
+  source_quotes:
+  - quote: A measure is a column-level aggregate — sum of order_value, count of distinct customers, that
+      kind of thing.
+    source: Dave Kim
+    date: '2026-05-05'
+  confidence: high
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: Cohort
+  domain: analytics
+  description: A reusable slice of customers defined once and reported across any metric. Example "customers
+    whose first order was in period 4". Today defined inconsistently across marketing, finance, and ML
+    tooling.
+  related_to:
+  - Customer
+  - CohortDefinition
+  - Metric
+  source_quotes:
+  - quote: You define the cohort once — say, 'customers whose first order was in period 4' — and then
+      you report any metric across that cohort.
+    source: Dave Kim
+    date: '2026-05-05'
+  confidence: high
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: CohortDefinition
+  domain: analytics
+  description: The versioned, owned, contract-backed artifact that pins down a cohort. Distinct from Cohort
+    (the idea); CohortDefinition is the reviewable specification.
+  related_to:
+  - Cohort
+  - DataContract
+  - MetricDefinition
+  source_quotes:
+  - quote: Cohort is the idea. CohortDefinition is the versioned, owned, contract-backed artifact. If
+      the definition changes, anything built on it needs to be notified.
+    source: Dave Kim
+    date: '2026-05-05'
+  confidence: high
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'
+- name: MetricDefinition
+  domain: analytics
+  description: The owned, contract-backed definition of a Metric. Treated as a DataProduct with semantic
+    payload — has grain, dimensions, SLO, and a breaking-change policy.
+  related_to:
+  - Metric
+  - DataProduct
+  - DataContract
+  source_quotes:
+  - quote: The metric definition IS a data product, in my view — it has an owner, a schema (grain + dimensions),
+      an SLO, a contract.
+    source: Dave Kim
+    date: '2026-05-05'
+  confidence: high
+  last_ingested:
+    session: 2026-05-06-week3-extraction
+    interviewer: alfred
+    at: '2026-04-19T09:23:42+00:00'

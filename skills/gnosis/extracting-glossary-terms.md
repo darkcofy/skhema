@@ -56,6 +56,45 @@ Required columns: `term`, `definition`, `source`. Optional: `domain`, `aliases` 
 - [ ] Terms are singular (Transaction, not Transactions) unless the plural is semantically distinct
 - [ ] CSV is valid (quoted values containing commas, no stray newlines inside unquoted fields)
 
+## Handoff to gnosis
+
+Save your LLM output under `clients/<name>/transcripts/_drafts/` (date-stamped, e.g. `2026-05-08-glossary-extraction.csv`) and hand it to gnosis for validation and merge:
+
+```bash
+gnosis ingest glossary \
+  --from clients/meshco/transcripts/_drafts/2026-05-08-glossary-extraction.csv \
+  --client meshco \
+  --session 2026-05-08-week3-glossary \
+  --interviewer alfred
+```
+
+What gnosis enforces when you run this:
+
+**Hard schema (refused if violated — nothing is written):**
+
+- Header contains `term`, `definition`, `source` at minimum; only `domain`, `aliases`, `notes` allowed as extras
+- Every row has non-empty `term` and non-empty `source`
+- No duplicate `term` within a single ingest (case-insensitive)
+- `definition` *may* be empty — but see the lint rule below
+
+**Soft lint (reported to `ontology/ingest-warnings.md`, non-blocking):**
+
+- `missing_definition_without_flag` — `definition` is empty and `notes` doesn't contain a clarification flag (`Needs clarification`, `TBD`, `unclear`, `unknown`). Empty definitions are only OK when you explicitly mark why.
+- `unknown_speaker_in_source` — the `source` cell looks like a person name (leading date followed by 1-4 capitalised words with no team/event token like Team/Council/Workshop/Kickoff/Interview) but the name doesn't match any stakeholder in `00_scope/stakeholders.yaml`. Team- or event-attributed sources (e.g. "2026-04-16 Data Council kickoff") are intentionally skipped.
+
+Fix warnings by editing `01_language/glossary-seeds.csv` directly, or by correcting the source fixture and re-ingesting.
+
+**Merge behaviour (important, different from concepts/stakeholders):**
+
+Glossary merge is **gentle by design** — curated definitions are not clobbered by a re-ingest. If a term already exists:
+
+- `aliases` are unioned (additive), and the row is reported as `Updated`
+- `definition`, `source`, `domain`, `notes` are **left untouched** — the row is reported as `Skipped` if no new aliases were contributed
+
+New terms are always added. If you want to revise an existing row's definition, edit the CSV by hand — the CLI deliberately won't overwrite curated content from a noisy LLM re-extraction. This is the opposite of the concepts ingest (which does overwrite) because a glossary is the canonical vocabulary reference and needs to be stable.
+
+Per-row provenance lives in the `source` column itself — the skill enforces the format `<YYYY-MM-DD> <speaker or event>`. There is no `last_ingested` sidecar for glossary.
+
 ## Examples
 
 ### Input

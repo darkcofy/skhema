@@ -71,6 +71,43 @@ Required: `name`, `role`. Optional but recommended: `team`, `interests`, `decisi
 - [ ] Email addresses use the domain from the engagement context (if mentioned)
 - [ ] No personal opinions in `notes` — only observed or reported behaviour
 
+## Handoff to gnosis
+
+Save your LLM output under `clients/<name>/transcripts/_drafts/` (date-stamped, e.g. `2026-05-07-stakeholders-extraction.yaml`) and hand it to gnosis for validation and merge:
+
+```bash
+gnosis ingest stakeholders \
+  --from clients/meshco/transcripts/_drafts/2026-05-07-stakeholders-extraction.yaml \
+  --client meshco \
+  --session 2026-05-07-week3-stakeholders \
+  --interviewer alfred
+```
+
+What gnosis enforces when you run this:
+
+**Hard schema (refused if violated — nothing is written):**
+
+- Each entry has non-empty `name` and `role`
+- If `influence` is set, it is one of `high` / `medium` / `low` / `unknown`
+- `interests`, `decision_rights` are lists of non-empty strings if provided
+- `email`, if set, contains `@`
+
+**Soft lint (reported to `ontology/ingest-warnings.md`, non-blocking):**
+
+- `missing_decision_rights_on_high_influence` — `influence: high` without at least one `decision_rights` entry (common when a stakeholder is cited as influential but their sign-off surface hasn't been captured yet)
+- `tbd_without_notes` — a `name: TBD` placeholder without `notes:` explaining why the role is unfilled and what introduction is needed
+
+Fix warnings by editing `00_scope/stakeholders.yaml` directly, or by correcting the source fixture and re-ingesting.
+
+**Merge behaviour:**
+
+- Named stakeholders are keyed by normalised name (case-fold, paren-suffix stripped). Re-ingesting the same name updates that entry: scalar fields (`role`, `team`, `email`, `influence`, `engagement_cadence`, `notes`) are overwritten; list fields (`interests`, `decision_rights`) are unioned.
+- `name: TBD` placeholders are keyed on the compound `(TBD, role, team)` tuple, so multiple TBDs for different roles coexist. When the real person surfaces later, ingest them as a named entry — the TBD stays until you delete it manually, and the `notes:` field on the new entry should reference the overlap.
+
+Every merged entry carries a `last_ingested` block recording the session, interviewer, and timestamp — so later you can trace when each stakeholder was first captured and when their entry was last revised.
+
+Follow-on effect worth knowing: the concepts extraction skill's `unknown_speaker` lint resolves against `00_scope/stakeholders.yaml`. So when a stakeholders ingest adds a previously-unknown speaker, re-running `gnosis ingest concepts` against the same concepts fixture will clear the corresponding warning — closing the loop between stage 0 and stage 2.
+
 ## Examples
 
 ### Input (kick-off notes excerpt)

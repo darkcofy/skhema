@@ -1,0 +1,14 @@
+term,definition,source,domain,aliases,notes
+Accounting Period,"A 4-4-5 fiscal-calendar period code stamped onto every commercial event at the point of capture","2026-05-04 Emma Ward",finance,"period, fiscal period",
+Settlement,"The reconciliation point where captured payments meet the books; settlement files arrive T+2 from the acquirer","2026-05-04 Emma Ward",finance,,
+Finance Feed,"The outbound curated dataset flowing from commercial systems into SAP at end of each accounting period","2026-05-04 Emma Ward",finance,,"Historically a service, now just a dataset name"
+Pending Settlement Position,"The running delta between captured and settled payments that finance reconciles against the bank","2026-05-04 Dan Kowalski",finance,,
+Report Package,"The bundle of ~30 curated reports delivered to group finance at end of close","2026-05-04 Emma Ward",finance,,Not a data product — a deliverable composed of multiple data products
+Reverse-ETL,"The pattern of piping curated analytics datasets back into operational systems (SAP in the meshco case)","2026-05-04 Emma Ward",finance,"reverse ETL, rETL",
+Metric,"A business-level measurement with a defined grain, approved filters, and an owner; distinct from a measure","2026-05-05 Dave Kim",analytics,,
+Measure,"A column-level aggregate expression (sum, count distinct) without business context","2026-05-05 Dave Kim",analytics,,
+Cohort,"A reusable slice of customers defined once and reported across any metric","2026-05-05 Dave Kim",analytics,,Today defined inconsistently across Braze, Power BI, and ML notebooks
+Cohort Definition,"The versioned, owned, contract-backed artifact that pins down a Cohort","2026-05-05 Dave Kim",analytics,,
+Metric Surface,"The outward face of the semantic layer — SQL for BI, REST for reverse-ETL, Python for ML","2026-05-05 Dave Kim",analytics,,Dave's coinage; may not survive to final vocabulary
+Cube,,"2026-05-05 Nina Patel",analytics,,
+Semantic Layer,"","2026-05-05 Dave Kim",analytics,,

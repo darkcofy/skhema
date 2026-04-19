@@ -116,7 +116,7 @@ def init(name: str) -> None:
 @app.command()
 def serve(
     client: str = typer.Option(..., help="Client name"),
-    port: int = typer.Option(8000, help="Port to serve on"),
+    port: int = typer.Option(8000, help="Port to serve on (auto-falls-back if taken)"),
     open_deck: bool = typer.Option(
         True, "--open-deck/--no-open-deck",
         help="Try to open the deck in your browser",
@@ -135,7 +135,35 @@ def serve(
 
     os.chdir(client_dir)
     handler = http.server.SimpleHTTPRequestHandler
-    with socketserver.TCPServer(("", port), handler) as httpd:
+
+    # allow_reuse_address avoids the TIME_WAIT trap on rapid Ctrl-C + restart.
+    class _ReusableServer(socketserver.TCPServer):
+        allow_reuse_address = True
+
+    # If the requested port is taken, walk up to +9 looking for a free one.
+    original_port = port
+    httpd = None
+    for candidate in range(port, port + 10):
+        try:
+            httpd = _ReusableServer(("", candidate), handler)
+            port = candidate
+            break
+        except OSError as e:
+            if e.errno == 98:  # Address already in use
+                typer.echo(
+                    f"Port {candidate} in use, trying {candidate + 1}…", err=True
+                )
+                continue
+            raise
+    if httpd is None:
+        typer.echo(
+            f"Couldn't find a free port in {original_port}..{original_port + 9}. "
+            f"Kill the occupying process (e.g. `fuser -k {original_port}/tcp`) and retry.",
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    with httpd:
         url = f"http://localhost:{port}/deck.html"
         typer.echo(f"Serving {client_dir} on port {port}")
         typer.echo(f"  Deck:     {url}")

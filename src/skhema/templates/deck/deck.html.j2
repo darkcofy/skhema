@@ -18,6 +18,11 @@
         <h1>{{ client.name }}</h1>
         {% if client.subtitle %}<p class="subtitle">{{ client.subtitle }}</p>{% endif %}
         <p class="meta">{{ generated_at.strftime('%B %Y') }}{% if total_diagrams %} · {{ total_diagrams }} diagram{{ 's' if total_diagrams != 1 else '' }}{% endif %}</p>
+        <p class="presenter-hint">
+          Navigate: <kbd>→</kbd> next · <kbd>↓</kbd> diagram notes ·
+          <kbd>S</kbd> presenter view · <kbd>ESC</kbd> overview ·
+          <kbd>F</kbd> fullscreen
+        </p>
       </section>
 
       {% for section in sections %}
@@ -26,18 +31,25 @@
           <h2>{{ section.label }}</h2>
         </section>
         {% for diagram in section.diagrams %}
-        <section>
+
+        <section class="diagram-slide">
           <h3>{{ diagram.title }}</h3>
-          <div class="diagram-row{% if not diagram.prose_html %} diagram-row--solo{% endif %}">
-            <div class="diagram">{{ diagram.svg_inline | safe }}</div>
-            {% if diagram.prose_html %}
-            <div class="diagram-prose">{{ diagram.prose_html | safe }}</div>
-            {% endif %}
-          </div>
+          <div class="diagram">{{ diagram.svg_inline | safe }}</div>
+          {% if diagram.prose_html %}
+          <p class="sub-hint">↓ notes below · <kbd>S</kbd> for presenter view</p>
+          {% endif %}
           {% if diagram.notes %}
           <aside class="notes">{{ diagram.notes | safe }}</aside>
           {% endif %}
         </section>
+
+        {% if diagram.prose_html %}
+        <section class="prose-slide">
+          <h3>{{ diagram.title }} — notes</h3>
+          <div class="diagram-prose">{{ diagram.prose_html | safe }}</div>
+        </section>
+        {% endif %}
+
         {% endfor %}
       </section>
       {% endfor %}
@@ -48,10 +60,10 @@
           <h2>Architecture Decisions</h2>
         </section>
         {% for adr in adrs %}
-        <section>
+        <section class="adr-slide">
           <h3>ADR{{ "%02d"|format(adr.number) }}: {{ adr.title }}</h3>
           <p class="status status-{{ adr.status|lower }}">{{ adr.status }}</p>
-          <div class="adr-body">{{ adr.body_html | safe }}</div>
+          <div class="adr-body diagram-prose">{{ adr.body_html | safe }}</div>
         </section>
         {% endfor %}
       </section>
@@ -60,6 +72,12 @@
       <section class="cover">
         <h1>Thank you</h1>
         <p class="subtitle">Questions?</p>
+        <p class="presenter-hint">
+          For the speaker-view popup: serve the deck via
+          <code>python -m http.server</code> and open over
+          <code>http://</code> — then press <kbd>S</kbd>. File://
+          URLs can't open popups in some browsers.
+        </p>
       </section>
 
     </div>
@@ -77,6 +95,11 @@
       backgroundTransition: 'fade',
       pdfSeparateFragments: false,
       pdfMaxPagesPerSlide: 1,
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      minScale: 0.2,
+      maxScale: 2.0,
       view: (location.search.match(/print-pdf/gi) ? 'print' : undefined),
     });
   </script>

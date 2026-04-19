@@ -12,6 +12,7 @@ class ADR:
     title: str
     status: str
     path: Path
+    body: str = ""
     elements: list[str] = field(default_factory=list)
     concepts: list[str] = field(default_factory=list)
 
@@ -20,7 +21,11 @@ _ELEMENT_RE = re.compile(r"<!--\s*skhema:elements\s+(.+?)\s*-->")
 _CONCEPT_RE = re.compile(r"<!--\s*gnosis:concepts\s+(.+?)\s*-->")
 _ADR_FILE_RE = re.compile(r"^ADR(\d+)-.*\.md$")
 _TITLE_RE = re.compile(r"^#\s+ADR\d+:\s*(.+)$", re.MULTILINE)
-_STATUS_RE = re.compile(r"^## Status\s*\n+(\w+)", re.MULTILINE)
+# Two ADR status styles we accept:
+#   `## Status\n\nAccepted`         (Nygard classic)
+#   `**Status:** Accepted`          (bold-inline, current skhema convention)
+_STATUS_SECTION_RE = re.compile(r"^## Status\s*\n+(\w+)", re.MULTILINE)
+_STATUS_INLINE_RE = re.compile(r"^\*\*Status:\*\*\s+(\w+)", re.MULTILINE)
 
 
 def parse_adr(path: str) -> ADR:
@@ -34,7 +39,7 @@ def parse_adr(path: str) -> ADR:
     m = _TITLE_RE.search(text)
     title = m.group(1).strip() if m else filename
 
-    m = _STATUS_RE.search(text)
+    m = _STATUS_INLINE_RE.search(text) or _STATUS_SECTION_RE.search(text)
     status = m.group(1).strip() if m else "Unknown"
 
     elements = []
@@ -45,8 +50,19 @@ def parse_adr(path: str) -> ADR:
     for m in _CONCEPT_RE.finditer(text):
         concepts.extend(c.strip() for c in m.group(1).split(","))
 
+    # Body = full markdown minus the `# ADR…` title line and the comment
+    # tags (those are already surfaced via number/title/elements/concepts).
+    body_lines = []
+    for line in text.splitlines():
+        if _TITLE_RE.match(line):
+            continue
+        if _ELEMENT_RE.search(line) or _CONCEPT_RE.search(line):
+            continue
+        body_lines.append(line)
+    body = "\n".join(body_lines).strip()
+
     return ADR(
-        number=number, title=title, status=status,
+        number=number, title=title, status=status, body=body,
         path=Path(path), elements=elements, concepts=concepts,
     )
 
